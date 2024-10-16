@@ -154,6 +154,7 @@ public class FriendRequestService {
     private void addFriend(long userId, long friendId) {
         friendRepository.save(Friend.builder()
                 .userId(userId)
+                        .type(1)
                 .friendId(friendId).build());
     }
 

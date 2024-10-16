@@ -37,8 +37,6 @@ CREATE TABLE `agreement`
     `agree_privacy`         tinyint            DEFAULT '1' COMMENT '개인정보',
     `agree_sensitive`       tinyint            DEFAULT '0' COMMENT '민감정보',
     `agree_marketing`       tinyint            DEFAULT '0' COMMENT '마케팅',
-    `agree_sns`	            tinyint	NULL	   DEFAULT '0'	COMMENT 'sns 수신동의',
-    `agree_email`	        tinyint	NULL	   DEFAULT '0'	COMMENT 'email 수신동의',
     `marketing_modified_at` timestamp NULL     DEFAULT NULL COMMENT '마케팅변경일자',
     `created_at`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     PRIMARY KEY (`id`)

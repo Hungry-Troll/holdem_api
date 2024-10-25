@@ -1,0 +1,59 @@
+spring:
+  config:
+    activate:
+      on-profile: compose
+  datasource:
+    write:
+      jdbc-url: jdbc:mysql://mysql:3306/mydatabase?autoReconnect=true&autoReconnection=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useTimezone=true&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+      username: myuser
+      password: mypass
+      minimum-idle: 1
+      maximum-pool-size: 2
+      useServerPrepStmts: true
+    read:
+      jdbc-url: jdbc:mysql://mysql:3306/mydatabase?autoReconnect=true&autoReconnection=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useTimezone=true&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+      username: myuser
+      password: mypass
+      minimum-idle: 1
+      maximum-pool-size: 2
+      useServerPrepStmts: true
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Seoul
+  flyway:
+    enabled: true
+    baselineOnMigrate: true
+    locations: "classpath:db/migration"
+    validateMigrationNaming: true
+  docker:
+    compose:
+      lifecycle-management: none # none, start-only , start-and-stop
+server:
+  error:
+    include-exception: false
+    include-stacktrace: never
+    path: '/api/error'
+    whitelabel:
+      enabled: false
+  port: 38081
+redis:
+  host: redis
+  port: 6379
+  auth: false
+  authentication:
+    database: 0
+  user:
+    database: 1
+  sso:
+    database: 2
+  noti:
+    database: 3
+  ingame:
+    database: 4
+  type: STANDARD
+jwt:
+  secret: mysecret

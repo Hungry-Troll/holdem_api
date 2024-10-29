@@ -5,18 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.event.constant.UserEventType;
-import net.lodgames.event.service.UserEventService;
+import net.lodgames.follow.repository.FollowRepository;
+import net.lodgames.follow.service.FollowService;
 import net.lodgames.friend.model.Friend;
 import net.lodgames.friend.model.FriendBlock;
-import net.lodgames.friend.model.FriendRequest;
 import net.lodgames.friend.param.*;
 import net.lodgames.friend.repository.*;
 import net.lodgames.friend.vo.*;
-import net.lodgames.user.constants.UserStatus;
 import net.lodgames.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,9 +26,11 @@ public class FriendBlockService {
     private final FriendRepository friendRepository;
     private final FriendRequestRepository friendRequestRepository;
     private final FriendBlockRepository friendBlockRepository;
+    private final FollowRepository followRepository;
+
 
     // 친구차단 리스트
-    public List<FriendBlockVo> friendBlocKList(FriendListParam friendListParam) {
+    public List<FriendBlockVo> friendBlockList(FriendListParam friendListParam) {
         return friendBlockQueryRepository.selectFriendBlockByUserId(friendListParam, friendListParam.of());
     }
 
@@ -39,6 +38,7 @@ public class FriendBlockService {
     public void addFriendBlock(FriendBlockParam friendBlockParam) {
         long userId = friendBlockParam.getUserId();
         long friendId = friendBlockParam.getFriendId();
+
         // 상대방이 존재하는지 확인
         if (!userRepository.existsById(friendId)) {
             throw new RestException(ErrorCode.FAIL_ADD_FRIEND_BLOCK_NOT_EXIST);
@@ -50,18 +50,33 @@ public class FriendBlockService {
         }
 
         // 친구 관계가 있으면 삭제
-        deleteFriend(userId, friendId, false);
-        deleteFriend(friendId, userId, false);
+        deleteFriend(userId, friendId);
+        deleteFriend(friendId, userId);
         // 친구 요청이 있으면 삭제
         deleteFriendRequest(userId, friendId);
         deleteFriendRequest(friendId, userId);
         // 친구 관계 외에 맺어진 관계가 있으면 삭제한다.(TODO) 기획상 정의 아직없음
-
+        // 1. follow 삭제
+        deleteFollows(userId, friendId);
         // 친구 차단 정보 추가
         friendBlockRepository.save(FriendBlock.builder()
                 .userId(userId)
                 .friendId(friendId)
                 .build());
+    }
+
+    // 팔로우 취소
+    private void deleteFollows(long userId, long friendId) {
+        // 상대방이 follow 한 관계가 있으면 삭제
+        deleteFollow(userId, friendId);
+        // 내가 follow 한 관계까 있으면 삭제
+        deleteFollow(friendId, userId);
+    }
+
+    // 친구 관계 삭제
+    private void deleteFollow(long userId, long followerId) {
+        followRepository.findByUserIdAndFollowId(userId, followerId)
+                .ifPresent(followRepository::delete);
     }
 
     // 친구차단 삭제
@@ -78,16 +93,9 @@ public class FriendBlockService {
     }
 
     // 친구 관계 삭제
-    private void deleteFriend(long userId, long friendId, boolean isStrict) {
-        Friend friend;
-        try {
-            friend = retrieveFriend(userId,friendId);
-            friendRepository.delete(friend);
-        } catch (RestException e){
-            if (isStrict) {
-                throw new RestException(ErrorCode.FAIL_DELETE_FRIEND);
-            }
-        }
+    private void deleteFriend(long userId, long friendId) {
+        friendRepository.findByUserIdAndFriendId(userId, friendId)
+                .ifPresent(friendRepository::delete);
     }
 
     // 친구차단 가져오기

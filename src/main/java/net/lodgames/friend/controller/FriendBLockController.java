@@ -21,7 +21,7 @@ public class FriendBLockController {
     @GetMapping("/friends/blocks")
     public ResponseEntity<?> friendBlockList(@RequestBody FriendListParam friendListParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         friendListParam.setUserId(userPrincipal.getUserId());
-        return ResponseEntity.ok(friendBlockService.friendBlocKList(friendListParam));
+        return ResponseEntity.ok(friendBlockService.friendBlockList(friendListParam));
     }
 
     // 친구차단 추가

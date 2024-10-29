@@ -1,0 +1,43 @@
+package net.lodgames.message.util;
+
+
+import net.lodgames.message.model.Message;
+import net.lodgames.message.param.MessageAddParam;
+import net.lodgames.message.param.MessageDeleteParam;
+import net.lodgames.message.vo.*;
+import net.lodgames.user.model.Profile;
+import net.lodgames.user.param.ProfileModParam;
+import org.mapstruct.*;
+
+import java.util.List;
+
+@Mapper(componentModel = "spring" ,unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface MessageMapper {
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    MessageSendVo updateSendMessageToVo(Message message);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    MessageReadVo updateReadMessageToVo(Message messages);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    List<MessageReadVo> updateMessageInBoxReadParamToVoList(List<Message> messages);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateProfileFromParam(ProfileModParam param, @MappingTarget Profile profile);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateMessageAddParam(MessageAddParam param, @MappingTarget Message message);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    MessageDeleteVo updateDeleteMessageToVo(Message message);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    List<MessageDeleteVo> updateDeleteAllMessageToVoList(List<Message> message);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    MessageUpdateVo updateMessageToVo(Message message);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    List<MessageSentCheckVo> updateCheckSendMessageToVo(List<Message> message);
+}

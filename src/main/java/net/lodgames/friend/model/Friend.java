@@ -31,7 +31,8 @@ public class Friend {
     private LocalDateTime createdAt; // 만든날짜
 
     @Builder
-    public Friend(long userId, long friendId){
+    public Friend(long userId, long friendId, Integer type) {
+        this.type = type;
         this.userId = userId;
         this.friendId = friendId;
     }

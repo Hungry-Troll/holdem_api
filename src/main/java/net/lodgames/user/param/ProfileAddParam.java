@@ -8,6 +8,5 @@ import lombok.Setter;
 public class ProfileAddParam {
     private Long userId;
     private String nickname;
-    private String uniqueNickname;
     private String image;
 }

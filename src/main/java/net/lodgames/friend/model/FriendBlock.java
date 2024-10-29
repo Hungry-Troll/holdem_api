@@ -5,14 +5,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Entity(name = "friend_block")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class FriendBlock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +24,10 @@ public class FriendBlock {
 
     private Long friendId;
 
-    @UpdateTimestamp
+    @LastModifiedDate
     private LocalDateTime updatedAt; // 변경일
 
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createdAt; // 만든날짜
 
     @Builder

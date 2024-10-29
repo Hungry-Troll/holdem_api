@@ -1,12 +1,14 @@
 package net.lodgames.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +26,10 @@ public class Profile {
     private Long userId;
     @Column(name = "nickname")
     private String nickname;
-    @Column(name = "unique_nickname")
-    private String uniqueNickname;
     @Column(name = "image")
     private String image;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt; // 변경일
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createdAt; // 만든날짜
-
+    @LastModifiedDate
+    private LocalDateTime updatedAt; // 변경일
 }

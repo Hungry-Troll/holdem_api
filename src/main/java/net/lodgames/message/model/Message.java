@@ -1,6 +1,6 @@
 package net.lodgames.message.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,6 +30,7 @@ public class Message {
     @Column(name ="created_at")
     private LocalDateTime createdAt;
     @Column(name ="read_at")
+    @LastModifiedDate
     private LocalDateTime readAt;
     @Column(name ="deleted_at")
     private LocalDateTime deletedAt;

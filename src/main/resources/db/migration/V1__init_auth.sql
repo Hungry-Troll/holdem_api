@@ -15,20 +15,6 @@ CREATE TABLE `users`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='유저';
 
-CREATE TABLE `profile`
-(
-    `id`             bigint    NOT NULL AUTO_INCREMENT COMMENT '프로필 고유번호',
-    `user_id`        bigint    NOT NULL COMMENT '유저고유번호',
-    `nickname`       varchar(100)       DEFAULT NULL COMMENT '닉네입',
-    `unique_nickname` varchar(100)       DEFAULT NULL COMMENT '유니크 닉네입',
-    `image`          varchar(100)       DEFAULT NULL COMMENT '이미지 경로',
-    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT ='프로필';
-
 CREATE TABLE `agreement`
 (
     `id`                    bigint    NOT NULL AUTO_INCREMENT COMMENT '동의고유번호',
@@ -100,7 +86,7 @@ CREATE TABLE `refresh_token`
     `id`              bigint       NOT NULL AUTO_INCREMENT COMMENT '리프레쉬토큰 고유번호',
     `user_id`         bigint       NOT NULL COMMENT '유저고유번호',
     `refresh_token`   varchar(100) NOT NULL COMMENT '리프레쉬토큰',
-    `os`              tinyint      DEFAULT NULL COMMENT '기기OS',
+    `os`              tinyint               DEFAULT NULL COMMENT '기기OS',
     `expire_datetime` datetime     NOT NULL COMMENT '만료일시',
     `created_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     PRIMARY KEY (`id`)
@@ -111,7 +97,7 @@ CREATE TABLE `refresh_token`
 CREATE TABLE `social_login`
 (
     `id`            bigint       NOT NULL AUTO_INCREMENT COMMENT '소셜로그인 고유번호',
-    `user_id`       bigint       DEFAULT NULL COMMENT '유저고유번호',
+    `user_id`       bigint                DEFAULT NULL COMMENT '유저고유번호',
     `provider_type` tinyint      NOT NULL COMMENT '소셜 로그인 프로바이더 종류',
     `social_id`     varchar(100) NOT NULL COMMENT '소셜 프로바이더  유저 고유 식별 아이디',
     `created_at`    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',

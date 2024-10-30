@@ -73,7 +73,24 @@ dependencies {
 
 }
 
+task unpackJar(type: Copy) {
+	def unpackDir = "$buildDir/dependency"
+	def jarFile = "$buildDir/libs/${rootProject.name}-${version}.jar"
+	delete unpackDir
+	from zipTree(jarFile)
+	into unpackDir
+}
 
-tasks.named('test') {
+build {
+	finalizedBy unpackJar
+}
+
+test {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs = [
+			'-Amapstruct.suppressGeneratorTimestamp=true'
+	]
 }

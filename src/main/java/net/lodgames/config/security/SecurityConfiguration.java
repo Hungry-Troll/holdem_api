@@ -44,10 +44,10 @@ public class SecurityConfiguration {
                 .addFilter(new JwtAuthorizationFilter(authenticationManagerBuilder.getObject(), jwtAuthenticationService, secret));
         http.authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
-                                new AntPathRequestMatcher("/"),
-                                new AntPathRequestMatcher("/hello"),
-                                new AntPathRequestMatcher("/api/error"),
-                                new AntPathRequestMatcher("/api/hello")
+                                /* new AntPathRequestMatcher("/"),*/
+                                "/", "/error", "/api/error"
+                                , "/hello", "/api/hello", "/api/hello/log", "/api/now"// MAIN
+                                , "/test/**", "/api/test/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler()));

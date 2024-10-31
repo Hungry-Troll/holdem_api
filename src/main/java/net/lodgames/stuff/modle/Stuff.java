@@ -5,14 +5,16 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity(name="stuff")
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Stuff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +27,9 @@ public class Stuff {
     private String description; // 물건 설명
     @Column(name="make_datetime")
     private LocalDateTime makeDatetime; // 물건 생산 날짜
-    @UpdateTimestamp
+    @LastModifiedDate
     private LocalDateTime updatedAt; // 변경일
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createdAt; // 만든날짜
 
     @Builder

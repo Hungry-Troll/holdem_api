@@ -61,3 +61,16 @@ CREATE TABLE `message`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='메세지';
+
+CREATE TABLE `profile`
+(
+    `id`             bigint    NOT NULL AUTO_INCREMENT COMMENT '프로필 고유번호',
+    `user_id`        bigint    NOT NULL COMMENT '유저고유번호',
+    `nickname`       varchar(100)       DEFAULT NULL COMMENT '닉네입',
+    `image`          varchar(100)       DEFAULT NULL COMMENT '이미지 경로',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='프로필';

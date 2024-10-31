@@ -74,3 +74,28 @@ CREATE TABLE `profile`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='프로필';
+
+CREATE TABLE `follow`
+(
+    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '팔로우 고유번호',
+    `user_id`    bigint    NOT NULL COMMENT '유저고유번호',
+    `follow_id`  bigint    NOT NULL COMMENT '팔로하는사람 유저고유번호',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='팔로우';
+
+CREATE TABLE `app_version`
+(
+    `id`             int         NOT NULL AUTO_INCREMENT COMMENT '앱 버전 고유번호',
+    `version`        varchar(20) NOT NULL COMMENT '업데이트 버전',
+    `version_type`   tinyint     NOT NULL COMMENT '앱 버전 타입',
+    `publish_at`     timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '게시시각',
+    `publish_status` tinyint     NOT NULL COMMENT '버전 출시 상태',
+    `created_at`     timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`     timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='앱 버전';

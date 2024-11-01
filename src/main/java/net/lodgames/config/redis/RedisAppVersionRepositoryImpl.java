@@ -1,12 +1,14 @@
-package net.lodgames.config.db.redis;
+package net.lodgames.config.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Repository;
 
 @Slf4j
+@RedisHash("RedisAppVersion")
 @Repository
 public class RedisAppVersionRepositoryImpl {
     private static final String KEY_APP_VERSION = "app:version";

@@ -1,7 +1,7 @@
 package net.lodgames.ingame.service;
 
 import lombok.RequiredArgsConstructor;
-import net.lodgames.config.db.redis.RedisInGameAuthenticationRepositoryImpl;
+import net.lodgames.config.redis.RedisInGameAuthenticationRepositoryImpl;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.ingame.param.InGameAuthenticationKeyParam;
@@ -10,8 +10,6 @@ import net.lodgames.ingame.vo.InGameAuthenticationKeyVo;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.time.LocalDateTime;
 
 
 @Service

@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 
 @Getter
 @Setter
-
 public class PagingParam {
     private int page = 1;
     private int limit = 10;

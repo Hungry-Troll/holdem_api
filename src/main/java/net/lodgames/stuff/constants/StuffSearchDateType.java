@@ -1,5 +1,7 @@
 package net.lodgames.stuff.constants;
 
+import lombok.Getter;
+
 public enum StuffSearchDateType {
     CREATED_AT("createdAt"),
     UPDATED_AT("updatedAt"),

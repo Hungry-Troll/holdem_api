@@ -2,6 +2,7 @@ package net.lodgames.config.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Repository
+@RedisHash("RedisUser")
 @Slf4j
 public class RedisUserRepositoryImpl {
     private static final String KEY_BLACK_USER = "black:user:%d";

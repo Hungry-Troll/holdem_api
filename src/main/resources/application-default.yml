@@ -57,3 +57,4 @@ redis:
   type: STANDARD
 jwt:
   secret: mysecret
+cheat-use: true

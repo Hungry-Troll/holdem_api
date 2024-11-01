@@ -37,15 +37,12 @@ class StuffQueryRepositoryTest {
         statuses.add(StuffStatus.ACTIVE);
         statuses.add(StuffStatus.STANDBY);
         stuffListParam.setStatuses(statuses);
-
         stuffListParam.setSearchType(StuffSearchType.NAME);
         stuffListParam.setSearchValue("name");
         stuffListParam.setSearchDateType(StuffSearchDateType.MAKE_DATETIME);
         stuffListParam.setStartDate(LocalDate.now());
         stuffListParam.setEndDate(LocalDate.now());
-
         stuffListParam.setPage(1);
-
         stuffQueryRepository.getStuffListByCondition(stuffListParam,stuffListParam.of());
     }
 }

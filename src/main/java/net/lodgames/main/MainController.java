@@ -17,13 +17,11 @@ public class MainController {
     public void ping() {}
 
     @GetMapping("/api/hello")
-    @ResponseBody
     public ResponseEntity<?> hello(){
         return ResponseEntity.ok("HELLO!");
     }
 
     @GetMapping("/api/hello/log")
-    @ResponseBody
     public ResponseEntity<?> helloLog(){
         log.info("HELLO!");
         return ResponseEntity.ok("HELLO!");
@@ -34,7 +32,6 @@ public class MainController {
     public void root() {}
 
     @GetMapping("/api/now")
-    @ResponseBody
     public ResponseEntity<?> now(){
         return ResponseEntity.ok(Now.builder().time(Instant.now().toEpochMilli()).build());
     }

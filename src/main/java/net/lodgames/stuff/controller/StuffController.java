@@ -26,7 +26,6 @@ public class StuffController {
 
     // 추가
     @PostMapping("")
-    @ResponseBody
     public ResponseEntity<?> addStuff(@RequestBody StuffAddParam stuffAddParam) {
         StuffVo stuffVo = stuffService.addStuff(stuffAddParam);
         return ResponseEntity.ok(stuffVo);
@@ -34,7 +33,6 @@ public class StuffController {
 
     // 변경
     @PutMapping("/{stuffId}")
-    @ResponseBody
     public ResponseEntity<?> modStuff(@PathVariable("stuffId") Long stuffId,@RequestBody StuffModParam stuffModParam) {
         stuffModParam.setId(stuffId);
         return ResponseEntity.ok(stuffService.modStuff(stuffModParam));
@@ -42,7 +40,6 @@ public class StuffController {
 
     // 리스트
     @GetMapping("")
-    @ResponseBody
     public ResponseEntity<List<?>> getStuffList( @RequestBody StuffListParam stuffListParam) {
         List<StuffVo> stuffVoList = stuffService.getStuffList(stuffListParam);
         return ResponseEntity.ok(stuffVoList);
@@ -50,7 +47,6 @@ public class StuffController {
 
     // 삭제
     @DeleteMapping("/{stuffId}")
-    @ResponseBody
     public ResponseEntity<?> deleteStuff(@PathVariable("stuffId") Long stuffId) {
         stuffService.deleteStuff(StuffDelParam.builder().id(stuffId).build());
         return ResponseEntity.ok().build();

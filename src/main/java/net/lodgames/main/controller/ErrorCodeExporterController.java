@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 public class ErrorCodeExporterController {
     // test method
     @GetMapping("/api/test/error_code")
-    @ResponseBody
     public ResponseEntity<?> error_code() throws Exception{
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());

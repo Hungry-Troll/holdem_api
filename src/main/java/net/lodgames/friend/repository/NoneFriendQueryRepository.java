@@ -21,6 +21,7 @@ public class NoneFriendQueryRepository {
         return jpaQueryFactory.select(Projections.bean(NoneFriendInfoVo.class,
                         users.userId,
                         profile.image,
+                        profile.basicImageIdx,
                         profile.nickname,
                         friendRequest.receiver.isNotNull().as("isRequest")
                 ))

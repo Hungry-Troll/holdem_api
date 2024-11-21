@@ -43,7 +43,7 @@ public class FollowController {
 
     // 팔로우함
     @PostMapping("/follow/{followId}")
-    public ResponseEntity<?> follow(@PathVariable long followId, @AuthenticationPrincipal UserPrincipal userPrincipal) throws Exception {
+    public ResponseEntity<?> follow(@PathVariable(name="followId") long followId, @AuthenticationPrincipal UserPrincipal userPrincipal) throws Exception {
         followService.follow(FollowParam.builder()
                 .userId(userPrincipal.getUserId())
                 .followId(followId).build());
@@ -52,7 +52,7 @@ public class FollowController {
 
     // 팔로우 취소
     @PostMapping("/unfollow/{followId}")
-    public ResponseEntity<?> unFollow(@PathVariable long followId, @AuthenticationPrincipal UserPrincipal userPrincipal) throws Exception {
+    public ResponseEntity<?> unFollow(@PathVariable(name="followId") long followId, @AuthenticationPrincipal UserPrincipal userPrincipal) throws Exception {
         followService.unfollow(UnFollowParam.builder()
                 .userId(userPrincipal.getUserId())
                 .followId(followId).build());

@@ -3,6 +3,7 @@ package net.lodgames.friend.controller;
 import net.lodgames.config.security.UserPrincipal;
 import net.lodgames.friend.param.*;
 import net.lodgames.friend.service.FriendService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import net.lodgames.friend.vo.FriendVo;
 import lombok.AllArgsConstructor;
@@ -22,14 +23,16 @@ public class FriendController {
 
     // 친구 리스트
     @GetMapping("/friends")
-    public ResponseEntity<List<FriendVo>> friendList(@RequestBody FriendListParam friendListParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<List<FriendVo>> friendList(@RequestBody FriendListParam friendListParam,
+                                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
         friendListParam.setUserId(userPrincipal.getUserId());
         return ResponseEntity.ok(friendService.getFriendList(friendListParam));
     }
 
     // 친구 정보 조회
     @GetMapping("/friends/{friendId}")
-    public ResponseEntity<?> friendInfo(@PathVariable long friendId, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<?> friendInfo(@PathVariable long friendId,
+                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(friendService.getFriendInfo(
                 FriendInfoParam.builder()
                         .userId(userPrincipal.getUserId())
@@ -39,17 +42,18 @@ public class FriendController {
 
     // 친구삭제
     @DeleteMapping("/friends")
-    public ResponseEntity<?> deleteFriend(@RequestBody FriendDeleteParam friendDeleteParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteFriend(@RequestBody FriendDeleteParam friendDeleteParam,
+                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
         friendDeleteParam.setUserId(userPrincipal.getUserId());
         friendService.deleteFriend(friendDeleteParam);
         return ResponseEntity.ok().build();
     }
 
-    // 사람 찾기
-    @PostMapping("/friends/search")
-    public ResponseEntity<?> findFriend(@RequestBody FindFriendParam findFriendParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        long userId = userPrincipal.getUserId();
-        findFriendParam.setUserId(userId);
-        return ResponseEntity.ok(friendService.findFriend(findFriendParam));
+    // 닉네임 찾기
+    @GetMapping("/friends/findUserNickname")
+    public ResponseEntity<?> findUserNickname(@RequestBody FindUserNicknameParam findUserNicknameParam,
+                                              @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        findUserNicknameParam.setUserId(userPrincipal.getUserId());
+        return ResponseEntity.ok(friendService.findUserNickname(findUserNicknameParam));
     }
 }

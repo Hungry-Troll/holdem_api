@@ -31,6 +31,7 @@ public class FriendRequestQueryRepository {
                         users.updatedAt.as("accountUpdateDate"),
                         profile.nickname,
                         profile.image,
+                        profile.basicImageIdx,
                         profile.updatedAt.as("profileUpdateDate")
                 ))
                 .from(friendRequest)
@@ -53,6 +54,7 @@ public class FriendRequestQueryRepository {
                         users.updatedAt.as("accountUpdateDate"),
                         profile.nickname,
                         profile.image,
+                        profile.basicImageIdx,
                         profile.updatedAt.as("profileUpdateDate")
                 ))
                 .from(friendRequest)

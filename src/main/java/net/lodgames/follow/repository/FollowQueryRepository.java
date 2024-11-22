@@ -31,7 +31,8 @@ public class FollowQueryRepository {
                         users.userId,
                         users.status,
                         profile.nickname,
-                        profile.image
+                        profile.image,
+                        profile.basicImageIdx
                 ))
                 .from(follow)
                 .join(users).on(follow.followId.eq(users.userId))
@@ -52,7 +53,8 @@ public class FollowQueryRepository {
                         users.userId,
                         users.status,
                         profile.nickname,
-                        profile.image
+                        profile.image,
+                        profile.basicImageIdx
                 ))
                 .from(follow)
                 .join(users).on(follow.userId.eq(users.userId))

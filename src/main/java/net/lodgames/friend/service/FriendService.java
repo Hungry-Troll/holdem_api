@@ -1,22 +1,20 @@
 package net.lodgames.friend.service;
 
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.event.constant.UserEventType;
 import net.lodgames.event.service.UserEventService;
-import net.lodgames.friend.model.FriendBlock;
 import net.lodgames.friend.model.Friend;
-import net.lodgames.friend.model.FriendRequest;
 import net.lodgames.friend.param.*;
-import net.lodgames.friend.repository.*;
-import net.lodgames.friend.vo.*;
-import net.lodgames.user.constants.UserStatus;
-import net.lodgames.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import net.lodgames.friend.repository.FriendQueryRepository;
+import net.lodgames.friend.repository.FriendRepository;
+import net.lodgames.friend.vo.FindUserNicknameVo;
+import net.lodgames.friend.vo.FriendInfoVo;
+import net.lodgames.friend.vo.FriendVo;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -70,24 +68,12 @@ public class FriendService {
         );
     }
 
-    // 친구 추가를 위한 유저 찾기
-    public List<FindFriendVo> findFriend(FindFriendParam findFriendParam) {
-        // to lowercase
-        if (findFriendParam.getId() == null || findFriendParam.getId().isEmpty()) {
-            findFriendParam.setNickname(findFriendParam.getNickname().toLowerCase());
-            return friendQueryRepository.selectFriendByNickname(findFriendParam, findFriendParam.of());
-        } else {
-            findFriendParam.setId(findFriendParam.getId().toLowerCase());
-            FindFriendVo findFriendVo = friendQueryRepository.findFriendById(findFriendParam);
-            if (findFriendVo == null || findFriendVo.getUserId() == null) {
-                throw new RestException(ErrorCode.NOT_FOUND_USER);
-            }
-            // 나자신 에게는 보낼수 없음
-            if (findFriendVo.getUserId() == findFriendParam.getUserId()) {
-                throw new RestException(ErrorCode.FOUND_USER_IS_ME);
-            }
-            return List.of(findFriendVo);
+    // 친구 추가를 위한 유저 닉네임으로 찾기
+    public List<FindUserNicknameVo> findUserNickname(FindUserNicknameParam findUserNicknameParam) {
+        if (findUserNicknameParam.getNickname() == null || findUserNicknameParam.getNickname().trim().isEmpty()) {
+            throw new RestException(ErrorCode.NOT_FOUND_NICKNAME_USER);
         }
+        return friendQueryRepository.findUserNickname(findUserNicknameParam, findUserNicknameParam.of());
     }
 
     // 친구 관계 삭제
@@ -102,6 +88,5 @@ public class FriendService {
         String extData = userEventService.getSimpleExtData(userId);
         userEventService.setUserEvent(SOURCE_FRIEND_DELETE, UserEventType.FRIEND_DELETE, userId, friendId, extData);
     }
-
 }
 

@@ -32,6 +32,7 @@ public class FriendBlockQueryRepository {
                         users.createdAt,
                         profile.nickname,
                         profile.image,
+                        profile.basicImageIdx,
                         profile.updatedAt
                 ))
                 .from(friendBlock)

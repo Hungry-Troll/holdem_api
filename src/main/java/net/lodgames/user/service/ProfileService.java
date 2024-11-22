@@ -34,6 +34,7 @@ public class ProfileService {
     public ProfileVo addProfile(ProfileAddParam profileAddParam) {
         Profile profile = profileRepository.save(Profile.builder()
                 .image(profileAddParam.getImage())
+                .basicImageIdx(profileAddParam.getBasicImageIdx())
                 .userId(profileAddParam.getUserId())
                 .nickname(profileAddParam.getNickname()).build()
         );

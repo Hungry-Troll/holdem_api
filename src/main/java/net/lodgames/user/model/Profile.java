@@ -28,6 +28,8 @@ public class Profile {
     private String nickname;
     @Column(name = "image")
     private String image;
+    @Column(name = "basic_image_idx")
+    private Short basicImageIdx;
     @CreatedDate
     private LocalDateTime createdAt; // 만든날짜
     @LastModifiedDate

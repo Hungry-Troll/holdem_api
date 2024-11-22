@@ -101,3 +101,15 @@ CREATE TABLE `app_version`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='게시판';
+
+CREATE TABLE `user_block`
+(
+    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '유저차단 고유번호',
+    `user_id`    bigint    NOT NULL COMMENT '유저 고유번호',
+    `block_user_id`  bigint    NOT NULL COMMENT '차단유저 고유번호',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='유저차단';

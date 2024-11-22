@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @AllArgsConstructor
-@RequestMapping("/api/v1/profile")
+@RequestMapping("/api/v1")
 public class ProfileController {
 
     private ProfileService profileService;
 
     // 조회
-    @GetMapping("")
+    @GetMapping("/profile")
     public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(profileService.getProfile(userPrincipal.getUserId()));
     }
 
     // 추가
-    @PostMapping("")
+    @PostMapping("/profile")
     public ResponseEntity<?> addProfile(@RequestBody ProfileAddParam profileAddParam,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         profileAddParam.setUserId(userPrincipal.getUserId());
@@ -34,7 +34,7 @@ public class ProfileController {
     }
 
     // 변경
-    @PutMapping("")
+    @PutMapping("/profile")
     public ResponseEntity<?> modProfile(@RequestBody ProfileModParam profileModParam,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         profileModParam.setUserId(userPrincipal.getUserId());
@@ -42,7 +42,7 @@ public class ProfileController {
     }
 
     // 삭제 (로컬 테스트용 / 프로필 아이디로 삭제)
-    @DeleteMapping("/{profileId}")
+    @DeleteMapping("/profile/{profileId}")
     public ResponseEntity<?> deleteProfile(@PathVariable("profileId") Long profileId) {
         return ResponseEntity.ok(profileService.deleteProfile(profileId));
     }

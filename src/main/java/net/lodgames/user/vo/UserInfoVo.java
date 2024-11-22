@@ -2,21 +2,19 @@ package net.lodgames.user.vo;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.lodgames.user.constants.UserStatus;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class ProfileVo {
-
-    private long id;
-    // 유저
+public class UserInfoVo {
+    // account(User)
     private long userId;
-    // 프로필
-    private String nickname;
+    private UserStatus status;
+
+    // profile(friend)
     private String image;
+    private String nickname;
     private Short basicImageIdx;
-    //
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

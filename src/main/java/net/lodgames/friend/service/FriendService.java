@@ -11,7 +11,6 @@ import net.lodgames.friend.model.Friend;
 import net.lodgames.friend.param.*;
 import net.lodgames.friend.repository.FriendQueryRepository;
 import net.lodgames.friend.repository.FriendRepository;
-import net.lodgames.friend.vo.FindUserNicknameVo;
 import net.lodgames.friend.vo.FriendInfoVo;
 import net.lodgames.friend.vo.FriendVo;
 import org.springframework.stereotype.Service;
@@ -68,13 +67,6 @@ public class FriendService {
         );
     }
 
-    // 친구 추가를 위한 유저 닉네임으로 찾기
-    public List<FindUserNicknameVo> findUserNickname(FindUserNicknameParam findUserNicknameParam) {
-        if (findUserNicknameParam.getNickname() == null || findUserNicknameParam.getNickname().trim().isEmpty()) {
-            throw new RestException(ErrorCode.NOT_FOUND_NICKNAME_USER);
-        }
-        return friendQueryRepository.findUserNickname(findUserNicknameParam, findUserNicknameParam.of());
-    }
 
     // 친구 관계 삭제
     public void deleteFriend(FriendDeleteParam friendDeleteParam) {

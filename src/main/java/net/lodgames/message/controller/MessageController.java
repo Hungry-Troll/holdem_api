@@ -19,7 +19,7 @@ public class MessageController {
 
     //쪽지 보내기
     @PostMapping("/messages/{receiverId}/send")
-    public ResponseEntity<?> addMessage(@PathVariable long receiverId,
+    public ResponseEntity<?> addMessage(@PathVariable(name="receiverId") long receiverId,
                                          @RequestBody MessageAddParam messageAddParam,
                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
         messageAddParam.setReceiverId(receiverId);
@@ -29,7 +29,7 @@ public class MessageController {
 
     //쪽지 읽기
     @GetMapping("/messages/{messageId}/read")
-    public ResponseEntity<?> getMessage(@PathVariable long messageId,
+    public ResponseEntity<?> getMessage(@PathVariable(name="messageId") long messageId,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(messageService.getMessage(MessageGetParam.builder()
                                                                             .receiverId(userPrincipal.getUserId())
@@ -47,7 +47,7 @@ public class MessageController {
 
     //쪽지 삭제
     @DeleteMapping("messages/{messageId}/delete")
-    public ResponseEntity<?> deleteMessage(@PathVariable long messageId,
+    public ResponseEntity<?> deleteMessage(@PathVariable(name="messageId") long messageId,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(messageService.deleteMessage(MessageDeleteParam.builder()
                                                                                 .receiverId(userPrincipal.getUserId())

@@ -1,13 +1,15 @@
-package net.lodgames.friend.param;
+package net.lodgames.user.param;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import net.lodgames.common.param.PagingParam;
 
 @Getter
 @Setter
-public class FindUserNicknameParam extends PagingParam {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class SearchUserNicknameParam extends PagingParam {
     @JsonIgnore
     private long userId;
     private String nickname;

@@ -3,7 +3,6 @@ package net.lodgames.friend.controller;
 import net.lodgames.config.security.UserPrincipal;
 import net.lodgames.friend.param.*;
 import net.lodgames.friend.service.FriendService;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import net.lodgames.friend.vo.FriendVo;
 import lombok.AllArgsConstructor;
@@ -47,13 +46,5 @@ public class FriendController {
         friendDeleteParam.setUserId(userPrincipal.getUserId());
         friendService.deleteFriend(friendDeleteParam);
         return ResponseEntity.ok().build();
-    }
-
-    // 닉네임 찾기
-    @GetMapping("/friends/findUserNickname")
-    public ResponseEntity<?> findUserNickname(@RequestBody FindUserNicknameParam findUserNicknameParam,
-                                              @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        findUserNicknameParam.setUserId(userPrincipal.getUserId());
-        return ResponseEntity.ok(friendService.findUserNickname(findUserNicknameParam));
     }
 }

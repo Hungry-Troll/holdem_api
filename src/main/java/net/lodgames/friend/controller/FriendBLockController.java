@@ -39,5 +39,4 @@ public class FriendBLockController {
         friendBlockService.deleteFriendBlock(friendBlockParam);
         return ResponseEntity.ok().build();
     }
-
 }

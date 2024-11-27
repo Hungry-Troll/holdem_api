@@ -44,6 +44,8 @@ public class RedisConfiguration {
     private int notiDatabase;
     @Value("${redis.ingame.database:4}")
     private int inGameDatabase;
+    @Value("5")
+    private int versionDatabase;
 
     @Value("${redis.password:bg}")
     private String password;
@@ -108,6 +110,23 @@ public class RedisConfiguration {
     public RedisTemplate<String, String>  notiRedisTemplate() {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(notiRedisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setEnableTransactionSupport(true);
+        return redisTemplate;
+    }
+
+    @Qualifier("versionRedisConnectionFactory")
+    @Bean(name="versionRedisConnectionFactory")
+    LettuceConnectionFactory versionRedisConnectionFactory() {
+        return getLettuceConnectionFactory(versionDatabase);
+    }
+
+    @Qualifier("versionRedisTemplate")
+    @Bean(name="versionRedisTemplate")
+    public RedisTemplate<String, String>  versionRedisTemplate() {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(versionRedisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setEnableTransactionSupport(true);

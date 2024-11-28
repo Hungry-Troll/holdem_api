@@ -32,11 +32,10 @@ public class UserBlockController {
 
     // 유저 차단 리스트
     @GetMapping("/users/blocks")
-    public ResponseEntity<?> blockUserList(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(userBlockService.blockUserList(
-                UserBlockListParam.builder()
-                        .userId(userPrincipal.getUserId()).build())
-        );
+    public ResponseEntity<?> blockUserList(@RequestBody UserBlockListParam userBlockListParam,
+                                           @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        userBlockListParam.setUserId(userPrincipal.getUserId());
+        return ResponseEntity.ok(userBlockService.blockUserList(userBlockListParam));
     }
 
     // 유저 차단 삭제

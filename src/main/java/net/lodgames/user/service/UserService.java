@@ -10,6 +10,7 @@ import net.lodgames.user.repository.UserQueryRepository;
 import net.lodgames.user.vo.FindUserNicknameVo;
 import net.lodgames.user.vo.UserInfoVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class UserService {
 
     private final UserQueryRepository userQueryRepository;
 
+    @Transactional(readOnly = true)
     public UserInfoVo userInfo(UserInfoParam userInfoParam) {
         // 자기 자신을 조회
         if (userInfoParam.getUserId() == userInfoParam.getTargetUserId()) {
@@ -28,15 +30,16 @@ public class UserService {
 
         UserInfoVo userInfoVo = userQueryRepository.selectUserInfo(userInfoParam);
         if (userInfoVo == null) {
-            throw new RestException(ErrorCode.NOT_FOUND_USERINFO);
+            throw new RestException(ErrorCode.NOT_FOUND_USER_INFO);
         }
         return userInfoVo;
     }
 
     // 친구 추가를 위한 유저 닉네임으로 찾기
+    @Transactional(readOnly = true)
     public List<FindUserNicknameVo> searchUserNickname(SearchUserNicknameParam searchUserNicknameParam) {
         if (searchUserNicknameParam.getNickname() == null || searchUserNicknameParam.getNickname().trim().isEmpty()) {
-            throw new RestException(ErrorCode.NOT_FOUND_NICKNAME_USER);
+            throw new RestException(ErrorCode.INVALID_NICKNAME_WHITESPACE);
         }
         return userQueryRepository.searchUserNickname(searchUserNicknameParam, searchUserNicknameParam.of());
     }

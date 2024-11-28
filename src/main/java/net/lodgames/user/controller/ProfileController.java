@@ -41,9 +41,9 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.modProfile(profileModParam));
     }
 
-    // 삭제 (로컬 테스트용 / 프로필 아이디로 삭제)
+    // 삭제 (로컬 테스트용 / 유저 아이디로 삭제)
     @DeleteMapping("/profile/{profileId}")
-    public ResponseEntity<?> deleteProfile(@PathVariable("profileId") Long profileId) {
-        return ResponseEntity.ok(profileService.deleteProfile(profileId));
+    public ResponseEntity<?> deleteProfile(@PathVariable("profileId") Long userId) {
+        return ResponseEntity.ok(profileService.deleteProfile(userId));
     }
 }

@@ -17,4 +17,7 @@ public class UserInfoVo {
     private String image;
     private String nickname;
     private Short basicImageIdx;
+    //
+    private Boolean isFollow;
+    private Boolean isBlock;
 }

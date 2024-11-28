@@ -21,7 +21,6 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-@Transactional
 public class UserBlockService {
 
     private final UserRepository userRepository;
@@ -29,12 +28,13 @@ public class UserBlockService {
     private final UserBlockQueryRepository userBlockQueryRepository;
 
     // 유저 차단
+    @Transactional(rollbackFor = {Exception.class})
     public void blockUser(UserBlockParam userBlockParam) {
         // 차단할 유저 존재하는지 확인
         if (!userRepository.existsById(userBlockParam.getBlockUserId())) {
-            throw new RestException(ErrorCode.FAIL_USER_BLOCK_NOT_EXIST);
+            throw new RestException(ErrorCode.NOT_EXIST_USER);
         }
-        // 자기 자신 차단 x
+        // 자기 자신은 차단 안됨
         if (userBlockParam.getUserId() == userBlockParam.getBlockUserId()) {
             throw new RestException(ErrorCode.FOUND_USER_IS_ME);
         }
@@ -51,21 +51,21 @@ public class UserBlockService {
     }
 
     // 유저 차단 리스트
+    @Transactional(readOnly = true)
     public List<UserBlockListVo> blockUserList(UserBlockListParam userBlockListParam) {
         return userBlockQueryRepository.selectBlockUserList(userBlockListParam, userBlockListParam.of());
     }
 
-    // 차단 유저 차단 해제
+    // 차단 유저 차단해제
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteBlockUser(UserBlockDeleteParam userBlockParam) {
-
         Long userId = userBlockParam.getUserId();
         Long blockUserId = userBlockParam.getBlockUserId();
 
-        // 유저 차단 확인
+        // 차단 유저 차단해제 확인
         if (!userBlockRepository.existsByUserIdAndBlockUserId(userId, blockUserId)) {
-            throw new RestException(ErrorCode.NOT_EXIST_USER_BLOCK);
+            throw new RestException(ErrorCode.USER_NOT_BLOCKED);
         }
-
         userBlockRepository.deleteByUserIdAndBlockUserId(userId, blockUserId);
     }
 }

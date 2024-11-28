@@ -1,10 +1,14 @@
 package net.lodgames.user.param;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProfileModParam {
     private Long userId;
     private String nickname;

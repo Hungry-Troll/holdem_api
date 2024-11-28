@@ -50,30 +50,17 @@ CREATE TABLE `friend_request`
 
 CREATE TABLE `message`
 (
-    id          bigint       NOT NULL AUTO_INCREMENT COMMENT '메세지 고유번호',
-    sender_id   bigint       NOT NULL COMMENT '메세지 보낸 유저 고유번호',
-    receiver_id bigint       NOT NULL COMMENT '메시지 받은 유저 고유번호',
+    id          bigint    NOT NULL AUTO_INCREMENT COMMENT '메세지 고유번호',
+    sender_id   bigint    NOT NULL COMMENT '메세지 보낸 유저 고유번호',
+    receiver_id bigint    NOT NULL COMMENT '메시지 받은 유저 고유번호',
     content     varchar(255) NULL COMMENT '메세지 내용',
-    created_at  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    read_at     timestamp    NULL COMMENT '읽은시각',
-    deleted_at  timestamp    NULL COMMENT '삭제시각',
+    created_at  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    read_at     timestamp NULL COMMENT '읽은시각',
+    deleted_at  timestamp NULL COMMENT '삭제시각',
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='메세지';
-
-CREATE TABLE `profile`
-(
-    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '프로필 고유번호',
-    `user_id`    bigint    NOT NULL COMMENT '유저고유번호',
-    `nickname`   varchar(100)       DEFAULT NULL COMMENT '닉네입',
-    `image`      varchar(100)       DEFAULT NULL COMMENT '이미지 경로',
-    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT ='프로필';
 
 CREATE TABLE `follow`
 (
@@ -91,10 +78,10 @@ CREATE TABLE `app_version`
     `id`             int         NOT NULL AUTO_INCREMENT COMMENT '앱 버전 고유번호',
     `version`        varchar(20) NOT NULL COMMENT '업데이트 버전',
     `version_type`   tinyint     NOT NULL COMMENT '앱 버전 타입',
-    `publish_at`     timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '게시시각',
+    `publish_at`     timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '게시시각',
     `publish_status` tinyint     NOT NULL COMMENT '버전 출시 상태',
-    `created_at`     timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at`     timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    `created_at`     timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`     timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -107,10 +94,23 @@ CREATE TABLE `board`
     `content`    varchar(100) NOT NULL COMMENT '본문',
     `board_type` tinyint      NOT NULL COMMENT '타입',
     `status`     tinyint      NOT NULL COMMENT '상태',
-    `image`      varchar(50)  NULL COMMENT '이미지 경로',
-    `created_at` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    `image`      varchar(50) NULL COMMENT '이미지 경로',
+    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='게시판';
+
+CREATE TABLE `user_block`
+(
+    `id`            bigint    NOT NULL AUTO_INCREMENT COMMENT '유저차단 고유번호',
+    `user_id`       bigint    NOT NULL COMMENT '유저 고유번호',
+    `block_user_id` bigint    NOT NULL COMMENT '차단유저 고유번호',
+    `created_at`    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='유저차단';
+

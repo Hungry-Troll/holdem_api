@@ -15,9 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import org.springframework.security.test.context.support.WithMockUser;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,7 +41,6 @@ public class MessageTest {
 
     @DisplayName("메세지 전송 테스트")
     @Test
-    @WithMockUser(username = "testUser", roles = {"USER"})  // 가짜 사용자 설정
     void sendMessage() throws Exception {
         // given 요청 데이터 준비
         MessageAddParam messageAddParam = new MessageAddParam();

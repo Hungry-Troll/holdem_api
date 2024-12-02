@@ -114,3 +114,15 @@ CREATE TABLE `user_block`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='유저차단';
 
+CREATE TABLE user_memo
+(
+    `id`             bigint       NOT NULL AUTO_INCREMENT COMMENT '유저메모 고유번호',
+    `user_id`        bigint       NOT NULL COMMENT '메모 작성 유저번호',
+    `target_user_id` bigint       NOT NULL COMMENT '메모 대상 유저번호',
+    `memo_text`      varchar(255) NOT NULL COMMENT '메모 내용',
+    `created_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='유저메모';

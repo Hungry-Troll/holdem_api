@@ -17,6 +17,7 @@ import static net.lodgames.follow.model.QFollow.follow;
 import static net.lodgames.user.model.QProfile.profile;
 import static net.lodgames.user.model.QUsers.users;
 import static net.lodgames.user.model.QUserBlock.userBlock;
+import static net.lodgames.user.model.QUserMemo.userMemo;
 
 @Repository
 @AllArgsConstructor
@@ -35,7 +36,9 @@ public class UserQueryRepository {
                         profile.image,
                         profile.basicImageIdx,
                         follow.followId.isNotNull().as("isFollow"), // 요청 유저가 대상 유저를 팔로우하는지
-                        userBlock.blockUserId.isNotNull().as("isBlock") // 요청 유저가 대상 유저를 차단했는지
+                        userBlock.blockUserId.isNotNull().as("isBlock"), // 요청 유저가 대상 유저를 차단했는지
+                        userMemo.memoText
+
                 ))
                 .from(users)
                 .join(profile).on(profile.userId.eq(users.userId)) // 프로필은 대상 유저와 연결
@@ -43,6 +46,8 @@ public class UserQueryRepository {
                         .and(follow.followId.eq(targetUserId))) // 대상 유저를 팔로우했는지 확인
                 .leftJoin(userBlock).on(userBlock.userId.eq(userId) // 요청 유저가
                         .and(userBlock.blockUserId.eq(targetUserId))) // 대상 유저를 차단했는지 확인
+                .leftJoin(userMemo).on(userMemo.userId.eq(userId)
+                        .and(userMemo.targetUserId.eq(targetUserId)))
                 .where(users.userId.eq(targetUserId)) // 대상 유저의 정보를 조회
                 .fetchOne();
     }

@@ -19,9 +19,9 @@ public class UserBlock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "user_id")
+    @Column(name = "user_id") // 유저 아이디
     private long userId;
-    @Column(name = "block_user_id")
+    @Column(name = "block_user_id") // 차단 유저 아이디
     private long blockUserId;
     @CreatedDate
     @Column(name = "created_at")

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class MessageSendVo {
+public class MessageSendBoxVo {
     private long id;
     private long senderId;
     private long receiverId;

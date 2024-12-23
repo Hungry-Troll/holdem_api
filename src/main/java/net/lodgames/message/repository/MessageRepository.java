@@ -28,5 +28,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     //Optional<Message> findByIdAndReceiverIdAndDeletedAtIsNull(long id, long receiverId);
 
     // 쪽지 수정
-    Optional<Message> findByIdAndCreatedAtIsNotNullAndReadAtIsNullAndDeletedAtIsNull(long id);
+    //Optional<Message> findByIdAndCreatedAtIsNotNullAndReadAtIsNullAndDeletedAtIsNull(long id);
+
+    // 쪽지 수정
+    Optional<Message> findByIdAndReadAtIsNullAndDeletedAtIsNull(long id);
 }

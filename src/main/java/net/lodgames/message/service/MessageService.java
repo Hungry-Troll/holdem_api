@@ -27,16 +27,16 @@ public class MessageService {
 
     //쪽지 보내기
     @Transactional
-    public MessageSendVo addMessage(MessageAddParam messageAddParam) {
-        if (messageAddParam.getReceiverId() == 0) {
+    public void addMessage(MessageAddParam messageAddParam) {
+        if (messageAddParam.getReceiverId() <= 0) {
             throw new RestException(ErrorCode.FAIL_SEND_MESSAGE_NOT_FOUND_RECEIVER);
         }
-        Message message = messageRepository.save(Message.builder()
+        //TODO 금칙어는 클라에서 되도록 처리하고 크리티컬한것만 서버에서 처리하도록 기능 추가
+        messageRepository.save(Message.builder()
                 .senderId(messageAddParam.getSenderId())
                 .receiverId(messageAddParam.getReceiverId())
                 .content(messageAddParam.getContent()).build()
         );
-        return messageMapper.updateSendMessageToVo(message);
     }
 
     //쪽지 읽기
@@ -50,42 +50,46 @@ public class MessageService {
         return messageMapper.updateReadMessageToVo(messageRepository.save(findMessage));
     }
 
-    //받은 쪽지함 읽기
-    @Transactional
-    public List<MessageReadVo> postReceivedBoxMessageRead(MessageReceivedBoxGetParam messageReceivedBoxGetParam) {
-        List<Message> findMessages = messageQueryRepository.findReceivedBoxMessage(messageReceivedBoxGetParam, messageReceivedBoxGetParam.of()).orElseThrow(()->
-                new RestException(ErrorCode.FAIL_READ_MESSAGE_NOT_FOUND));
-
-        return messageMapper.updateMessageInBoxReadParamToVoList(findMessages);
-    }
-
     //쪽지 삭제
     @Transactional
-    public MessageDeleteVo deleteMessage(MessageDeleteParam messageDeleteParam) {
+    public void deleteMessage(MessageDeleteParam messageDeleteParam) {
         Message findMessage = messageRepository.findByIdAndReceiverIdAndDeletedAtIsNull(
                 messageDeleteParam.getMessageId(),
                 messageDeleteParam.getReceiverId()
         ).orElseThrow(() -> new RestException(ErrorCode.FAIL_DELETE_MESSAGE_NOT_FOUND));
         findMessage.setDeletedAt(LocalDateTime.now());
-        return messageMapper.updateDeleteMessageToVo(messageRepository.save(findMessage));
+        messageRepository.save(findMessage);
     }
 
     //보낸 쪽지 수정
     @Transactional
     public MessageUpdateVo updateMessage(MessageUpdateParam messageUpdateParam) {
-        Message findMessage = messageRepository.findByIdAndCreatedAtIsNotNullAndReadAtIsNullAndDeletedAtIsNull(
-                messageUpdateParam.getMessageId()
+        Message findMessage = messageRepository.findByIdAndReadAtIsNullAndDeletedAtIsNull(messageUpdateParam.getMessageId()
         ).orElseThrow(() -> new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_NOT_FOUND));
+        if (findMessage.getReadAt() != null) {
+            throw new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_ALREADY_READ);
+        }
+        if (findMessage.getDeletedAt() != null) {
+            throw new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_ALREADY_DELETED);
+        }
         findMessage.setContent(messageUpdateParam.getContent());
+        findMessage.setCreatedAt(LocalDateTime.now()); // 새로운 생성시간 (받는 사람이 읽지 않았으므로...)
         return messageMapper.updateMessageToVo(messageRepository.save(findMessage));
     }
 
-    //보낸 쪽지함 확인
+    //받은 쪽지함
     @Transactional
-    public List<MessageSentCheckVo> postSentBoxMessageRead(MessageSentBoxGetParam messageSentBoxGetParam) {
-        List<Message> findMessageList = messageQueryRepository.findSendBoxMessage(messageSentBoxGetParam, messageSentBoxGetParam.of()).orElseThrow(()->
-                new RestException(ErrorCode.FAIL_SEND_MESSAGE_NOT_FOUND_RECEIVER));
+    public List<MessageReceiveBoxVo> receiveBoxMessage(MessageReceiveBoxParam messageReceiveBoxParam) {
+        List<Message> findMessages = messageQueryRepository.findReceivedBoxMessage(
+                messageReceiveBoxParam, messageReceiveBoxParam.of());
+        return messageMapper.updateMessageListToVoList(findMessages);
+    }
 
-        return messageMapper.updateCheckSendMessageToVo(findMessageList);
+    //보낸 쪽지함
+    @Transactional
+    public List<MessageSendBoxVo> sendBoxMessage(MessageSendBoxParam messageSendBoxParam) {
+        List<Message> findMessages = messageQueryRepository.findSendBoxMessage(
+                messageSendBoxParam, messageSendBoxParam.of());
+        return messageMapper.updateCheckSendMessageToVo(findMessages);
     }
 }

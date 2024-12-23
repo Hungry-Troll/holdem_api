@@ -8,7 +8,6 @@ import net.lodgames.message.param.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +23,8 @@ public class MessageQueryRepository {
     // TODO: 추후 프로필하고 쪽지 합쳐야 됨
     
     // 받은 쪽지함 읽기
-    public Optional<List<Message>> findReceivedBoxMessage(MessageReceivedBoxGetParam param, Pageable pageable) {
-        List<Message> result = jpaQueryFactory.select(Projections.fields(Message.class,
+    public List<Message> findReceivedBoxMessage(MessageReceiveBoxParam param, Pageable pageable) {
+        return jpaQueryFactory.select(Projections.fields(Message.class,
                 message.id,
                 message.senderId,
                 message.receiverId,
@@ -40,14 +39,11 @@ public class MessageQueryRepository {
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
-
-        // 결과를 Optional 감싸서 반환
-        return result.isEmpty() ? Optional.empty() : Optional.of(result);
     }
 
     // 보낸 쪽지함 확인
-    public Optional<List<Message>> findSendBoxMessage(MessageSentBoxGetParam param, Pageable pageable) {
-        List<Message> result = jpaQueryFactory.select(Projections.fields(Message.class,
+    public List<Message> findSendBoxMessage(MessageSendBoxParam param, Pageable pageable) {
+        return jpaQueryFactory.select(Projections.fields(Message.class,
                         message.id,
                         message.senderId,
                         message.receiverId,
@@ -61,8 +57,5 @@ public class MessageQueryRepository {
                         .limit(pageable.getPageSize())
                         .offset(pageable.getOffset())
                         .fetch();
-
-        // 결과를 Optional 감싸서 반환
-        return result.isEmpty() ? Optional.empty() : Optional.of(result);
     }
 }

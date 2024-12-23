@@ -18,46 +18,39 @@ public class MessageController {
     private final MessageService messageService;
 
     //쪽지 보내기
-    @PostMapping("/messages/{receiverId}/send")
-    public ResponseEntity<?> addMessage(@PathVariable(name="receiverId") long receiverId,
-                                         @RequestBody MessageAddParam messageAddParam,
-                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        messageAddParam.setReceiverId(receiverId);
+    @PostMapping("/messages")
+    public ResponseEntity<?> addMessage(@RequestBody MessageAddParam messageAddParam,
+                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
         messageAddParam.setSenderId(userPrincipal.getUserId());
-        return ResponseEntity.ok(messageService.addMessage(messageAddParam));
+        messageService.addMessage(messageAddParam);
+        return ResponseEntity.ok().build();
     }
 
     //쪽지 읽기
-    @GetMapping("/messages/{messageId}/read")
+    @GetMapping("/messages/{messageId}")
     public ResponseEntity<?> getMessage(@PathVariable(name="messageId") long messageId,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(messageService.getMessage(MessageGetParam.builder()
-                                                                            .receiverId(userPrincipal.getUserId())
-                                                                            .messageId(messageId)
-                                                                            .build()));
-    }
-
-    //받은 쪽지함 읽기
-    @PostMapping("messages/receivedBox/read")
-    public ResponseEntity<?> postReceivedBoxMessageRead(@RequestBody MessageReceivedBoxGetParam messageReceivedBoxGetParam,
-                                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        messageReceivedBoxGetParam.setReceiverId(userPrincipal.getUserId());
-        return ResponseEntity.ok(messageService.postReceivedBoxMessageRead(messageReceivedBoxGetParam));
+        return ResponseEntity.ok(
+                messageService.getMessage(MessageGetParam.builder()
+                                                         .receiverId(userPrincipal.getUserId())
+                                                         .messageId(messageId)
+                                                         .build()));
     }
 
     //쪽지 삭제
-    @DeleteMapping("messages/{messageId}/delete")
+    @DeleteMapping("/messages/{messageId}")
     public ResponseEntity<?> deleteMessage(@PathVariable(name="messageId") long messageId,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(messageService.deleteMessage(MessageDeleteParam.builder()
-                                                                                .receiverId(userPrincipal.getUserId())
-                                                                                .messageId(messageId)
-                                                                                .build()));
+        messageService.deleteMessage(MessageDeleteParam.builder()
+                                                       .receiverId(userPrincipal.getUserId())
+                                                       .messageId(messageId)
+                                                       .build());
+        return ResponseEntity.ok().build();
     }
 
-    //쪽지 수정
-    @PostMapping("messages/{messageId}/update")
-    public ResponseEntity<?> updateMessage(@PathVariable long messageId,
+    //쪽지 수정 // 보낸 쪽지를 상대방이 읽거나 삭제 전까지만 수정 할 수 있음
+    @PutMapping("/messages/{messageId}")
+    public ResponseEntity<?> updateMessage(@PathVariable(name="messageId") long messageId,
                                            @RequestBody MessageUpdateParam messageUpdateParam,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         messageUpdateParam.setMessageId(messageId);
@@ -65,11 +58,19 @@ public class MessageController {
         return ResponseEntity.ok(messageService.updateMessage(messageUpdateParam));
     }
 
-    //보낸 쪽지함 읽기
-    @PostMapping("messages/sentBox/read")
-    public ResponseEntity<?> postSentBoxMessageRead(@RequestBody MessageSentBoxGetParam messageSentBoxGetParam,
-                                                    @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        messageSentBoxGetParam.setSenderId(userPrincipal.getUserId());
-        return ResponseEntity.ok(messageService.postSentBoxMessageRead(messageSentBoxGetParam));
+    //받은 쪽지함 //
+    @GetMapping("/messages/receiveBox")
+    public ResponseEntity<?> receiveBoxMessage(@RequestBody MessageReceiveBoxParam messageReceiveBoxParam,
+                                               @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        messageReceiveBoxParam.setReceiverId(userPrincipal.getUserId());
+        return ResponseEntity.ok(messageService.receiveBoxMessage(messageReceiveBoxParam));
+    }
+
+    //보낸 쪽지함 // 보낸 쪽지함은 상대방이 읽기 전이나 삭제 전까지만 볼 수 있음
+    @GetMapping("/messages/sendBox")
+    public ResponseEntity<?> sendBoxMessage(@RequestBody MessageSendBoxParam messageSendBoxParam,
+                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        messageSendBoxParam.setSenderId(userPrincipal.getUserId());
+        return ResponseEntity.ok(messageService.sendBoxMessage(messageSendBoxParam));
     }
 }

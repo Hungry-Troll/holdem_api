@@ -1,14 +1,13 @@
 package net.lodgames.message.param;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import net.lodgames.common.param.PagingParam;
 
 @Getter
 @Setter
-@Builder
-public class MessageReceivedBoxGetParam extends PagingParam {
-    private long id;
+public class MessageReceiveBoxParam extends PagingParam {
+    @JsonIgnore
     private long receiverId;
 }

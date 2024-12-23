@@ -30,7 +30,7 @@ public class Message {
     @Column(name ="created_at")
     private LocalDateTime createdAt;
     @Column(name ="read_at")
-    @LastModifiedDate
+    //@LastModifiedDate
     private LocalDateTime readAt;
     @Column(name ="deleted_at")
     private LocalDateTime deletedAt;

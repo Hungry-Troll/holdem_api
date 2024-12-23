@@ -138,11 +138,11 @@ CREATE TABLE `storage`
     `status`       tinyint      NOT NULL COMMENT '상태 (수령 전, 수령 후)',
     `sender_type`  tinyint      NOT NULL COMMENT '전송타입(user/admin 보낸 쪽 기록)',
     `content_type` tinyint      NOT NULL COMMENT '종류(재화/아이템/번들)',
-    `expiry_date`  timestamp    NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '수령기한',
-    `read_at`      timestamp    NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '읽은시각',
+    `expiry_date`  timestamp    NULL     COMMENT '수령기한',
+    `read_at`      timestamp    NULL     COMMENT '읽은시각',
     `created_at`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     `updated_at`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
-    `deleted_at`   timestamp    NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '삭제시각',
+    `deleted_at`   timestamp    NULL     COMMENT '삭제시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

@@ -2,6 +2,7 @@ package net.lodgames.config.redis;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Redis list specific operations 을 사용해 이벤트 큐를 구현
  */
+@RedisHash("RedisQueue")
 @Repository
 public class RedisQueueRepositoryImpl {
     private static final String EVENT_QUEUE_NAME = "event-queue";

@@ -1,7 +1,8 @@
-package net.lodgames.config.db.redis;
+package net.lodgames.config.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Repository
+@RedisHash("RedisInGameAuthentication")
 @Slf4j
 public class RedisInGameAuthenticationRepositoryImpl {
 

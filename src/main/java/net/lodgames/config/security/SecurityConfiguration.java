@@ -47,7 +47,7 @@ public class SecurityConfiguration {
                                 /* new AntPathRequestMatcher("/"),*/
                                 "/", "/error", "/api/error"
                                 , "/hello", "/api/hello", "/api/hello/log", "/api/now"// MAIN
-                                , "/test/**", "/api/test/**"
+                                , "/test/**", "/api/test/**", "/inter/api/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler()));

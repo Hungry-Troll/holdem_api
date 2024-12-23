@@ -1,9 +1,15 @@
 package net.lodgames.config;
 
-import net.lodgames.stuff.repository.StuffQueryRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import net.lodgames.shop.bundle.repository.BundleQueryRepository;
+import net.lodgames.shop.category.repository.CategoryQueryRepository;
+import net.lodgames.shop.collection.repository.CollectionQueryRepository;
+import net.lodgames.shop.item.repository.ItemQueryRepository;
+import net.lodgames.shop.item.repository.ItemUnitQueryRepository;
+import net.lodgames.shop.purchase.repository.PurchaseQueryRepository;
+import net.lodgames.stuff.repository.StuffQueryRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -20,5 +26,34 @@ public class QueryDsLTestConfig {
     @Bean
     public StuffQueryRepository stuffQueryRepository() {
         return new StuffQueryRepository(jpaQueryFactory());
+    }
+
+    @Bean
+    public ItemQueryRepository itemQueryRepository() {
+        return new ItemQueryRepository(jpaQueryFactory());
+    }
+
+    @Bean
+    public ItemUnitQueryRepository itemUnitQueryRepository() {
+        return new ItemUnitQueryRepository(jpaQueryFactory());
+    }
+
+    @Bean
+    public CategoryQueryRepository categoryQueryRepository() {
+        return new CategoryQueryRepository(jpaQueryFactory());
+    }
+
+    @Bean
+    public BundleQueryRepository bundleQueryRepository() {
+        return new BundleQueryRepository(jpaQueryFactory());
+    }
+    @Bean
+    public PurchaseQueryRepository purchaseQueryRepository() {
+        return new PurchaseQueryRepository(jpaQueryFactory());
+    }
+
+    @Bean
+    public CollectionQueryRepository collectionQueryRepository() {
+        return new CollectionQueryRepository(jpaQueryFactory());
     }
 }

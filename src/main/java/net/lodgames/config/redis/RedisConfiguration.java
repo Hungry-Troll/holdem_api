@@ -15,6 +15,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -29,9 +30,9 @@ import java.util.List;
  */
 @Slf4j
 @EnableCaching(proxyTargetClass = true)
+@EnableRedisRepositories(basePackages = "net.lodgames.config.redis")
 @Configuration
 public class RedisConfiguration {
-
     @Value("${redis.host}")
     private String host;
     @Value("${redis.port:6379}")

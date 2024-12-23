@@ -1,6 +1,6 @@
 FROM public.ecr.aws/docker/library/amazoncorretto:21-alpine-jdk
 RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:springtodtj
+USER spring:spring
 ARG DEPENDENCY=build/dependency
 WORKDIR app
 COPY ${DEPENDENCY}/BOOT-INF/classes BOOT-INF/classes

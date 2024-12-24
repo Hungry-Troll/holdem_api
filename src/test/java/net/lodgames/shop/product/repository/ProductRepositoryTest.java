@@ -42,7 +42,7 @@ public class ProductRepositoryTest {
                 .image("test image")
                 .info("test info")
                 .type(ProductType.CURRENCY)
-                .count(100)
+                .stockQuantity(100)
                 .price(100)
                 .originPrice(100)
                 .build());

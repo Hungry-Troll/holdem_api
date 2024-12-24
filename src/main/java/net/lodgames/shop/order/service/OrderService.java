@@ -37,7 +37,7 @@ public class OrderService {
         // check [total purchase amount] within this month
         depositRecordService.checkTotalPurchaseAmountWithinThisMonth(orderAcceptParam.getUserId(), product.getPrice());
         // 상품 갯수 체크
-        checkOrderAvailable(product.getCount());
+        checkOrderAvailable(product.getStockQuantity());
 
         // make order
         Orders orders = orderRepository.save(Orders.builder()

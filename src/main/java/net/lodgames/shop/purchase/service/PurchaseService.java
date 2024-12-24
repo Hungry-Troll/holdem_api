@@ -166,7 +166,7 @@ public class PurchaseService {
             // 구매 번들 재화 타입
             CurrencyType currencyType = bundleCurrency.getCurrencyType();
             // 구매 번들 재화 개수
-            Integer count = bundleCurrency.getCount();
+            Long count = bundleCurrency.getCount();
             // 코인 지급
             if (Objects.requireNonNull(currencyType) == CurrencyType.COIN) {
                 coinService.addCoinByBundleTransaction(userId, count);

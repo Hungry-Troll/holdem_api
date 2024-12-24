@@ -201,17 +201,21 @@ public class CoinService {
 
     }
 
-    public void addCoinByOrder(Long userId, Integer quantity, String orderIdempotentKey) {
+    public void addCoinByOrder(Long userId, Long quantity, String orderIdempotentKey) {
         addCoinWithLock(userId, quantity, CoinHistoryDesc.DEPOSIT_BY_ORDER_PAID, orderIdempotentKey);
     }
 
-    public void addCoinByBundleTransaction(Long userId, Integer quantity) {
+    public void addCoinByBundleTransaction(Long userId, Long quantity) {
         String orderIdempotentKey = UUID.randomUUID().toString();
         addCoinWithLock(userId, quantity, CoinHistoryDesc.DEPOSIT_BY_BUNDLE_CURRENCY, orderIdempotentKey);
     }
 
-    public void addCoinByReceiveStorage(Long userId, Integer quantity, String orderIdempotentKey) {
-        addCoinWithLock(userId, quantity, CoinHistoryDesc.DEPOSIT_BY_RECEIVE_STORAGE, orderIdempotentKey);
+    public void addCoinByReceiveStorage(Long userId, Long quantity, String idempotentKey) {
+        addCoinWithLock(userId, quantity, CoinHistoryDesc.DEPOSIT_BY_RECEIVE_STORAGE, idempotentKey);
+    }
+
+    public void subCoinBySendStorage(Long userId, Long quantity, String idempotentKey) {
+        spendCoinWithLock(userId, quantity, CoinHistoryDesc.DEPOSIT_BY_SEND_STORAGE, idempotentKey);
     }
 
 }

@@ -67,7 +67,7 @@ public class ProductService {
     // 갯수 제한이 있을 경우 갯수를 변경한다.
     public void decreaseCountIfHasQuantityLimit(Long productId) {
         Product product = retrieveProduct(productId);
-        product.setCount(product.getCount() - 1);
+        product.setStockQuantity(product.getStockQuantity() - 1);
         productRepository.save(product);
     }
 

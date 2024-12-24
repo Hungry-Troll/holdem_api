@@ -138,11 +138,11 @@ CREATE TABLE `storage`
     `status`       tinyint      NOT NULL COMMENT '상태 (수령 전, 수령 후)',
     `sender_type`  tinyint      NOT NULL COMMENT '전송타입(user/admin 보낸 쪽 기록)',
     `content_type` tinyint      NOT NULL COMMENT '종류(재화/아이템/번들)',
-    `expiry_date`  timestamp    NULL     COMMENT '수령기한',
-    `read_at`      timestamp    NULL     COMMENT '읽은시각',
+    `expiry_date`  timestamp    NULL COMMENT '수령기한',
+    `read_at`      timestamp    NULL COMMENT '읽은시각',
     `created_at`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     `updated_at`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
-    `deleted_at`   timestamp    NULL     COMMENT '삭제시각',
+    `deleted_at`   timestamp    NULL COMMENT '삭제시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -240,19 +240,19 @@ CREATE TABLE `diamond_record`
 
 CREATE TABLE `product`
 (
-    `id`           bigint       NOT NULL AUTO_INCREMENT COMMENT '상품 고유번호',
-    `name`         varchar(60)  NOT NULL COMMENT '이름',
-    `description`  TEXT         NULL COMMENT '설명',
-    `status`       tinyint      NOT NULL DEFAULT 0 COMMENT '상태(준비중 , 판매중, 판매중지, 게시중지)',
-    `thumbnail`    varchar(255) NULL COMMENT '썸네일 경로',
-    `image`        varchar(255) NULL COMMENT '이미지 경로',
-    `info`         varchar(255) NULL COMMENT '상품 정보',
-    `type`         tinyint      NOT NULL DEFAULT 0 COMMENT '상품타입(재화)',
-    `count`        int          NOT NULL DEFAULT 1 COMMENT '수량',
-    `price`        int          NOT NULL DEFAULT 0 COMMENT '금액',
-    `origin_price` int          NOT NULL DEFAULT 0 COMMENT '원금액',
-    `created_at`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    `id`             bigint       NOT NULL AUTO_INCREMENT COMMENT '상품 고유번호',
+    `name`           varchar(60)  NOT NULL COMMENT '이름',
+    `description`    TEXT         NULL COMMENT '설명',
+    `status`         tinyint      NOT NULL DEFAULT 0 COMMENT '상태(준비중 , 판매중, 판매중지, 게시중지)',
+    `thumbnail`      varchar(255) NULL COMMENT '썸네일 경로',
+    `image`          varchar(255) NULL COMMENT '이미지 경로',
+    `info`           varchar(255) NULL COMMENT '상품 정보',
+    `type`           tinyint      NOT NULL DEFAULT 0 COMMENT '상품타입(재화)',
+    `stock_quantity` int          NULL COMMENT '재고수량',
+    `price`          int          NOT NULL DEFAULT 0 COMMENT '금액',
+    `origin_price`   int          NOT NULL DEFAULT 0 COMMENT '원금액',
+    `created_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

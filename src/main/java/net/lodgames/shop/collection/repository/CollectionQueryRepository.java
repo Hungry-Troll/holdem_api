@@ -24,7 +24,7 @@ public class CollectionQueryRepository {
         return jpaQueryFactory
                 .select(Projections.fields(CollectionVo.class,
                         collection.id,              // 수집 고유번호
-                        collection.itemId,
+                        collection.itemId,          // 아이템 고유번호
                         collection.userId,          // 유저 고유번호
                         collection.purchaseId,      // 구매 아이디
                         collection.periodType,      // 기간 타입
@@ -49,6 +49,7 @@ public class CollectionQueryRepository {
                                 item.period,        // 기간
                                 item.expiration,    // 만료일
                                 item.currencyType,  // 재화타입
+                                item.amount,        // 합계
                                 item.createdAt,     // 만든날짜
                                 item.updatedAt      // 변경일
                         ).as("item")

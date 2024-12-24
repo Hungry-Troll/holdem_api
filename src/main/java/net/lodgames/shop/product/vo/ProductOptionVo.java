@@ -13,6 +13,6 @@ public class ProductOptionVo {
     private Long productId;          // 상품 아이디
     private String name;             // 이름
     private ProductOptionType type;  // 상품 옵션 타입 DIAMOND(0), COIN(1), ITEM(2)
-    private Integer quantity;        // 갯수
+    private Long quantity;           // 갯수
     private LocalDateTime createdAt; // 생성시각
 }

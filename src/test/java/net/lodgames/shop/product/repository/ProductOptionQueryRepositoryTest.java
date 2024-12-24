@@ -39,20 +39,20 @@ public class ProductOptionQueryRepositoryTest {
     private ProductRepository productRepository;
 
     @Test
-    void getProductOption(){
+    void getProductOption() {
         //given
         Product product = productRepository.save(Product.builder().name("test").description("test description")
                 .status(ProductStatus.ON_SALE).thumbnail("").image("").info("").type(ProductType.CURRENCY)
-                .count(100).price(100).originPrice(100).build());
+                .stockQuantity(100).price(100).originPrice(100).build());
 
         ProductOption option1 = ProductOption.builder().productId(product.getId()).type(ProductOptionType.COIN)
-                .name("testOption1").quantity(100).build();
+                .name("testOption1").quantity(100L).build();
         ProductOption option2 = ProductOption.builder().productId(product.getId()).type(ProductOptionType.COIN)
-                .name("testOption2").quantity(200).build();
+                .name("testOption2").quantity(200L).build();
         ProductOption option3 = ProductOption.builder().productId(product.getId()).type(ProductOptionType.COIN)
-                .name("testOption3").quantity(300).build();
+                .name("testOption3").quantity(300L).build();
         ProductOption option4 = ProductOption.builder().productId(product.getId()).type(ProductOptionType.COIN)
-                .name("testOption4").quantity(400).build();
+                .name("testOption4").quantity(400L).build();
 
         productOptionRepository.save(option1);
         productOptionRepository.save(option2);
@@ -60,7 +60,7 @@ public class ProductOptionQueryRepositoryTest {
         productOptionRepository.save(option4);
 
         //when
-        List< ProductOptionVo> list = productOptionQueryRepository.getProductOptionList(product.getId());
+        List<ProductOptionVo> list = productOptionQueryRepository.getProductOptionList(product.getId());
 
         //then
         Assertions.assertEquals(list.get(0).getName(), option4.getName());

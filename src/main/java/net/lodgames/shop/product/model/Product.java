@@ -28,7 +28,7 @@ public class Product {
     private String image;            // 이미지 경로
     private String info;             // 정보
     private ProductType type;        // 상품 종류
-    private Integer count;           // 갯수 (null 이면 무제한)
+    private Integer stockQuantity;   // 갯수 (null 이면 무제한)
     private Integer price;           // 판매가격
     private Integer originPrice;     // 원가격
     @CreatedDate

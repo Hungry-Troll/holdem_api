@@ -1,6 +1,5 @@
 package net.lodgames.shop.item.vo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +11,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 public class ItemVo {
     private Long id;                   // 아이템 고유번호
@@ -33,7 +31,6 @@ public class ItemVo {
     private LocalDateTime expiration;  // 만료일
     private CurrencyType currencyType; // 재화타입
     private Integer amount;            // 재화가격
-    private Boolean collection;        // 컬렉션 여부
     private LocalDateTime createdAt;   // 만든날짜
     private LocalDateTime updatedAt;   // 변경일
 }

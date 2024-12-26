@@ -25,7 +25,7 @@ public class ProductQueryRepository {
                         product.thumbnail,
                         product.image,
                         product.type,
-                        product.count,
+                        product.stockQuantity,
                         product.info,
                         product.originPrice,
                         product.price,

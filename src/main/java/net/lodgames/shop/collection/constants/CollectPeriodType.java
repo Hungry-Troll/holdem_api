@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum CollectPeriodType {
-    NONE(0),
-    EXPIRATION(1)
+    NONE(0),       // 없음
+    EXPIRATION(1)  // 만료
     ;
     private final int value;
     CollectPeriodType(int value) {

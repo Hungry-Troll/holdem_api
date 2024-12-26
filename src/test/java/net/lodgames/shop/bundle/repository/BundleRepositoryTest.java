@@ -113,7 +113,7 @@ public class BundleRepositoryTest {
         BundleCurrency bundleCurrency = bundleCurrencyRepository.save(
                 BundleCurrency.builder()
                         .bundleId(bundle.getId())
-                        .count(10000)
+                        .count(10000L)
                         .currencyType(CurrencyType.COIN)
                         .createdAt(LocalDateTime.now())
                         .build());

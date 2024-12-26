@@ -20,7 +20,7 @@ public class BundleCurrency {
     private Long id;
     private Long bundleId;              // 번들 고유 번호
     private CurrencyType currencyType;  // 재화타입 // COIN Only
-    private Integer count;              // 갯수
+    private Long count;              // 갯수
     @CreatedDate
     private LocalDateTime createdAt;    // 만든날짜
 }

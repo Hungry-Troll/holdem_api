@@ -49,7 +49,7 @@ public class DepositRecordService {
     }
 
     // 지불 재화 기록 생성
-    public void addDepositCurrencyRecord(Long depositRecordId, CurrencyType currencyType, Integer depositAmount, String idempotentKey) {
+    public void addDepositCurrencyRecord(Long depositRecordId, CurrencyType currencyType, Long depositAmount, String idempotentKey) {
         DepositCurrencyRecord depositCurrencyRecord = DepositCurrencyRecord.builder()
                 .depositRecordId(depositRecordId) // 입금 기록 아이디
                 .depositAmount(depositAmount)     // 입금 금액

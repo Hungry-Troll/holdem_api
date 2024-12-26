@@ -20,11 +20,11 @@ public class DepositCurrencyRecord {
     private Long id;                   // 입금재화기록 고유번호
     private Long depositRecordId;      // 입금기록 고유번호
     private CurrencyType currencyType; // 재화타입
-    private Integer depositAmount;     // 입금금액
+    private Long depositAmount;        // 입금금액
     private String idempotentKey;      // 멱등키
     private LocalDateTime createdAt;   // 생성시각
     @Builder
-    public DepositCurrencyRecord(Long depositRecordId, CurrencyType currencyType, Integer depositAmount, String idempotentKey) {
+    public DepositCurrencyRecord(Long depositRecordId, CurrencyType currencyType, Long depositAmount, String idempotentKey) {
         this.depositRecordId = depositRecordId;
         this.currencyType = currencyType;
         this.depositAmount = depositAmount;

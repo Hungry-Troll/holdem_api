@@ -7,5 +7,6 @@ public class CoinHistoryDesc {
     public static final String DEPOSIT_GAME_COIN = "Deposit coin from game";
     public static final String DEPOSIT_BY_BUNDLE_CURRENCY = "Deposit coin BY bundle currency transaction";
     public static final String DEPOSIT_BY_RECEIVE_STORAGE = "Deposit coin by receive storage";
+    public static final String DEPOSIT_BY_SEND_STORAGE = "Deposit coin by send storage";
 
 }

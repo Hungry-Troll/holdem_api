@@ -193,11 +193,15 @@ public class DiamondService {
 
     }
 
-    public void addDiamondByOrder(Long userId, Integer quantity, String orderIdempotentKey ) {
+    public void addDiamondByOrder(Long userId, Long quantity, String orderIdempotentKey ) {
         addDiamondWithLock(userId, quantity, DiamondHistoryDesc.DEPOSIT_BY_ORDER_PAID, orderIdempotentKey);
     }
 
-    public void addDiamondByReceiveStorage(Long userId, Integer quantity, String orderIdempotentKey) {
-        addDiamondWithLock(userId, quantity, DiamondHistoryDesc.DEPOSIT_BY_RECEIVE_STORAGE, orderIdempotentKey);
+    public void addDiamondByReceiveStorage(Long userId, Long quantity, String idempotentKey) {
+        addDiamondWithLock(userId, quantity, DiamondHistoryDesc.DEPOSIT_BY_RECEIVE_STORAGE, idempotentKey);
+    }
+
+    public void subDiamondBySendStorage(Long userId, Long quantity, String idempotentKey) {
+        spendDiamondWithLock(userId, quantity, DiamondHistoryDesc.DEPOSIT_BY_SEND_STORAGE, idempotentKey);
     }
 }

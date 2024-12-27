@@ -3,7 +3,7 @@ package net.lodgames.shop.deposit.service;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.currency.constants.CurrencyType;
+import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.shop.deposit.constants.DepositConstants;
 import net.lodgames.shop.deposit.model.DepositCurrencyRecord;
 import net.lodgames.shop.deposit.model.DepositRecord;

@@ -1,7 +1,7 @@
 package net.lodgames.shop.purchase.repository;
 
 import jakarta.transaction.Transactional;
-import net.lodgames.currency.constants.CurrencyType;
+import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.shop.bundle.model.Bundle;
 import net.lodgames.shop.bundle.repository.BundleCurrencyRepository;
 import net.lodgames.shop.bundle.repository.BundleItemRepository;

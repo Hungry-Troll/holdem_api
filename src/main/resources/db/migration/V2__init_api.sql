@@ -184,6 +184,33 @@ CREATE TABLE `storage_bundle`
   COLLATE = utf8mb4_general_ci COMMENT ='보관함번들';
 
 # shop
+CREATE TABLE `chip`
+(
+    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '칩 고유번호',
+    `user_id`    bigint    NOT NULL COMMENT '유저고유번호',
+    `amount`     int       NOT NULL DEFAULT 0 COMMENT '금액',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='칩';
+
+CREATE TABLE `chip_record`
+(
+    `id`             bigint       NOT NULL AUTO_INCREMENT COMMENT '칩기록 고유번호',
+    `user_id`        bigint       NOT NULL COMMENT '유저고유번호',
+    `change_type`    tinyint      NOT NULL COMMENT '변경타입(add, use)',
+    `change_chip`    int          NOT NULL COMMENT '변경칩',
+    `result_chip`    int          NOT NULL COMMENT '결과칩',
+    `change_desc`    varchar(255) NULL COMMENT '변경설명',
+    `idempotent_key` varchar(255) NOT NULL COMMENT '멱등키',
+    `created_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='칩기록';
+
 CREATE TABLE `coin`
 (
     `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '코인고유번호',

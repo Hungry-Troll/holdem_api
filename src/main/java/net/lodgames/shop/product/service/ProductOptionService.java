@@ -2,9 +2,9 @@ package net.lodgames.shop.product.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.lodgames.currency.constants.CurrencyType;
-import net.lodgames.currency.service.CoinService;
-import net.lodgames.currency.service.DiamondService;
+import net.lodgames.currency.common.constants.CurrencyType;
+import net.lodgames.currency.coin.service.CoinService;
+import net.lodgames.currency.diamond.service.DiamondService;
 import net.lodgames.shop.deposit.service.DepositRecordService;
 import net.lodgames.shop.product.constants.ProductOptionType;
 import net.lodgames.shop.product.model.ProductOption;

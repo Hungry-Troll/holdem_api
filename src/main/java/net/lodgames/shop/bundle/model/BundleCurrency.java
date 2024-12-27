@@ -2,7 +2,7 @@ package net.lodgames.shop.bundle.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import net.lodgames.currency.constants.CurrencyType;
+import net.lodgames.currency.common.constants.CurrencyType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

@@ -2,7 +2,7 @@ package net.lodgames.shop.bundle.vo;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.lodgames.currency.constants.CurrencyType;
+import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.shop.bundle.constants.BundleStatus;
 import net.lodgames.shop.item.vo.ItemVo;
 

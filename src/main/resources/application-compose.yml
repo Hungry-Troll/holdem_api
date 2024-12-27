@@ -32,6 +32,12 @@ spring:
   docker:
     compose:
       lifecycle-management: none # none, start-only , start-and-stop
+  # redisson connection info
+  data:
+    redis:
+      database: 6
+      host: redis
+      port: 6379
 server:
   error:
     include-exception: false
@@ -57,3 +63,4 @@ redis:
   type: STANDARD
 jwt:
   secret: mysecret
+cheat-use: false

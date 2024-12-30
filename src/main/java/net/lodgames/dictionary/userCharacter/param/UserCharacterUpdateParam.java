@@ -1,0 +1,23 @@
+package net.lodgames.dictionary.userCharacter.param;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserCharacterUpdateParam {
+    @JsonIgnore
+    private Long id;
+    @JsonIgnore
+    private Long userId;
+    private Long characterId;
+    private Long customiseId;
+    private Integer level;
+    private Integer grade;
+    private Integer statusIndex;
+}

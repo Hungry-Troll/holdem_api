@@ -1,0 +1,61 @@
+package net.lodgames.dictionary.userCharacter.controller;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.lodgames.config.security.UserPrincipal;
+import net.lodgames.dictionary.userCharacter.param.UserCharacterAddParam;
+import net.lodgames.dictionary.userCharacter.param.UserCharacterUpdateParam;
+import net.lodgames.dictionary.userCharacter.service.UserCharacterService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController
+@CrossOrigin
+@AllArgsConstructor
+@RequestMapping("/api/v1")
+public class UserCharacterController {
+
+        private final UserCharacterService userCharacterService;
+
+        // 유저 캐릭터 등록 (유저가 뽑기나 재화로 구매 시)
+        @PostMapping("/userCharacters")
+        public ResponseEntity<?> addUserCharacter(@RequestBody UserCharacterAddParam userCharacterAddParam,
+                                                  @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            userCharacterAddParam.setUserId(userPrincipal.getUserId());
+            userCharacterService.addUserCharacter(userCharacterAddParam);
+            return ResponseEntity.ok().build();
+        }
+
+        // 유저 캐릭터 단일 조회
+        @GetMapping("/userCharacters/{id}")
+        public ResponseEntity<?> getUserCharacter(@PathVariable(name = "id") Long id,
+                                                  @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            return ResponseEntity.ok(userCharacterService.getUserCharacter(id, userPrincipal.getUserId()));
+        }
+
+        // 유저 캐릭터 전체 조회
+        @GetMapping("/userCharacters")
+        public ResponseEntity<?> getUserCharacters(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+            return ResponseEntity.ok(userCharacterService.getUserCharacters(userPrincipal.getUserId()));
+        }
+
+        // 유저 캐릭터 삭제 (기록 X)
+        @DeleteMapping("/userCharacters/{id}")
+        public ResponseEntity<?> deleteUserCharacter(@PathVariable(name = "id") Long id,
+                                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            userCharacterService.deleteUserCharacter(id, userPrincipal.getUserId());
+            return ResponseEntity.ok().build();
+        }
+
+        // 유저 캐릭터 수정
+        @PutMapping("/userCharacters/{id}")
+        public ResponseEntity<?> updateUserCharacter(@PathVariable(name = "id") Long id,
+                                                     @RequestBody UserCharacterUpdateParam userCharacterUpdateParam,
+                                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            userCharacterUpdateParam.setId(id);
+            userCharacterUpdateParam.setUserId(userPrincipal.getUserId());
+            return ResponseEntity.ok(userCharacterService.updateUserCharacter(userCharacterUpdateParam));
+        }
+}

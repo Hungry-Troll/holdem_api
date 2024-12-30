@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/storages/currency")
+@RequestMapping("/api/v1")
 public class StorageCurrencyController {
 
     private StorageCurrencyService storageCurrencyService;
 
     // 보관함 재화 보내기(user -> user) create
-    @PostMapping("/send")
+    @PostMapping("/storages/currency/send")
     public ResponseEntity<?> sendCurrencyStorage(@RequestBody StorageSendCurrencyParam storageSendCurrencyParam,
                                                  @AuthenticationPrincipal UserPrincipal userPrincipal) {
         storageSendCurrencyParam.setSenderId(userPrincipal.getUserId());
@@ -31,8 +31,8 @@ public class StorageCurrencyController {
     }
 
     // 보관함 재화 보내기(admin -> user)
-    @PostMapping("/grant")
-    public ResponseEntity<?> grantCurrencyStorage(@RequestBody StorageGrantCurrencyParam storageGrantCurrencyParam) {
+    @PostMapping("/storages/currency/grant")
+    public ResponseEntity<?> grantCurrencyStorage(@RequestBody StorageGrantCurrencyParam storageGrantCurrencyParam){
         storageGrantCurrencyParam.setSenderId(-1L); // TODO 임시 어드민 ID : -1
         storageGrantCurrencyParam.setSenderType(StorageSenderType.ADMIN);
         storageCurrencyService.grantCurrencyStorage(storageGrantCurrencyParam);
@@ -40,7 +40,7 @@ public class StorageCurrencyController {
     }
 
     // 보관함 재화 받기 // 민감한 데이터이므로 @PathVariable 대신 @RequestBody 사용
-    @PutMapping("/receive")
+    @PutMapping("/storages/currency")
     public ResponseEntity<?> receiveCurrencyStorage(@RequestBody StorageReceiveCurrencyParam storageReceiveCurrencyParam,
                                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
         storageReceiveCurrencyParam.setReceiverId(userPrincipal.getUserId());

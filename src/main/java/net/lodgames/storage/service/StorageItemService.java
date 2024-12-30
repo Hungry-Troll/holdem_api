@@ -3,6 +3,9 @@ package net.lodgames.storage.service;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
+import net.lodgames.shop.item.model.Item;
+import net.lodgames.shop.item.repository.ItemRepository;
+import net.lodgames.shop.purchase.service.PurchaseService;
 import net.lodgames.storage.constants.StorageContentType;
 import net.lodgames.storage.constants.StorageSenderType;
 import net.lodgames.storage.constants.StorageStatus;
@@ -27,11 +30,8 @@ public class StorageItemService {
 
     private final StorageRepository storageRepository;
     private final StorageItemRepository storageItemRepository;
-    private final TempItemService tempItemService;
-
-    // MD5 해시 생성용
-    private final StorageHashGenerator storageHashGenerator;
-
+    private final PurchaseService purchaseService;
+    private final ItemRepository itemRepository;
     // Storage id null 체크, 삭제 체크 공용
     private final StorageValidatorService storageValidatorService;
 
@@ -46,6 +46,19 @@ public class StorageItemService {
         }
         if (storageGrantItemParam.getNum() <= 0) {
             throw new RestException(ErrorCode.INVALID_ITEM_NUMBER);
+        }
+
+        // 보관함에 넣을 수 있는 아이템 및 번들은 FREE, EVENT 만 가능
+        // 해당 아이템의 CurrencyState enum 중 FREE, EVENT 만 보관함에 넣을 수 있음
+        Item findItem = itemRepository.findById(storageGrantItemParam.getItemId())
+                .orElseThrow(() -> new RestException(ErrorCode.NOT_FOUND_BUNDLE));
+
+        // 보관함 타입이 재화면 보낼 수 없음 (아이템만 가능)
+        switch (findItem.getCurrencyType()) {
+            case DIAMOND:
+            case COIN:
+            case CHIP:
+                throw new RestException(ErrorCode.FAIL_STORAGE_ITEM_NOT_ENOUGH_STOCK);
         }
 
         // 받을 아이템 아이디 + 아이템 유닛 아이디 두개가 맞물려있음 아이템 가지고 오면 자연스럽게 유닛 가지고 올 수 있음
@@ -104,23 +117,19 @@ public class StorageItemService {
     }
 
     private void receiveItem(Storage findStorage, StorageItemParam storageItemParam) {
-        // TODO 팀장님 코드 병합 시 수정
-        String generatedHash = storageHashGenerator.generateMD5(findStorage.getId());
         Long purchaseId
-                = tempItemService.receiveItem(storageItemParam.getReceiverId(),
-                                              storageItemParam.getItemId(),
-                                              storageItemParam.getItemNum(),
-                                              generatedHash);
+                = purchaseService.purchaseItemByReceiveStorage(storageItemParam.getReceiverId(),
+                                                               storageItemParam.getItemId());
         // 구매고유아이디
         findStorage.setPurchaseId(purchaseId);
     }
 
-    // 보관함 재화 받기 (저장)
+    // 보관함 아이템 받기 (저장)
     @Transactional(rollbackFor = Exception.class)
     public void recordGetItem(Storage findStorage, StorageItem findStorageItem) {
         findStorage.setStatus(StorageStatus.RECEIVED);
         findStorage.setDeletedAt(LocalDateTime.now());
-        findStorageItem.setItemNum(0);
+        //findStorageItem.setItemNum(0); 어차피 보관함 삭제를 하니까 아이템 갯수 초기화할 필요가 있나 고민
         storageRepository.save(findStorage);
         storageItemRepository.save(findStorageItem);
     }

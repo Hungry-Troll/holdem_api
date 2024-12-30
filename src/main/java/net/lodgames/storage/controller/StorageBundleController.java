@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/storages/bundle")
+@RequestMapping("/api/v1")
 public class StorageBundleController {
 
     private StorageBundleService storageBundleService;
 
     // 보관함 번들 보내기 (admin -> user)
-    @PostMapping("/grant")
+    @PostMapping("/storages/bundle")
     public ResponseEntity<?> grantBundleStorage(@RequestBody StorageGrantBundleParam storageGrantBundleParam) {
         storageBundleService.grantBundleStorage(storageGrantBundleParam);
         return ResponseEntity.ok().build();
     }
 
     // 보관함 번들 받기 // 민감한 데이터이므로 @PathVariable 대신 @RequestBody 사용
-    @PutMapping("/receive")
+    @PutMapping("/storages/bundle")
     public ResponseEntity<?> receiveBundleStorage(@RequestBody StorageReceiveBundleParam storageReceiveBundleParam,
                                                   @AuthenticationPrincipal UserPrincipal userPrincipal) {
         storageReceiveBundleParam.setUserId(userPrincipal.getUserId());

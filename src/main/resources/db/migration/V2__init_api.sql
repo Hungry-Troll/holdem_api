@@ -463,3 +463,19 @@ CREATE TABLE `bundle_item`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='번들 아이템';
+
+CREATE TABLE `user_character`
+(
+    `id`           bigint    NOT NULL AUTO_INCREMENT COMMENT '유저캐릭터고유번호',
+    `user_id`      bigint    NOT NULL COMMENT '유저고유번호',
+    `character_id` bigint    NOT NULL COMMENT '캐릭터고유번호',
+    `customise_id` bigint    NOT NULL COMMENT '커스터마이즈고유번호',
+    `level`        int       NOT NULL COMMENT '레벨',
+    `grade`        int       NOT NULL COMMENT '등급',
+    `status_index` int       NOT NULL COMMENT '스텟인덱스',
+    `created_at`   timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`   timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='유저캐릭터';

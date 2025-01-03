@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.lodgames.currency.constants.CurrencyType;
+import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.shop.item.constants.ItemPeriodType;
 import net.lodgames.shop.item.constants.ItemStatus;
 import org.springframework.data.annotation.CreatedDate;

@@ -3,7 +3,7 @@ package net.lodgames.shop.item.vo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.lodgames.currency.constants.CurrencyType;
+import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.shop.item.constants.ItemPeriodType;
 import net.lodgames.shop.item.constants.ItemStatus;
 

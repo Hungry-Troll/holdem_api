@@ -3,7 +3,7 @@ package net.lodgames.shop.purchase.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
-import net.lodgames.currency.constants.CurrencyType;
+import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.shop.bundle.vo.BundleVo;
 import net.lodgames.shop.item.vo.ItemVo;
 import net.lodgames.shop.purchase.constants.PurchaseType;

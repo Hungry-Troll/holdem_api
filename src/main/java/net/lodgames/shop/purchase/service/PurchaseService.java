@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.currency.constants.CurrencyType;
-import net.lodgames.currency.service.CoinService;
+import net.lodgames.currency.common.constants.CurrencyType;
+import net.lodgames.currency.chip.service.ChipService;
+import net.lodgames.currency.coin.service.CoinService;
 import net.lodgames.shop.bundle.constants.BundleStatus;
 import net.lodgames.shop.bundle.model.Bundle;
 import net.lodgames.shop.bundle.model.BundleCurrency;
@@ -47,6 +48,7 @@ public class PurchaseService {
     private final CollectionService collectionService;
     private final BundleItemRepository bundleItemRepository;
     private final BundleCurrencyRepository bundleCurrencyRepository;
+    private final ChipService chipService;
 
     // 구매 리스트
     @Transactional(readOnly = true)
@@ -117,10 +119,10 @@ public class PurchaseService {
         Purchase purchase = purchaseRepository.save(
                 Purchase.builder()
                         .purchaseType(getPurchaseType(item.getCurrencyType())) // 구매함
-                        .userId(userId)                       // 유저 고유번호
-                        .itemId(itemId)                           // 아이템
-                        .paidAmount(item.getAmount())         // 아이템 가격
-                        .currencyType(item.getCurrencyType()) // 아이템 재화타입;
+                        .userId(userId)                                        // 유저 고유번호
+                        .itemId(itemId)                                        // 아이템
+                        .paidAmount(item.getAmount())                          // 아이템 가격
+                        .currencyType(item.getCurrencyType())                  // 아이템 재화타입;
                         .build()
         );
         // 아이템 재고 처리
@@ -170,6 +172,8 @@ public class PurchaseService {
             // 코인 지급
             if (Objects.requireNonNull(currencyType) == CurrencyType.COIN) {
                 coinService.addCoinByBundleTransaction(userId, count);
+            } else if (Objects.requireNonNull(currencyType) == CurrencyType.CHIP) {
+                chipService.addChipByBundleTransaction(userId, count);
             }
         }
         return bundle;
@@ -177,6 +181,12 @@ public class PurchaseService {
 
     // 아이템 구매 가능 여부 체크
     private void checkItemAvailability(Item item) {
+        // !! NOTE : 보관함에서 받는 아이템은 무료나 이벤트 아이템 이어야 한다.
+        // 기획 확인 필요.
+        if (item.getCurrencyType() == CurrencyType.FREE
+                || item.getCurrencyType() == CurrencyType.EVENT) {
+            return;
+        }
         // 판매중인 상품이 아님
         if (ItemStatus.ON_SALE != item.getStatus()) {
             throw new RestException(ErrorCode.ITEM_IS_NOT_ON_SALE);

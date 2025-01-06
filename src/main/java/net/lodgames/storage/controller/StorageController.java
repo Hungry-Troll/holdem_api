@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/storages")
+@RequestMapping("/api/v1")
 public class StorageController {
 
     private StorageService storageService;
 
     // 보관함 단일 조회 (읽음 표시)
-    @GetMapping("/{storageId}")
+    @GetMapping("/storages/{storageId}")
     public ResponseEntity<?> readStorage(@PathVariable(name = "storageId") Long storageId,
                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(storageService.readStorage(
@@ -31,7 +31,7 @@ public class StorageController {
     }
 
     // 보관함 전체 조회 (추후 UI 구성에 따라 반환 속성 변경)
-    @GetMapping("")
+    @GetMapping("/storages")
     public ResponseEntity<?> getStorages(@RequestBody StoragesGetParam storagesGetParam,
                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
         storagesGetParam.setReceiverId(userPrincipal.getUserId());
@@ -39,7 +39,7 @@ public class StorageController {
     }
 
     // 보관함 삭제 (Admin 사용)
-    @DeleteMapping("/{storageId}")
+    @DeleteMapping("/storages/{storageId}")
     public ResponseEntity<?> deleteStorage(@PathVariable(name ="storageId") Long storageId,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         storageService.deleteStorage(

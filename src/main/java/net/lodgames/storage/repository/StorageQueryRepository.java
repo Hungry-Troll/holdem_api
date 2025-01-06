@@ -89,7 +89,7 @@ public class StorageQueryRepository {
                         .and(storage.status.eq(StorageStatus.WAITING)))
                 .leftJoin(storageCurrency).on(storage.id.eq(storageCurrency.storageId))
                 .leftJoin(storageBundle).on(storage.id.eq(storageBundle.storageId))
-                .leftJoin(storageItem).on(storage.id.eq(storageItem.itemId))
+                .leftJoin(storageItem).on(storage.id.eq(storageItem.storageId))
                 .orderBy(storage.id.desc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())

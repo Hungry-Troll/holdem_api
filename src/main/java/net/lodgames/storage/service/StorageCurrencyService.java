@@ -3,11 +3,14 @@ package net.lodgames.storage.service;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
+import net.lodgames.currency.service.CoinService;
+import net.lodgames.currency.service.DiamondService;
 import net.lodgames.storage.constants.StorageStatus;
 import net.lodgames.storage.model.Storage;
 import net.lodgames.storage.model.StorageCurrency;
 import net.lodgames.storage.param.currency.StorageCurrencyParam;
 import net.lodgames.storage.param.currency.StorageReceiveCurrencyParam;
+import net.lodgames.storage.param.currency.StorageSendCurrencyParam;
 import net.lodgames.storage.repository.currency.StorageCurrencyRepository;
 import net.lodgames.storage.repository.StorageRepository;
 import net.lodgames.storage.service.temp.TempCoinService;
@@ -28,9 +31,11 @@ public class StorageCurrencyService {
 
     // Storage id null 체크, 삭제 체크 공용
     private final StorageValidatorService storageValidatorService;
-
     // MD5 해시 생성용
     private final StorageHashGenerator storageHashGenerator;
+    // 재화 관련
+    private final CoinService coinService;
+    private final DiamondService diamondService;
 
     // TODO : 임시 코드 팀장님 재화 코드 사용 후 삭제
     private final TempCoinService tempCoinService;// 임시 코드
@@ -49,14 +54,14 @@ public class StorageCurrencyService {
     public void grantCurrencyStorage(StorageCurrencyParam storageCurrencyParam) {
         checkSendCurrencyParam(storageCurrencyParam); // 널 체크
         Storage savedStorage = recordSendCurrency(storageCurrencyParam); // 재화 보낸 기록 저장
-        sendCurrency(savedStorage, storageCurrencyParam); // 재화 보내기 계산
+        sendCurrencyAdmin(savedStorage, storageCurrencyParam); // 재화 보내기 계산
     }
 
     // 보관함 재화 보내기 Param null 체크
     private void checkSendCurrencyParam(StorageCurrencyParam storageCurrencyParam) {
         // 필수 요소 확인
         if (storageCurrencyParam.getReceiverId() == null ||
-            storageCurrencyParam.getCurrencyAmount() == null) {
+                storageCurrencyParam.getCurrencyAmount() == null) {
             throw new RestException(ErrorCode.MISSING_REQUIRED_PARAMETER);
         }
         // 송금자 수신자 확인
@@ -71,34 +76,39 @@ public class StorageCurrencyService {
 
     // 보관함 재화 보내기 (계산)
     public void sendCurrency(Storage savedStorage, StorageCurrencyParam storageCurrencyParam) {
-        Long purchaseId = null;
         String generatedHash = storageHashGenerator.generateMD5(savedStorage.getId());
-        // TODO 팀장님 코드 병합시 람다식 수정
         switch (storageCurrencyParam.getCurrencyType()) {
-            case COIN -> purchaseId = tempCoinService.subtractCoinByOrder(storageCurrencyParam.getSenderId(),
-                                                             storageCurrencyParam.getCurrencyAmount(),
-                                                             generatedHash);
-            case DIAMOND -> purchaseId = tempDiamondService.subtractDiamondByOrder(storageCurrencyParam.getSenderId(),
-                                                             storageCurrencyParam.getCurrencyAmount());
+            case COIN -> coinService.subCoinBySendStorage(storageCurrencyParam.getSenderId(),
+                                                          storageCurrencyParam.getCurrencyAmount(),
+                                                          generatedHash);
+
+            case DIAMOND -> diamondService.subDiamondBySendStorage(storageCurrencyParam.getSenderId(),
+                                                                   storageCurrencyParam.getCurrencyAmount(),
+                                                                   generatedHash);
         }
-        // 구매고유아이디 (널처리 안함 무결한 데이터가 온다고 가정)
-        savedStorage.setPurchaseId(purchaseId);
+        storageRepository.save(savedStorage);
+    }
+
+    // 보관함 재화 보내기 (어드민) (계산)
+    public void sendCurrencyAdmin(Storage savedStorage, StorageCurrencyParam storageCurrencyParam) {
+        // 어드민은 재화를 가지고 있을 필요가 없으므로 따로 계산 할 필요가 없음
+        // 형식을 맞추기 위한 더미 코드
         storageRepository.save(savedStorage);
     }
 
     // 보관함 재화 보내기 (저장)
-    public Storage recordSendCurrency(StorageCurrencyParam param) {
+    public Storage recordSendCurrency(StorageCurrencyParam storageCurrencyParam) {
         // Storage, StorageCurrency 둘 다 저장필요
 
         // Storage 저장
         Storage storage = Storage.builder()
-                .receiverId(param.getReceiverId())
-                .senderId(param.getSenderId())
-                .title(param.getTitle())
-                .description(param.getDescription())
-                .senderType(param.getSenderType())
+                .receiverId(storageCurrencyParam.getReceiverId())
+                .senderId(storageCurrencyParam.getSenderId())
+                .title(storageCurrencyParam.getTitle())
+                .description(storageCurrencyParam.getDescription())
+                .senderType(storageCurrencyParam.getSenderType())
                 .status(StorageStatus.WAITING)
-                .contentType(param.getContentType())
+                .contentType(storageCurrencyParam.getContentType())
                 .expiryDate(LocalDateTime.now().plusWeeks(2)) // TODO 임시로 2주
                 .build();
         Storage savedStorage = storageRepository.save(storage);
@@ -106,8 +116,8 @@ public class StorageCurrencyService {
         // StorageCurrency 저장
         StorageCurrency storageCurrency = StorageCurrency.builder()
                 .storageId(savedStorage.getId())
-                .currencyType(param.getCurrencyType())
-                .currencyAmount(param.getCurrencyAmount())
+                .currencyType(storageCurrencyParam.getCurrencyType())
+                .currencyAmount(storageCurrencyParam.getCurrencyAmount())
                 .build();
         storageCurrencyRepository.save(storageCurrency);
 
@@ -146,28 +156,24 @@ public class StorageCurrencyService {
 
     // 보관함 재화 받기 (계산)
     private void receiveCurrency(Storage findStorage, StorageCurrencyParam storageCurrencyParam) {
-        Long purchaseId = null;
-        String generatedHash = storageHashGenerator.generateMD5(findStorage.getId());
-        // TODO 팀장님 코드 병합 시 수정
+        // 해시 생성
+        String generatedHash = storageHashGenerator.generateSHA1(findStorage.getId());
         switch (storageCurrencyParam.getCurrencyType()) {
-            case COIN -> purchaseId
-                    = tempCoinService.receiveCoinByOrder(storageCurrencyParam.getReceiverId(),
-                                                                         storageCurrencyParam.getCurrencyAmount(),
-                                                                         generatedHash);
-            case DIAMOND -> purchaseId
-                    = tempDiamondService.receiveDiamondByOrder(storageCurrencyParam.getReceiverId(),
-                                                                                  storageCurrencyParam.getCurrencyAmount(),
-                                                                                  generatedHash);
+            case COIN -> coinService.addCoinByOrder(storageCurrencyParam.getReceiverId(),
+                                                     storageCurrencyParam.getCurrencyAmount(),
+                                                     generatedHash);
+
+            case DIAMOND -> diamondService.addDiamondByOrder(storageCurrencyParam.getReceiverId(),
+                                                             storageCurrencyParam.getCurrencyAmount(),
+                                                             generatedHash);
         }
-        // 구매고유아이디 (널처리 안함 무결한 데이터가 온다고 가정)
-        findStorage.setPurchaseId(purchaseId);
     }
 
     // 보관함 재화 받기 (저장)
     public void recordReceiveCurrency(Storage findStorage, StorageCurrency findStorageCurrency) {
         findStorage.setStatus(StorageStatus.RECEIVED);
         findStorage.setDeletedAt(LocalDateTime.now());
-        findStorageCurrency.setCurrencyAmount(0L);
+        //findStorageCurrency.setCurrencyAmount(0L);
         storageRepository.save(findStorage);
         storageCurrencyRepository.save(findStorageCurrency);
     }

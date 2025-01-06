@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/storages/item")
+@RequestMapping("/api/v1")
 public class StorageItemController {
 
     private StorageItemService storageItemService;
 
     // 보관함 아이템 보내기(admin -> user)
-    @PostMapping("/grant")
+    @PostMapping("/storages/item")
     public ResponseEntity<?> grantItemStorage(@RequestBody StorageGrantItemParam storageGrantItemParam) {
         storageItemService.grantItemStorage(storageGrantItemParam);
         return ResponseEntity.ok().build();
     }
 
     // 보관함 아이템 받기 // 민감한 데이터이므로 @PathVariable 대신 @RequestBody 사용
-    @PutMapping("/receive")
+    @PutMapping("/storages/item")
     public ResponseEntity<?> receiveItemStorage(@RequestBody StorageReceiveItemParam storageReceiveItemParam,
                                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
         storageReceiveItemParam.setUserId(userPrincipal.getUserId());

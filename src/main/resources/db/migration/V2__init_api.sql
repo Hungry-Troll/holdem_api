@@ -437,7 +437,7 @@ CREATE TABLE `collection`
     `purchase_id`     bigint    NOT NULL COMMENT '구매고유번호',
     `period_type`     tinyint   NOT NULL COMMENT '기간타입(영구, 기간)',
     `activation`      tinyint   NOT NULL DEFAULT 0 COMMENT '활성여부(활성,비활성)',
-    `expire_datetime` datetime  NOT NULL COMMENT '만료기한',
+    `expire_datetime` datetime  NULL COMMENT '만료기한',
     `created_at`      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     `updated_at`      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)

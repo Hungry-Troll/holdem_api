@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 public class StoragesGetVo {
     // TODO 추후 화면 UI 구성에 따라서 바뀔 수 있음
     // Storage
-    @JsonIgnore
     private Long id;
     private Long receiverId;
     private Long senderId;

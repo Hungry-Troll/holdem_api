@@ -3,6 +3,11 @@ package net.lodgames.storage.service;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
+import net.lodgames.shop.bundle.model.Bundle;
+import net.lodgames.shop.bundle.repository.BundleRepository;
+import net.lodgames.shop.item.model.Item;
+import net.lodgames.shop.item.repository.ItemRepository;
+import net.lodgames.shop.purchase.service.PurchaseService;
 import net.lodgames.storage.constants.StorageContentType;
 import net.lodgames.storage.constants.StorageSenderType;
 import net.lodgames.storage.constants.StorageStatus;
@@ -26,7 +31,8 @@ public class StorageBundleService {
 
     private final StorageRepository storageRepository;
     private final StorageBundleRepository storageBundleRepository;
-    private final TempBundleService tempBundleService;
+    private final PurchaseService purchaseService;
+    private final BundleRepository bundleRepository;
 
     private final StorageValidatorService storageValidatorService;
 
@@ -38,6 +44,20 @@ public class StorageBundleService {
             storageGrantBundleParam.getReceiverId() == null) {
             throw new RestException(ErrorCode.MISSING_REQUIRED_PARAMETER);
         }
+
+        // 보관함에 넣을 수 있는 아이템 및 번들은 FREE, EVENT 만 가능
+        // 해당 아이템의 CurrencyState enum 중 FREE, EVENT 만 보관함에 넣을 수 있음
+        Bundle findBundle = bundleRepository.findById(storageGrantBundleParam.getBundleId())
+                .orElseThrow(() -> new RestException(ErrorCode.NOT_FOUND_ITEM));
+
+        // 보관함 타입이 재화면 보낼 수 없음 (번들만 가능)
+        switch (findBundle.getCurrencyType()) {
+            case DIAMOND:
+            case COIN:
+            case CHIP:
+                throw new RestException(ErrorCode.FAIL_STORAGE_BUNDLE_NOT_ENOUGH_STOCK);
+        }
+
         // 필요한 내용 받을 사람 아이디
         // 이미 만들어져 있는 번들 아이디 중 해당 아이디를 보관함에 넣기만 하면 됨
         // 보관함 테이블에 기록만 함
@@ -50,7 +70,7 @@ public class StorageBundleService {
                 .senderType(StorageSenderType.ADMIN)
                 .status(StorageStatus.WAITING)
                 .contentType(StorageContentType.BUNDLE)
-                .expiryDate(LocalDateTime.now().plusWeeks(2)) // TODO 임시로 2주
+                .expiryDate(LocalDateTime.now().plusWeeks(2)) //임시 2주
                 .build();
         storageRepository.save(storage); // StorageId 필요
 
@@ -92,14 +112,14 @@ public class StorageBundleService {
     }
 
     private void receiveBundle(Storage findStorage, StorageBundleParam storageBundleParam) {
-        // TODO 팀장님 코드 병합 시 수정
         Long purchaseId =
-                tempBundleService.receiveBundle(storageBundleParam.getReceiverId(), storageBundleParam.getBundleId());
+                purchaseService.purchaseBundleByReceiveStorage(storageBundleParam.getReceiverId(),
+                                                               storageBundleParam.getBundleId());
         // 구매고유아이디
         findStorage.setPurchaseId(purchaseId);
     }
 
-    // 보관함 재화 받기 (저장)
+    // 보관함 번들 받기 (저장)
     @Transactional(rollbackFor = Exception.class)
     public void recordGetBundle(Storage findStorage, StorageBundle findStorageBundle) {
         findStorage.setStatus(StorageStatus.RECEIVED);

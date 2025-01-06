@@ -3,8 +3,9 @@ package net.lodgames.storage.service;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.currency.service.CoinService;
-import net.lodgames.currency.service.DiamondService;
+import net.lodgames.currency.chip.service.ChipService;
+import net.lodgames.currency.coin.service.CoinService;
+import net.lodgames.currency.diamond.service.DiamondService;
 import net.lodgames.storage.constants.StorageStatus;
 import net.lodgames.storage.model.Storage;
 import net.lodgames.storage.model.StorageCurrency;
@@ -36,6 +37,7 @@ public class StorageCurrencyService {
     // 재화 관련
     private final CoinService coinService;
     private final DiamondService diamondService;
+    private final ChipService chipService;
 
     // TODO : 임시 코드 팀장님 재화 코드 사용 후 삭제
     private final TempCoinService tempCoinService;// 임시 코드

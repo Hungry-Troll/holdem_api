@@ -83,7 +83,9 @@ public class StorageCurrencyService {
             case COIN -> coinService.subCoinBySendStorage(storageCurrencyParam.getSenderId(),
                                                           storageCurrencyParam.getCurrencyAmount(),
                                                           generatedHash);
-
+            case CHIP -> chipService.subChipBySendStorage(storageCurrencyParam.getSenderId(),
+                                                          storageCurrencyParam.getCurrencyAmount(),
+                                                          generatedHash);
             case DIAMOND -> diamondService.subDiamondBySendStorage(storageCurrencyParam.getSenderId(),
                                                                    storageCurrencyParam.getCurrencyAmount(),
                                                                    generatedHash);
@@ -161,11 +163,13 @@ public class StorageCurrencyService {
         // 해시 생성
         String generatedHash = storageHashGenerator.generateSHA1(findStorage.getId());
         switch (storageCurrencyParam.getCurrencyType()) {
-            case COIN -> coinService.addCoinByOrder(storageCurrencyParam.getReceiverId(),
-                                                     storageCurrencyParam.getCurrencyAmount(),
-                                                     generatedHash);
-
-            case DIAMOND -> diamondService.addDiamondByOrder(storageCurrencyParam.getReceiverId(),
+            case COIN -> coinService.addCoinByReceiveStorage(storageCurrencyParam.getReceiverId(),
+                                                             storageCurrencyParam.getCurrencyAmount(),
+                                                             generatedHash);
+            case CHIP -> chipService.addChipByReceiveStorage(storageCurrencyParam.getReceiverId(),
+                                                             storageCurrencyParam.getCurrencyAmount(),
+                                                             generatedHash);
+            case DIAMOND -> diamondService.addDiamondByReceiveStorage(storageCurrencyParam.getReceiverId(),
                                                              storageCurrencyParam.getCurrencyAmount(),
                                                              generatedHash);
         }

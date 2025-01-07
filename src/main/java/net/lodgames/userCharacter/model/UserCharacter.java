@@ -1,4 +1,4 @@
-package net.lodgames.dictionary.userCharacter.model;
+package net.lodgames.userCharacter.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

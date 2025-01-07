@@ -1,4 +1,4 @@
-package net.lodgames.dictionary.userCharacter.param;
+package net.lodgames.userCharacter.param;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCharacterUpdateParam {
+public class UserCharacterModParam {
     @JsonIgnore
     private Long id;
     @JsonIgnore

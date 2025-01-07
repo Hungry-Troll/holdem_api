@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MessageUpdateParam {
+public class MessageModParam {
     @JsonIgnore
     private long messageId;
     @JsonIgnore

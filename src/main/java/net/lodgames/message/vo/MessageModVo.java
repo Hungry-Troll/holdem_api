@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MessageUpdateVo {
+public class MessageModVo {
     private long id;
     private long senderId;
     private long receiverId;

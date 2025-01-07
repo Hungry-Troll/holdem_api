@@ -63,8 +63,8 @@ public class MessageService {
 
     //보낸 쪽지 수정
     @Transactional
-    public MessageUpdateVo updateMessage(MessageUpdateParam messageUpdateParam) {
-        Message findMessage = messageRepository.findByIdAndReadAtIsNullAndDeletedAtIsNull(messageUpdateParam.getMessageId()
+    public MessageModVo modMessage(MessageModParam messageModParam) {
+        Message findMessage = messageRepository.findByIdAndReadAtIsNullAndDeletedAtIsNull(messageModParam.getMessageId()
         ).orElseThrow(() -> new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_NOT_FOUND));
         if (findMessage.getReadAt() != null) {
             throw new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_ALREADY_READ);
@@ -72,9 +72,9 @@ public class MessageService {
         if (findMessage.getDeletedAt() != null) {
             throw new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_ALREADY_DELETED);
         }
-        findMessage.setContent(messageUpdateParam.getContent());
+        findMessage.setContent(messageModParam.getContent());
         findMessage.setCreatedAt(LocalDateTime.now()); // 새로운 생성시간 (받는 사람이 읽지 않았으므로...)
-        return messageMapper.updateMessageToVo(messageRepository.save(findMessage));
+        return messageMapper.modMessageToVo(messageRepository.save(findMessage));
     }
 
     //받은 쪽지함

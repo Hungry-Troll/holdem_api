@@ -2,10 +2,7 @@ package net.lodgames.message.util;
 
 
 import net.lodgames.message.model.Message;
-import net.lodgames.message.param.MessageAddParam;
 import net.lodgames.message.vo.*;
-import net.lodgames.user.model.Profile;
-import net.lodgames.user.param.ProfileModParam;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -20,7 +17,7 @@ public interface MessageMapper {
     List<MessageReceiveBoxVo> updateMessageListToVoList(List<Message> messages);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    MessageUpdateVo updateMessageToVo(Message message);
+    MessageModVo modMessageToVo(Message message);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     List<MessageSendBoxVo> updateCheckSendMessageToVo(List<Message> message);

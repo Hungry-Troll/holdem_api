@@ -37,7 +37,7 @@ public class MessageController {
                                                          .build()));
     }
 
-    //쪽지 삭제
+    //쪽지 단일 삭제
     @DeleteMapping("/messages/{messageId}")
     public ResponseEntity<?> deleteMessage(@PathVariable(name="messageId") long messageId,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -45,6 +45,15 @@ public class MessageController {
                                                        .receiverId(userPrincipal.getUserId())
                                                        .messageId(messageId)
                                                        .build());
+        return ResponseEntity.ok().build();
+    }
+
+    //쪽지 다중 삭제
+    @DeleteMapping("/messages")
+    public ResponseEntity<?> deleteMessages(@RequestBody MessagesDeleteParam messagesDeleteParam,
+                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        messagesDeleteParam.setReceiverId(userPrincipal.getUserId());
+        messageService.deleteMessages(messagesDeleteParam);
         return ResponseEntity.ok().build();
     }
 

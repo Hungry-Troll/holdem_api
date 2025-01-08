@@ -10,26 +10,10 @@ import java.util.Optional;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-
-//    @Query("SELECT m FROM message m WHERE m.receiverId = :receiverId")
-//    public List<Message> findByReceiverId(long receiverId);
-    Optional<List<Message>> findByReceiverId(long receiverId, Pageable pageable);
-
-//    @Query("SELECT m FROM message m WHERE m.senderId = :senderId")
-//    public List<Message> findBySenderId(long senderId);
-    Optional<List<Message>> findBySenderId(long senderId);
-
-
-
     // 쪽지 읽기 및 삭제
     Optional<Message> findByIdAndReceiverIdAndDeletedAtIsNull(long id, long receiverId);
-
-    // 쪽지 삭제
-    //Optional<Message> findByIdAndReceiverIdAndDeletedAtIsNull(long id, long receiverId);
-
-    // 쪽지 수정
-    //Optional<Message> findByIdAndCreatedAtIsNotNullAndReadAtIsNullAndDeletedAtIsNull(long id);
-
+    // 쪽지 리스트 읽기
+    List<Message> findByIdInAndReceiverIdAndDeletedAtIsNull(List<Long> ids, long receiverId);
     // 쪽지 수정
     Optional<Message> findByIdAndReadAtIsNullAndDeletedAtIsNull(long id);
 }

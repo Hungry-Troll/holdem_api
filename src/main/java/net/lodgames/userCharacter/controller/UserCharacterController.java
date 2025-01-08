@@ -1,11 +1,11 @@
-package net.lodgames.dictionary.userCharacter.controller;
+package net.lodgames.userCharacter.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.security.UserPrincipal;
-import net.lodgames.dictionary.userCharacter.param.UserCharacterAddParam;
-import net.lodgames.dictionary.userCharacter.param.UserCharacterUpdateParam;
-import net.lodgames.dictionary.userCharacter.service.UserCharacterService;
+import net.lodgames.userCharacter.param.UserCharacterAddParam;
+import net.lodgames.userCharacter.param.UserCharacterModParam;
+import net.lodgames.userCharacter.service.UserCharacterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -51,11 +51,11 @@ public class UserCharacterController {
 
         // 유저 캐릭터 수정
         @PutMapping("/userCharacters/{id}")
-        public ResponseEntity<?> updateUserCharacter(@PathVariable(name = "id") Long id,
-                                                     @RequestBody UserCharacterUpdateParam userCharacterUpdateParam,
-                                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
-            userCharacterUpdateParam.setId(id);
-            userCharacterUpdateParam.setUserId(userPrincipal.getUserId());
-            return ResponseEntity.ok(userCharacterService.updateUserCharacter(userCharacterUpdateParam));
+        public ResponseEntity<?> modUserCharacter(@PathVariable(name = "id") Long id,
+                                                  @RequestBody UserCharacterModParam userCharacterModParam,
+                                                  @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            userCharacterModParam.setId(id);
+            userCharacterModParam.setUserId(userPrincipal.getUserId());
+            return ResponseEntity.ok(userCharacterService.modUserCharacter(userCharacterModParam));
         }
 }

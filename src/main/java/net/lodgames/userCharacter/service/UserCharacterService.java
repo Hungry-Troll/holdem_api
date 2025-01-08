@@ -1,17 +1,17 @@
-package net.lodgames.dictionary.userCharacter.service;
+package net.lodgames.userCharacter.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.dictionary.userCharacter.model.UserCharacter;
-import net.lodgames.dictionary.userCharacter.param.UserCharacterAddParam;
-import net.lodgames.dictionary.userCharacter.param.UserCharacterUpdateParam;
-import net.lodgames.dictionary.userCharacter.repository.UserCharacterRepository;
-import net.lodgames.dictionary.userCharacter.util.UserCharacterMapper;
-import net.lodgames.dictionary.userCharacter.vo.UserCharacterGetVo;
-import net.lodgames.dictionary.userCharacter.vo.UserCharacterUpdateVo;
-import net.lodgames.dictionary.userCharacter.vo.UserCharactersGetVo;
+import net.lodgames.userCharacter.model.UserCharacter;
+import net.lodgames.userCharacter.param.UserCharacterAddParam;
+import net.lodgames.userCharacter.param.UserCharacterModParam;
+import net.lodgames.userCharacter.repository.UserCharacterRepository;
+import net.lodgames.userCharacter.util.UserCharacterMapper;
+import net.lodgames.userCharacter.vo.UserCharacterGetVo;
+import net.lodgames.userCharacter.vo.UserCharacterModVo;
+import net.lodgames.userCharacter.vo.UserCharactersGetVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,20 +57,20 @@ public class UserCharacterService {
 
     // 유저 캐릭터 수정
     @Transactional(rollbackFor = {Exception.class})
-    public UserCharacterUpdateVo updateUserCharacter(UserCharacterUpdateParam userCharacterUpdateParam) {
+    public UserCharacterModVo modUserCharacter(UserCharacterModParam userCharacterModParam) {
         // 유저 캐릭터가 존재하는지 확인
         UserCharacter findUserCharacter = userCharacterRepository.findByIdAndUserId(
-                userCharacterUpdateParam.getId(),
-                userCharacterUpdateParam.getUserId())
+                userCharacterModParam.getId(),
+                userCharacterModParam.getUserId())
                 .orElseThrow(() -> new RestException(ErrorCode.USER_CHARACTER_NOT_EXIST));
         // 수정된 정보로 업데이트
-        findUserCharacter.setCharacterId(userCharacterUpdateParam.getCharacterId());
-        findUserCharacter.setCustomiseId(userCharacterUpdateParam.getCustomiseId());
-        findUserCharacter.setLevel(userCharacterUpdateParam.getLevel());
-        findUserCharacter.setGrade(userCharacterUpdateParam.getGrade());
-        findUserCharacter.setStatusIndex(userCharacterUpdateParam.getStatusIndex());
+        findUserCharacter.setCharacterId(userCharacterModParam.getCharacterId());
+        findUserCharacter.setCustomiseId(userCharacterModParam.getCustomiseId());
+        findUserCharacter.setLevel(userCharacterModParam.getLevel());
+        findUserCharacter.setGrade(userCharacterModParam.getGrade());
+        findUserCharacter.setStatusIndex(userCharacterModParam.getStatusIndex());
         // 저장 후 반환
-        return userCharacterMapper.userCharacterToUpdateVo(
+        return userCharacterMapper.userCharacterToModVo(
                 userCharacterRepository.save(findUserCharacter));
 
     }

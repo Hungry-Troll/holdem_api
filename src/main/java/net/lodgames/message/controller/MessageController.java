@@ -50,12 +50,12 @@ public class MessageController {
 
     //쪽지 수정 // 보낸 쪽지를 상대방이 읽거나 삭제 전까지만 수정 할 수 있음
     @PutMapping("/messages/{messageId}")
-    public ResponseEntity<?> updateMessage(@PathVariable(name="messageId") long messageId,
-                                           @RequestBody MessageUpdateParam messageUpdateParam,
-                                           @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        messageUpdateParam.setMessageId(messageId);
-        messageUpdateParam.setSenderId(userPrincipal.getUserId());
-        return ResponseEntity.ok(messageService.updateMessage(messageUpdateParam));
+    public ResponseEntity<?> modMessage(@PathVariable(name="messageId") long messageId,
+                                        @RequestBody MessageModParam messageModParam,
+                                        @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        messageModParam.setMessageId(messageId);
+        messageModParam.setSenderId(userPrincipal.getUserId());
+        return ResponseEntity.ok(messageService.modMessage(messageModParam));
     }
 
     //받은 쪽지함 //

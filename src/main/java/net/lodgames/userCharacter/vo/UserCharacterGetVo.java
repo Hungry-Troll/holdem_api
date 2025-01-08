@@ -1,4 +1,4 @@
-package net.lodgames.dictionary.userCharacter.vo;
+package net.lodgames.userCharacter.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCharacterUpdateVo {
+public class UserCharacterGetVo {
     @JsonIgnore
     private Long id;
     @JsonIgnore

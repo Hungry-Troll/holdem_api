@@ -26,6 +26,15 @@ public class MessageController {
         return ResponseEntity.ok().build();
     }
 
+    //쪽지 다중 보내기
+    @PostMapping("/messages/multiple")
+    public ResponseEntity<?> addMessages(@RequestBody MessagesAddParam messagesAddParam,
+                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        messagesAddParam.setSenderId(userPrincipal.getUserId());
+        messageService.addMessages(messagesAddParam);
+        return ResponseEntity.ok().build();
+    }
+
     //쪽지 읽기
     @GetMapping("/messages/{messageId}")
     public ResponseEntity<?> getMessage(@PathVariable(name="messageId") long messageId,

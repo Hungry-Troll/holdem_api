@@ -74,4 +74,30 @@ public class UserCharacterService {
                 userCharacterRepository.save(findUserCharacter));
 
     }
+
+    // 유저 캐릭터 레벨업
+    @Transactional(rollbackFor = {Exception.class})
+    public void levelUpUserCharacter(Long id, Long userId) {
+        // 유저 캐릭터가 존재하는지 확인
+        UserCharacter findUserCharacter = userCharacterRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RestException(ErrorCode.USER_CHARACTER_NOT_EXIST));
+        // 레벨업
+        // TODO 최대 레벨 확인해야 됨
+        findUserCharacter.setLevel(findUserCharacter.getLevel() + 1);
+        // 저장
+        userCharacterRepository.save(findUserCharacter);
+    }
+
+    // 유저 캐릭터 등급업
+    @Transactional(rollbackFor = {Exception.class})
+    public void gradeUpUserCharacter(Long id, Long userId) {
+        // 유저 캐릭터가 존재하는지 확인
+        UserCharacter findUserCharacter = userCharacterRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RestException(ErrorCode.USER_CHARACTER_NOT_EXIST));
+        // 등급업
+        // TODO 최대 등급 확인해야 됨
+        findUserCharacter.setGrade(findUserCharacter.getGrade() + 1);
+        // 저장
+        userCharacterRepository.save(findUserCharacter);
+    }
 }

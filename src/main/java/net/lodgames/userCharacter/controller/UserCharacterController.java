@@ -58,4 +58,21 @@ public class UserCharacterController {
             userCharacterModParam.setUserId(userPrincipal.getUserId());
             return ResponseEntity.ok(userCharacterService.modUserCharacter(userCharacterModParam));
         }
+
+        // 유저 캐릭터 레벨업
+        @PutMapping("/userCharacters/{id}/levelUp")
+        public ResponseEntity<?> levelUpUserCharacter(@PathVariable(name = "id") Long id,
+                                                      @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            userCharacterService.levelUpUserCharacter(id, userPrincipal.getUserId());
+            return ResponseEntity.ok().build();
+        }
+
+        // 유저 캐릭터 등급업
+        @PutMapping("/userCharacters/{id}/gradeUp")
+        public ResponseEntity<?> gradeUpUserCharacter(@PathVariable(name = "id") Long id,
+                                                      @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            userCharacterService.gradeUpUserCharacter(id, userPrincipal.getUserId());
+            return ResponseEntity.ok().build();
+        }
+
 }

@@ -17,7 +17,7 @@ public interface MessageMapper {
     List<MessageReceiveBoxVo> updateMessageListToVoList(List<Message> messages);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    MessageModVo modMessageToVo(Message message);
+    MessageModVo updateMessageToVo(Message message);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     List<MessageSendBoxVo> updateCheckSendMessageToVo(List<Message> message);

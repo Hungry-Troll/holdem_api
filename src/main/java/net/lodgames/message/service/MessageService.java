@@ -89,7 +89,7 @@ public class MessageService {
         }
         findMessage.setContent(messageModParam.getContent());
         findMessage.setCreatedAt(LocalDateTime.now()); // 새로운 생성시간 (받는 사람이 읽지 않았으므로...)
-        return messageMapper.modMessageToVo(messageRepository.save(findMessage));
+        return messageMapper.updateMessageToVo(messageRepository.save(findMessage));
     }
 
     //받은 쪽지함

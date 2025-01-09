@@ -74,5 +74,4 @@ public class UserCharacterController {
             userCharacterService.gradeUpUserCharacter(id, userPrincipal.getUserId());
             return ResponseEntity.ok().build();
         }
-
 }

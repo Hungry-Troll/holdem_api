@@ -1,6 +1,7 @@
 package net.lodgames.user.service;
 
 import net.lodgames.user.repository.UserQueryRepository;
+import net.lodgames.user.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import net.lodgames.user.util.ProfileMapper;
 import net.lodgames.user.vo.*;
 import org.springframework.stereotype.Service;
 import net.lodgames.config.error.ErrorCode;
+import java.security.SecureRandom;
 
 @Slf4j
 @Service
@@ -21,10 +23,19 @@ public class ProfileService {
 
     private ProfileMapper profileMapper;
     private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
 
+    // 랜덤 닉네임 생성용
+    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final int ALPHABET_LENGTH = 2; // 앞 2글자
+    private static final int NUMBER_LENGTH = 7;   // 뒤 7글자
+    private static final String SAP = "_";
+    private final SecureRandom random = new SecureRandom();
+    //
+
     // 프로필 조회
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = {Exception.class})
     public ProfileVo getProfile(Long userId) {
         return profileMapper.updateProfileToVo(retrieveProfile(userId));
     }
@@ -66,11 +77,23 @@ public class ProfileService {
     }
 
     // 프로필 가져오기
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = {Exception.class})
     protected Profile retrieveProfile(long userId) {
-        return profileRepository.findByUserId(userId).orElseThrow(() ->
-                new RestException(ErrorCode.PROFILE_NOT_EXIST)
+        Profile findProfile = profileRepository.findByUserId(userId)
+                .orElseGet(() -> {
+                    if (!userRepository.existsByUserId(userId)) {
+                        throw new RestException(ErrorCode.USER_NOT_EXIST);
+                    }
+                    String nickName = createRandomNickName();
+                    return profileRepository.save(Profile.builder()
+                            .userId(userId)
+                            .image("")
+                            .basicImageIdx((short) 0)
+                            .nickname(nickName)
+                            .build());
+                }
         );
+        return findProfile;
     }
 
     // 닉네임 조건 검사
@@ -91,5 +114,26 @@ public class ProfileService {
         if(!nickname.equals(findProfile.getNickname())) {
             throw new RestException(ErrorCode.EXIST_NICKNAME);// 동일한 닉네임 있음
         }
+    }
+
+    //랜덤 닉네임 생성
+    public String createRandomNickName() {
+        StringBuilder nickname = new StringBuilder();
+
+        // 대문자 알파벳 2글자 추가
+        for (int i = 0; i < ALPHABET_LENGTH; i++) {
+            char letter = ALPHABET.charAt(random.nextInt(ALPHABET.length()));
+            nickname.append(letter);
+        }
+
+        nickname.append(SAP);
+
+        // 숫자 7글자 추가
+        for (int i = 0; i < NUMBER_LENGTH; i++) {
+            int digit = random.nextInt(10);
+            nickname.append(digit);
+        }
+
+        return nickname.toString();
     }
 }

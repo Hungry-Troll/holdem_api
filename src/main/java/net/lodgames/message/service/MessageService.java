@@ -45,15 +45,12 @@ public class MessageService {
         if (messagesAddParam.getReceiverIds().isEmpty()) {
             throw new RestException(ErrorCode.FAIL_SEND_MESSAGE_NOT_FOUND_RECEIVER);
         }
-        if (messagesAddParam.getContents().isEmpty()) {
-            throw new RestException(ErrorCode.FAIL_SEND_MESSAGE_NOT_FOUND_CONTENT);
-        }
         //TODO 금칙어는 클라에서 되도록 처리하고 크리티컬한것만 서버에서 처리하도록 기능 추가
         for (int i = 0; i < messagesAddParam.getReceiverIds().size(); i++) {
             messageRepository.save(Message.builder()
                     .senderId(messagesAddParam.getSenderId())
                     .receiverId(messagesAddParam.getReceiverIds().get(i))
-                    .content(messagesAddParam.getContents().get(i)).build()
+                    .content(messagesAddParam.getContent()).build()
             );
         }
     }

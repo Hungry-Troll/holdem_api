@@ -12,5 +12,5 @@ public class MessagesAddParam {
     @JsonIgnore
     private long senderId;
     private List<Long> receiverIds;
-    private List<String> contents;
+    private String content;
 }

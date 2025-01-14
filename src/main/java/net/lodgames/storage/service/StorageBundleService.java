@@ -18,7 +18,6 @@ import net.lodgames.storage.param.bundle.StorageReceiveBundleParam;
 import net.lodgames.storage.param.bundle.StorageGrantBundleParam;
 import net.lodgames.storage.repository.bundle.StorageBundleRepository;
 import net.lodgames.storage.repository.StorageRepository;
-import net.lodgames.storage.service.temp.TempBundleService;
 import net.lodgames.storage.service.util.StorageValidatorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +47,7 @@ public class StorageBundleService {
         // 보관함에 넣을 수 있는 아이템 및 번들은 FREE, EVENT 만 가능
         // 해당 아이템의 CurrencyState enum 중 FREE, EVENT 만 보관함에 넣을 수 있음
         Bundle findBundle = bundleRepository.findById(storageGrantBundleParam.getBundleId())
-                .orElseThrow(() -> new RestException(ErrorCode.NOT_FOUND_ITEM));
+                .orElseThrow(() -> new RestException(ErrorCode.NOT_FOUND_BUNDLE));
 
         // 보관함 타입이 재화면 보낼 수 없음 (번들만 가능)
         switch (findBundle.getCurrencyType()) {

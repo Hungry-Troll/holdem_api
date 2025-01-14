@@ -1,26 +1,25 @@
 package net.lodgames.friend.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.lodgames.user.constants.UserStatus;
 import lombok.Getter;
 import lombok.Setter;
+import net.lodgames.user.constants.UserStatus;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class FriendInfoVo {
-    // friend
+public class FriendSearchVo {
+    // Friend
     @JsonIgnore
-    private long id;
-    // user (userId = friendId)
-    private long friendId;
+    private Long id;
+    private Long friendId;
+    // User
     private UserStatus status;
-    // profile(friend)
+    private LocalDateTime logoutAt;
+    // Profile
     private String nickname;
     private String image;
     private Short basicImageIdx;
-    // friend
-    private LocalDateTime createdAt; // 만든날짜
-    private LocalDateTime updatedAt; // 변경일
+
 }

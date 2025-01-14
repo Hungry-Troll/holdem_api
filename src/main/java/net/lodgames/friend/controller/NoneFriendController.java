@@ -21,8 +21,8 @@ public class NoneFriendController {
 
     private final NoneFriendService noneFriendService;
 
-    @RequestMapping(value = "/friends/none/{noneFriendId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<NoneFriendInfoVo> getNoneFriend(@PathVariable Long noneFriendId, @AuthenticationPrincipal UserPrincipal userPrincipal) throws Exception {
+    @RequestMapping(value = "/friends/{noneFriendId}/none", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseEntity<NoneFriendInfoVo> getNoneFriend(@PathVariable(name ="noneFriendId") Long noneFriendId, @AuthenticationPrincipal UserPrincipal userPrincipal) throws Exception {
         return ResponseEntity.ok(noneFriendService.getNoneFriendInfo(NoneFriendInfoParam.builder()
                 .userId(userPrincipal.getUserId())
                 .noneFriendId(noneFriendId)

@@ -19,24 +19,31 @@ public class FriendBLockController {
 
     // 친구차단 리스트
     @GetMapping("/friends/blocks")
-    public ResponseEntity<?> friendBlockList(@RequestBody FriendListParam friendListParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<?> friendBlockList(@RequestBody FriendListParam friendListParam,
+                                             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         friendListParam.setUserId(userPrincipal.getUserId());
         return ResponseEntity.ok(friendBlockService.friendBlockList(friendListParam));
     }
 
     // 친구차단 추가
-    @PostMapping("/friends/blocks")
-    public ResponseEntity<?> addFriendBlock(@RequestBody FriendBlockParam friendBlockParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        friendBlockParam.setUserId(userPrincipal.getUserId());
-        friendBlockService.addFriendBlock(friendBlockParam);
+    @PostMapping("/friends/{friendId}/blocks")
+    public ResponseEntity<?> addFriendBlock(@PathVariable(name = "friendId") Long friendId,
+                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        friendBlockService.addFriendBlock(FriendBlockParam.builder()
+                .userId(userPrincipal.getUserId())
+                .friendId(friendId)
+                .build());
         return ResponseEntity.ok().build();
     }
 
     // 친구차단 삭제
-    @DeleteMapping("/friends/blocks")
-    public ResponseEntity<?> deleteFriendBlock(@RequestBody FriendBlockParam friendBlockParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        friendBlockParam.setUserId(userPrincipal.getUserId());
-        friendBlockService.deleteFriendBlock(friendBlockParam);
+    @DeleteMapping("/friends/{friendId}/blocks")
+    public ResponseEntity<?> deleteFriendBlock(@PathVariable(name ="friendId") Long friendId,
+                                               @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        friendBlockService.deleteFriendBlock(FriendBlockParam.builder()
+                .userId(userPrincipal.getUserId())
+                .friendId(friendId)
+                .build());
         return ResponseEntity.ok().build();
     }
 }

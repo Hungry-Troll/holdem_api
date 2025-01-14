@@ -8,6 +8,7 @@ import net.lodgames.friend.vo.NoneFriendInfoVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -17,6 +18,7 @@ public class NoneFriendService {
     private final NoneFriendQueryRepository noneFriendQueryRepository;
 
     // 친구가 아닌 사용자 정보 조회
+    @Transactional(readOnly = true)
     public NoneFriendInfoVo getNoneFriendInfo(NoneFriendInfoParam param) {
 
         if (param.getUserId() == param.getNoneFriendId()) {

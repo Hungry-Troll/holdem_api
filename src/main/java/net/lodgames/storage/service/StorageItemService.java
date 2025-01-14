@@ -51,7 +51,7 @@ public class StorageItemService {
         // 보관함에 넣을 수 있는 아이템 및 번들은 FREE, EVENT 만 가능
         // 해당 아이템의 CurrencyState enum 중 FREE, EVENT 만 보관함에 넣을 수 있음
         Item findItem = itemRepository.findById(storageGrantItemParam.getItemId())
-                .orElseThrow(() -> new RestException(ErrorCode.NOT_FOUND_BUNDLE));
+                .orElseThrow(() -> new RestException(ErrorCode.NOT_FOUND_ITEM));
 
         // 보관함 타입이 재화면 보낼 수 없음 (아이템만 가능)
         switch (findItem.getCurrencyType()) {

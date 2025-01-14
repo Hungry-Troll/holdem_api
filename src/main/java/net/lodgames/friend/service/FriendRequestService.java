@@ -34,11 +34,13 @@ public class FriendRequestService {
     private final UserEventService userEventService;
 
     // 친구 요청 전송 리스트
+    @Transactional(readOnly = true)
     public List<FriendReqSendVo> friendRequestSendList(FriendListParam friendListParam) {
         return friendRequestQueryRepository.selectFriendRequestByFriendId(friendListParam, friendListParam.of());
     }
 
     // 친구요청 받은 리스트
+    @Transactional(readOnly = true)
     public List<FriendReqRecvVo> friendRequestList(FriendListParam friendListParam) {
         return friendRequestQueryRepository.selectFriendRequestByUserId(friendListParam, friendListParam.of());
     }
@@ -103,6 +105,7 @@ public class FriendRequestService {
 
 
     // 친구 요청 수락
+    @Transactional(rollbackFor = Exception.class)
     public void acceptFriendRequest(FriendRequestParam friendRequestParam) {
         long receiver = friendRequestParam.getReceiver();
         long sender = friendRequestParam.getSender();
@@ -116,6 +119,7 @@ public class FriendRequestService {
     }
 
     // 친구요청 삭제
+    @Transactional(rollbackFor = Exception.class)
     public void deleteFriendRequest(FriendRequestParam friendRequestParam) {
         FriendRequest friendRequest = retrieveFriendRequest(friendRequestParam.getReceiver(), friendRequestParam.getSender());
         friendRequestRepository.delete(friendRequest);

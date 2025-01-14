@@ -30,7 +30,7 @@ public class FriendController {
 
     // 친구 정보 조회
     @GetMapping("/friends/{friendId}")
-    public ResponseEntity<?> friendInfo(@PathVariable long friendId,
+    public ResponseEntity<?> friendInfo(@PathVariable(name = "friendId") long friendId,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(friendService.getFriendInfo(
                 FriendInfoParam.builder()
@@ -40,11 +40,21 @@ public class FriendController {
     }
 
     // 친구삭제
-    @DeleteMapping("/friends")
-    public ResponseEntity<?> deleteFriend(@RequestBody FriendDeleteParam friendDeleteParam,
+    @DeleteMapping("/friends/{friendId}")
+    public ResponseEntity<?> deleteFriend(@PathVariable(name = "friendId") long friendId,
                                           @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        friendDeleteParam.setUserId(userPrincipal.getUserId());
-        friendService.deleteFriend(friendDeleteParam);
+        friendService.deleteFriend(FriendDeleteParam.builder()
+                    .userId(userPrincipal.getUserId())
+                    .friendId(friendId)
+                    .build());
         return ResponseEntity.ok().build();
+    }
+
+    // 친구 닉네임 검색
+    @GetMapping("/friends/nickname")
+    public ResponseEntity<?> searchFriend(@RequestBody FriendSearchParam friendSearchParam,
+                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        friendSearchParam.setUserId(userPrincipal.getUserId());
+        return ResponseEntity.ok(friendService.searchFriend(friendSearchParam));
     }
 }

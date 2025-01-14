@@ -12,8 +12,10 @@ import net.lodgames.friend.param.*;
 import net.lodgames.friend.repository.FriendQueryRepository;
 import net.lodgames.friend.repository.FriendRepository;
 import net.lodgames.friend.vo.FriendInfoVo;
+import net.lodgames.friend.vo.FriendSearchVo;
 import net.lodgames.friend.vo.FriendVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,23 +29,22 @@ public class FriendService {
     private final UserEventService userEventService;
 
     // 친구 리스트
+    @Transactional(rollbackFor = {Exception.class})
     public List<FriendVo> getFriendList(FriendListParam friendListParam) {
         return friendQueryRepository.selectFriendByUserId(friendListParam, friendListParam.of());
     }
 
     // 친구 정보 조회
+    @Transactional(rollbackFor = {Exception.class})
     public FriendInfoVo getFriendInfo(FriendInfoParam param) {
-
         // 자기 자신을 조회
         if (param.getUserId() == param.getFriendId()) {
             throw new RestException(ErrorCode.FOUND_USER_IS_ME);
         }
-
         FriendInfoVo friendInfoVo = friendQueryRepository.selectFriendByFriendId(param);
         if (friendInfoVo == null) {
             throw new RestException(ErrorCode.NOT_FOUND_FRIEND);
         }
-
         return friendInfoVo;
     }
 
@@ -69,6 +70,7 @@ public class FriendService {
 
 
     // 친구 관계 삭제
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteFriend(FriendDeleteParam friendDeleteParam) {
         long userId = friendDeleteParam.getUserId();
         long friendId = friendDeleteParam.getFriendId();
@@ -79,6 +81,12 @@ public class FriendService {
         // 친구 삭제 알림
         String extData = userEventService.getSimpleExtData(userId);
         userEventService.setUserEvent(SOURCE_FRIEND_DELETE, UserEventType.FRIEND_DELETE, userId, friendId, extData);
+    }
+
+    // 친구 닉네임 검색
+    @Transactional(rollbackFor = {Exception.class})
+    public List<FriendSearchVo> searchFriend(FriendSearchParam friendSearchParam) {
+        return friendQueryRepository.selectFriendByNickName(friendSearchParam, friendSearchParam.of());
     }
 }
 

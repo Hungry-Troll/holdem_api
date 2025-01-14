@@ -14,6 +14,7 @@ import net.lodgames.friend.repository.*;
 import net.lodgames.friend.vo.*;
 import net.lodgames.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,11 +31,13 @@ public class FriendBlockService {
 
 
     // 친구차단 리스트
+    @Transactional(readOnly = true)
     public List<FriendBlockVo> friendBlockList(FriendListParam friendListParam) {
         return friendBlockQueryRepository.selectFriendBlockByUserId(friendListParam, friendListParam.of());
     }
 
     // 친구차단 추가
+    @Transactional(rollbackFor = {Exception.class})
     public void addFriendBlock(FriendBlockParam friendBlockParam) {
         long userId = friendBlockParam.getUserId();
         long friendId = friendBlockParam.getFriendId();
@@ -80,6 +83,7 @@ public class FriendBlockService {
     }
 
     // 친구차단 삭제
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteFriendBlock(FriendBlockParam friendBlockParam) {
         FriendBlock friendBlock = retrieveFriendBlock(friendBlockParam.getUserId(), friendBlockParam.getFriendId());
         friendBlockRepository.delete(friendBlock);

@@ -44,7 +44,7 @@ public class StorageService {
         if (findStorage.getReadAt() == null) {
             findStorage.setReadAt(LocalDateTime.now());
         }
-        // 3. 보관함을 찾아서 조인 후 반환
+        // 3. 보관함을 해당 유저 아이디로 찾아서 조인 후 읽고 반환
         return storageQueryRepository.readStorage(storageReadParam)
                 .orElseThrow(()-> new RestException(ErrorCode.FAIL_READ_STORAGE));
     }

@@ -61,7 +61,6 @@ public class UserBlockService {
     public void deleteBlockUser(UserBlockDeleteParam userBlockParam) {
         Long userId = userBlockParam.getUserId();
         Long blockUserId = userBlockParam.getBlockUserId();
-
         // 차단 유저 차단해제 확인
         if (!userBlockRepository.existsByUserIdAndBlockUserId(userId, blockUserId)) {
             throw new RestException(ErrorCode.USER_NOT_BLOCKED);

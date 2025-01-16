@@ -21,17 +21,19 @@ public class UserMemoController {
 
     final UserMemoService userMemoService;
     // 추가
-    @PostMapping("/memo")
-    public ResponseEntity<?> addMemo(@RequestBody UserMemoAddParam userMemoAddParam,
+    @PostMapping("/users/{targetUserId}/memo")
+    public ResponseEntity<?> addMemo(@PathVariable(name = "targetUserId") long targetUserId,
+                                     @RequestBody UserMemoAddParam userMemoAddParam,
                                      @AuthenticationPrincipal UserPrincipal userPrincipal) {
         userMemoService.addMemo(UserMemoAddParam.builder()
                 .userId(userPrincipal.getUserId())
-                .targetUserId(userMemoAddParam.getTargetUserId())
-                .memoText(userMemoAddParam.getMemoText()).build());
+                .targetUserId(targetUserId)
+                .memoText(userMemoAddParam.getMemoText())
+                .build());
         return ResponseEntity.ok().build();
     }
     // 조회 (로컬 테스트용)
-    @GetMapping("/memo/{targetUserId}")
+    @GetMapping("/users/{targetUserId}/memo")
     public ResponseEntity<?> getMemo(@PathVariable(name = "targetUserId") long targetUserId,
                                      @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok().body(userMemoService.getMemo(UserMemoGetParam.builder()
@@ -40,18 +42,19 @@ public class UserMemoController {
                 .build()));
     }
     // 변경
-    @PutMapping("/memo")
-    public ResponseEntity<?> modMemo(@RequestBody UserMemoModParam userMemoModParam,
+    @PutMapping("/users/{targetUserId}/memo")
+    public ResponseEntity<?> modMemo(@PathVariable(name = "targetUserId") long targetUserId,
+                                     @RequestBody UserMemoModParam userMemoModParam,
                                      @AuthenticationPrincipal UserPrincipal userPrincipal) {
         userMemoService.modMemo(UserMemoModParam.builder()
                             .userId(userPrincipal.getUserId())
-                            .targetUserId(userMemoModParam.getTargetUserId())
+                            .targetUserId(targetUserId)
                             .memoText(userMemoModParam.getMemoText())
                             .build());
         return ResponseEntity.ok().build();
     }
     // 삭제 (로컬 테스트용)
-    @DeleteMapping("/memo/{targetUserId}")
+    @DeleteMapping("/users/{targetUserId}/memo")
     public ResponseEntity<?> delMemo(@PathVariable(name = "targetUserId") long targetUserId,
                                      @AuthenticationPrincipal UserPrincipal userPrincipal) {
         userMemoService.delMemo(UserMemoDelParam.builder()

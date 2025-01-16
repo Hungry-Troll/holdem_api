@@ -39,12 +39,14 @@ public class StorageCurrencyController {
         return ResponseEntity.ok().build();
     }
 
-    // 보관함 재화 받기 // 민감한 데이터이므로 @PathVariable 대신 @RequestBody 사용
-    @PutMapping("/storages/currency")
-    public ResponseEntity<?> receiveCurrencyStorage(@RequestBody StorageReceiveCurrencyParam storageReceiveCurrencyParam,
+    // 보관함 재화 받기
+    @PutMapping("/storages/{storageId}/currency")
+    public ResponseEntity<?> receiveCurrencyStorage(@PathVariable(name = "storageId") Long storageId,
                                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        storageReceiveCurrencyParam.setReceiverId(userPrincipal.getUserId());
-        storageCurrencyService.receiveCurrencyStorage(storageReceiveCurrencyParam);
+        storageCurrencyService.receiveCurrencyStorage(StorageReceiveCurrencyParam.builder()
+                .storageId(storageId)
+                .receiverId(userPrincipal.getUserId())
+                .build());
         return ResponseEntity.ok().build();
     }
 }

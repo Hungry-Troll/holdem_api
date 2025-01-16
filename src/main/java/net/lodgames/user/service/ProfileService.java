@@ -40,12 +40,17 @@ public class ProfileService {
         return profileMapper.updateProfileToVo(retrieveProfile(userId));
     }
 
-    // 프로필 추가 (동일 유저가 중복으로 프로필 추가 안한다는 가정)
+    // 프로필 추가
     @Transactional(rollbackFor = {Exception.class})
     public ProfileVo addProfile(ProfileAddParam profileAddParam) {
         // 닉네임 조건 검사
         checkProfileNickname(profileAddParam.getNickname(),
                              profileAddParam.getUserId());
+        // 동일한 유저가 이미 프로필을 가지고 있는 경우 확인
+        if(profileRepository.existsByUserId(profileAddParam.getUserId())) {
+            throw new RestException(ErrorCode.EXIST_PROFILE);
+        }
+        // 프로필 추가
         Profile profile = profileRepository.save(Profile.builder()
                 .image(profileAddParam.getImage())
                 .basicImageIdx(profileAddParam.getBasicImageIdx())

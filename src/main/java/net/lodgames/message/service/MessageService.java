@@ -98,12 +98,6 @@ public class MessageService {
     public MessageModVo modMessage(MessageModParam messageModParam) {
         Message findMessage = messageRepository.findByIdAndReadAtIsNullAndDeletedAtIsNull(messageModParam.getMessageId()
         ).orElseThrow(() -> new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_NOT_FOUND));
-        if (findMessage.getReadAt() != null) {
-            throw new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_ALREADY_READ);
-        }
-        if (findMessage.getDeletedAt() != null) {
-            throw new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_ALREADY_DELETED);
-        }
         findMessage.setContent(messageModParam.getContent());
         findMessage.setCreatedAt(LocalDateTime.now()); // 새로운 생성시간 (받는 사람이 읽지 않았으므로...)
         return messageMapper.updateMessageToVo(messageRepository.save(findMessage));

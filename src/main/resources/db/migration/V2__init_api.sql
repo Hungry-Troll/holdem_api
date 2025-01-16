@@ -240,11 +240,12 @@ CREATE TABLE `coin_record`
 
 CREATE TABLE `diamond`
 (
-    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '코인고유번호',
-    `user_id`    bigint    NOT NULL COMMENT '유저고유번호',
-    `amount`     int       NOT NULL DEFAULT 0 COMMENT '금액',
-    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    `id`          bigint    NOT NULL AUTO_INCREMENT COMMENT '코인고유번호',
+    `user_id`     bigint    NOT NULL COMMENT '유저고유번호',
+    `amount`      int       NOT NULL DEFAULT 0 COMMENT '금액',
+    `paid_amount` int       NOT NULL DEFAULT 0 COMMENT '구매 금액',
+    `created_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -256,6 +257,7 @@ CREATE TABLE `diamond_record`
     `user_id`        bigint       NOT NULL COMMENT '유저고유번호',
     `change_type`    tinyint      NOT NULL COMMENT '변경타입(add, use)',
     `change_diamond` int          NOT NULL COMMENT '변경다이아몬드',
+    `paid_diamond`   int          NOT NULL DEFAULT 0 COMMENT '구매 다이아몬드',
     `result_diamond` int          NOT NULL COMMENT '결과다이아몬드',
     `change_desc`    varchar(255) NULL COMMENT '변경설명',
     `idempotent_key` varchar(255) NOT NULL COMMENT '멱등키',

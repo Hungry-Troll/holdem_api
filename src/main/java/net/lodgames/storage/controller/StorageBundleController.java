@@ -25,12 +25,14 @@ public class StorageBundleController {
         return ResponseEntity.ok().build();
     }
 
-    // 보관함 번들 받기 // 민감한 데이터이므로 @PathVariable 대신 @RequestBody 사용
-    @PutMapping("/storages/bundle")
-    public ResponseEntity<?> receiveBundleStorage(@RequestBody StorageReceiveBundleParam storageReceiveBundleParam,
+    // 보관함 번들 받기
+    @PutMapping("/storages/{storageId}/bundle")
+    public ResponseEntity<?> receiveBundleStorage(@PathVariable("storageId") Long storageId,
                                                   @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        storageReceiveBundleParam.setUserId(userPrincipal.getUserId());
-        storageBundleService.receiveBundleStorage(storageReceiveBundleParam);
+        storageBundleService.receiveBundleStorage(StorageReceiveBundleParam.builder()
+                .storageId(storageId)
+                .userId(userPrincipal.getUserId())
+                .build());
         return ResponseEntity.ok().build();
     }
 }

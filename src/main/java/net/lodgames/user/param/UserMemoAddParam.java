@@ -1,5 +1,6 @@
 package net.lodgames.user.param;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 @Getter
@@ -8,7 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserMemoAddParam {
-    private long userId;
+    @JsonIgnore
     private long targetUserId;
+    @JsonIgnore
+    private long userId;
     private String memoText;
 }

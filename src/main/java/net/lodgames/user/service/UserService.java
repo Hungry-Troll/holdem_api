@@ -27,7 +27,7 @@ public class UserService {
         if (userInfoParam.getUserId() == userInfoParam.getTargetUserId()) {
             throw new RestException(ErrorCode.FOUND_USER_IS_ME);
         }
-
+        // 유저 정보를 찾을 수 없음
         UserInfoVo userInfoVo = userQueryRepository.selectUserInfo(userInfoParam);
         if (userInfoVo == null) {
             throw new RestException(ErrorCode.NOT_FOUND_USER_INFO);

@@ -20,13 +20,13 @@ public class ProfileController {
     private ProfileService profileService;
 
     // 조회
-    @GetMapping("/profile")
+    @GetMapping("/profiles")
     public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(profileService.getProfile(userPrincipal.getUserId()));
     }
 
     // 추가
-    @PostMapping("/profile")
+    @PostMapping("/profiles")
     public ResponseEntity<?> addProfile(@RequestBody ProfileAddParam profileAddParam,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         profileAddParam.setUserId(userPrincipal.getUserId());
@@ -34,7 +34,7 @@ public class ProfileController {
     }
 
     // 변경
-    @PutMapping("/profile")
+    @PutMapping("/profiles")
     public ResponseEntity<?> modProfile(@RequestBody ProfileModParam profileModParam,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         profileModParam.setUserId(userPrincipal.getUserId());
@@ -42,7 +42,7 @@ public class ProfileController {
     }
 
     // 삭제 (로컬 테스트용 / 유저 아이디로 삭제)
-    @DeleteMapping("/profile/{profileId}")
+    @DeleteMapping("/profiles/{profileId}")
     public ResponseEntity<?> deleteProfile(@PathVariable("profileId") Long userId) {
         return ResponseEntity.ok(profileService.deleteProfile(userId));
     }

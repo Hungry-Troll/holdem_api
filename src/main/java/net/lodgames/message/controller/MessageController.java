@@ -58,7 +58,7 @@ public class MessageController {
     }
 
     //쪽지 다중 삭제
-    @DeleteMapping("/messages")
+    @DeleteMapping("/messages/multiple")
     public ResponseEntity<?> deleteMessages(@RequestBody MessagesDeleteParam messagesDeleteParam,
                                             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         messagesDeleteParam.setReceiverId(userPrincipal.getUserId());

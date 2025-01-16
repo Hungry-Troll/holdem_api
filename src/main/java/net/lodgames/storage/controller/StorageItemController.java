@@ -25,12 +25,14 @@ public class StorageItemController {
         return ResponseEntity.ok().build();
     }
 
-    // 보관함 아이템 받기 // 민감한 데이터이므로 @PathVariable 대신 @RequestBody 사용
-    @PutMapping("/storages/item")
-    public ResponseEntity<?> receiveItemStorage(@RequestBody StorageReceiveItemParam storageReceiveItemParam,
+    // 보관함 아이템 받기
+    @PutMapping("/storages/{storageId}/item")
+    public ResponseEntity<?> receiveItemStorage(@PathVariable(name = "storageId") Long storageId,
                                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        storageReceiveItemParam.setUserId(userPrincipal.getUserId());
-        storageItemService.receiveItemStorage(storageReceiveItemParam);
+        storageItemService.receiveItemStorage(StorageReceiveItemParam.builder()
+                .storageId(storageId)
+                .userId(userPrincipal.getUserId())
+                .build());
         return ResponseEntity.ok().build();
     }
 }

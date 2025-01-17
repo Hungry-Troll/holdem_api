@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static net.lodgames.friend.model.QFriend.friend;
-import static net.lodgames.user.model.QProfile.profile;
-import static net.lodgames.user.model.QUsers.users;
+import static net.lodgames.user.profile.model.QProfile.profile;
+import static net.lodgames.user.user.model.QUsers.users;
 
 @Repository
 @AllArgsConstructor

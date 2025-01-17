@@ -11,7 +11,7 @@ import net.lodgames.currency.common.repository.CurrencyQueryRepository;
 import net.lodgames.currency.common.vo.CurrencyVo;
 import net.lodgames.currency.diamond.model.Diamond;
 import net.lodgames.currency.diamond.repository.DiamondRepository;
-import net.lodgames.user.repository.UserRepository;
+import net.lodgames.user.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service

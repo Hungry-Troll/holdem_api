@@ -2,7 +2,7 @@ package net.lodgames.follow.vo;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.lodgames.user.constants.UserStatus;
+import net.lodgames.user.user.constants.UserStatus;
 
 import java.time.LocalDateTime;
 

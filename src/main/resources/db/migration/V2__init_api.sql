@@ -116,12 +116,13 @@ CREATE TABLE `user_block`
 
 CREATE TABLE user_memo
 (
-    `id`             bigint       NOT NULL AUTO_INCREMENT COMMENT '유저메모 고유번호',
-    `user_id`        bigint       NOT NULL COMMENT '메모 작성 유저번호',
-    `target_user_id` bigint       NOT NULL COMMENT '메모 대상 유저번호',
-    `memo_text`      varchar(255) NOT NULL COMMENT '메모 내용',
-    `created_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    `id`             bigint        NOT NULL AUTO_INCREMENT COMMENT '유저메모 고유번호',
+    `user_id`        bigint        NOT NULL COMMENT '메모 작성 유저번호',
+    `target_user_id` bigint        NOT NULL COMMENT '메모 대상 유저번호',
+    `memo_text`      varchar(255)  NULL COMMENT '메모 내용',
+    `tag`            varchar(1000) NULL COMMENT '메모 태그',
+    `created_at`     timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`     timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -508,3 +509,18 @@ CREATE TABLE `user_character`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='유저캐릭터';
+
+CREATE TABLE `user_report`
+(
+    `id`             bigint       NOT NULL AUTO_INCREMENT COMMENT '유저신고 고유번호',
+    `reporter_id`    bigint       NOT NULL COMMENT '신고유저 고유번호',
+    `target_user_id` bigint       NOT NULL COMMENT '신고대상유저 고유번호',
+    `reason`         varchar(500) NOT NULL COMMENT '신고사유',
+    `status`         tinyint      NOT NULL COMMENT '신고상태',
+    `screenshot`     varchar(255) NULL COMMENT '스크린샷경로',
+    `created_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='유저신고'

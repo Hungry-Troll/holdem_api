@@ -1,8 +1,8 @@
 package net.lodgames.config.security;
 
 
-import net.lodgames.user.constants.UserStatus;
-import net.lodgames.user.model.LoginAddInfo;
+import net.lodgames.user.user.constants.UserStatus;
+import net.lodgames.user.user.model.LoginAddInfo;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

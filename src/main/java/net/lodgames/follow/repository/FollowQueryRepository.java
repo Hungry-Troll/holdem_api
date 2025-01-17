@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import static net.lodgames.follow.model.QFollow.follow;
-import static net.lodgames.user.model.QProfile.profile;
-import static net.lodgames.user.model.QUsers.users;
+import static net.lodgames.user.profile.model.QProfile.profile;
+import static net.lodgames.user.user.model.QUsers.users;
 
 @Repository
 @RequiredArgsConstructor

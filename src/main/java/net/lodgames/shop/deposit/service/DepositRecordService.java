@@ -10,9 +10,9 @@ import net.lodgames.shop.deposit.model.DepositRecord;
 import net.lodgames.shop.deposit.repository.DepositCurrencyRecordRepository;
 import net.lodgames.shop.deposit.repository.DepositRecordQueryRepository;
 import net.lodgames.shop.deposit.repository.DepositRecordRepository;
-import net.lodgames.user.model.IdentityVerification;
-import net.lodgames.user.repository.IdentityVerificationRepository;
-import net.lodgames.user.repository.UserRepository;
+import net.lodgames.user.user.model.IdentityVerification;
+import net.lodgames.user.user.repository.IdentityVerificationRepository;
+import net.lodgames.user.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

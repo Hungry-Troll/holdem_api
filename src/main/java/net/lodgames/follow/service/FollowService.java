@@ -8,13 +8,12 @@ import net.lodgames.follow.param.FollowParam;
 import net.lodgames.follow.param.UnFollowParam;
 import net.lodgames.follow.repository.FollowQueryRepository;
 import net.lodgames.follow.repository.FollowRepository;
-import net.lodgames.follow.vo.FollowVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.follow.vo.FolloweeVo;
 import net.lodgames.follow.vo.FollowerVo;
 import net.lodgames.friend.repository.FriendBlockRepository;
-import net.lodgames.user.repository.UserRepository;
+import net.lodgames.user.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

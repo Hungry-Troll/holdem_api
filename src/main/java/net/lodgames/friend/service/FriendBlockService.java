@@ -6,13 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.follow.repository.FollowRepository;
-import net.lodgames.follow.service.FollowService;
 import net.lodgames.friend.model.Friend;
 import net.lodgames.friend.model.FriendBlock;
 import net.lodgames.friend.param.*;
 import net.lodgames.friend.repository.*;
 import net.lodgames.friend.vo.*;
-import net.lodgames.user.repository.UserRepository;
+import net.lodgames.user.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

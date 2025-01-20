@@ -1,6 +1,6 @@
 package net.lodgames.friend.vo;
 
-import net.lodgames.user.constants.UserStatus;
+import net.lodgames.user.user.constants.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;

@@ -15,7 +15,7 @@ import net.lodgames.currency.coin.repository.CoinRepository;
 import net.lodgames.currency.coin.vo.CoinDepositVo;
 import net.lodgames.currency.coin.vo.CoinVo;
 import net.lodgames.currency.coin.vo.CoinWithdrawVo;
-import net.lodgames.user.repository.UserRepository;
+import net.lodgames.user.user.repository.UserRepository;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;

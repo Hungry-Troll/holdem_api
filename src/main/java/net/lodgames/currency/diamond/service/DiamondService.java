@@ -15,7 +15,7 @@ import net.lodgames.currency.diamond.repository.DiamondRepository;
 import net.lodgames.currency.diamond.vo.DiamondDepositVo;
 import net.lodgames.currency.diamond.vo.DiamondVo;
 import net.lodgames.currency.diamond.vo.DiamondWithdrawVo;
-import net.lodgames.user.repository.UserRepository;
+import net.lodgames.user.user.repository.UserRepository;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;

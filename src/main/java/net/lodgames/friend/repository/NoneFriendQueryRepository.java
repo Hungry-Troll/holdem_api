@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import static net.lodgames.friend.model.QFriendRequest.friendRequest;
-import static net.lodgames.user.model.QProfile.profile;
-import static net.lodgames.user.model.QUsers.users;
+import static net.lodgames.user.profile.model.QProfile.profile;
+import static net.lodgames.user.user.model.QUsers.users;
 
 @Repository
 @RequiredArgsConstructor

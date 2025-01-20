@@ -15,7 +15,7 @@ import net.lodgames.currency.chip.repository.ChipRepository;
 import net.lodgames.currency.chip.vo.ChipDepositVo;
 import net.lodgames.currency.chip.vo.ChipVo;
 import net.lodgames.currency.chip.vo.ChipWithdrawVo;
-import net.lodgames.user.repository.UserRepository;
+import net.lodgames.user.user.repository.UserRepository;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;

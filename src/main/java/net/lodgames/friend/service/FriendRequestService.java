@@ -8,13 +8,12 @@ import net.lodgames.config.error.exception.RestException;
 import net.lodgames.event.constant.UserEventType;
 import net.lodgames.event.service.UserEventService;
 import net.lodgames.friend.model.Friend;
-import net.lodgames.friend.model.FriendBlock;
 import net.lodgames.friend.model.FriendRequest;
 import net.lodgames.friend.param.*;
 import net.lodgames.friend.repository.*;
 import net.lodgames.friend.vo.*;
-import net.lodgames.user.constants.UserStatus;
-import net.lodgames.user.repository.UserRepository;
+import net.lodgames.user.user.constants.UserStatus;
+import net.lodgames.user.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

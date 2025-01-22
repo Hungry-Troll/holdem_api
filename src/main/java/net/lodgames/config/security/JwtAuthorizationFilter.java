@@ -8,9 +8,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.ResponseConstants;
 import net.lodgames.config.security.constants.JwtProperties;
-import net.lodgames.user.user.constants.LoginType;
-import net.lodgames.user.user.model.LoginAddInfo;
-import net.lodgames.user.user.service.JwtAuthenticationService;
+import net.lodgames.user.constants.LoginType;
+import net.lodgames.user.model.LoginAddInfo;
+import net.lodgames.user.service.JwtAuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.FilterChain;

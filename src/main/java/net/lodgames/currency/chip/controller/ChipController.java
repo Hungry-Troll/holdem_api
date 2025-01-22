@@ -2,6 +2,7 @@ package net.lodgames.currency.chip.controller;
 
 import lombok.RequiredArgsConstructor;
 import net.lodgames.config.security.UserPrincipal;
+import net.lodgames.currency.chip.param.ChipCheatParam;
 import net.lodgames.currency.chip.service.ChipService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,10 +21,12 @@ public class ChipController {
     }
 
     // TODO 금액 테스트용입니다. 운영에서 쓰이지 않도록 주의 바랍니다.
-    @PutMapping("/chip/cheat/{amount}")
-    public ResponseEntity<?> chipCheat(@PathVariable("amount") Long amount, @AuthenticationPrincipal UserPrincipal userPrincipal){
+    @PutMapping("/chip/cheat")
+    public ResponseEntity<?> chipCheat(@RequestBody ChipCheatParam chipCheatParam,
+                                       @AuthenticationPrincipal UserPrincipal userPrincipal){
         long userId = userPrincipal.getUserId();
-        chipService.chipCheat(userId, amount);
+        chipCheatParam.setUserId(userId);
+        chipService.chipCheat(chipCheatParam);
         return ResponseEntity.ok().build();
     }
 

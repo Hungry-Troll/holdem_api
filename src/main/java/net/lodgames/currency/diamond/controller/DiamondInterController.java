@@ -1,6 +1,7 @@
 package net.lodgames.currency.diamond.controller;
 
 import lombok.RequiredArgsConstructor;
+import net.lodgames.currency.diamond.param.DiamondCheatParam;
 import net.lodgames.currency.diamond.param.DiamondDepositParam;
 import net.lodgames.currency.diamond.param.DiamondWithdrawParam;
 import net.lodgames.currency.diamond.service.DiamondService;
@@ -18,16 +19,17 @@ public class DiamondInterController {
     private final DiamondService diamondService;
 
     // 다이아몬드 정보 취득
-    @GetMapping("/user/{userId}/diamond")
-    public ResponseEntity<?> getDiamond(@PathVariable("userId") Long userId){
-        return ResponseEntity.ok(diamondService.getDiamond(userId));
+    @GetMapping("/users/{userId}/diamond")
+    public ResponseEntity<?> getDiamond(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(diamondService.getDiamondVo(userId));
     }
 
     // 다이아몬드 치트
     // TODO 금액 테스트용입니다. 운영에서 쓰이지 않도록 주의 바랍니다.
-    @PutMapping("/user/{userId}/diamond/cheat/{amount}")
-    public ResponseEntity<?> diamondCheat(@PathVariable("userId") Long userId, @PathVariable("amount") Long amount){
-        diamondService.diamondCheat(userId, amount);
+    @PutMapping("/users/{userId}/diamond/cheat")
+    public ResponseEntity<?> diamondCheat(@PathVariable("userId") Long userId, @RequestBody DiamondCheatParam diamondCheatParam) {
+        diamondCheatParam.setUserId(userId);
+        diamondService.diamondCheat(diamondCheatParam);
         return ResponseEntity.ok().build();
     }
 
@@ -44,4 +46,5 @@ public class DiamondInterController {
         diamondWithdrawParam.setUserId(userId);
         return ResponseEntity.ok(diamondService.diamondWithdraw(diamondWithdrawParam));
     }
+
 }

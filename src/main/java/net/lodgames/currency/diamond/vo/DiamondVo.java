@@ -10,4 +10,5 @@ import lombok.Getter;
 public class DiamondVo {
     private Long userId;
     private Long amount;
+    private Long paidAmount;
 }

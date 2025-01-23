@@ -1,6 +1,6 @@
 package net.lodgames.config.security;
 
-import net.lodgames.user.user.model.LoginAddInfo;
+import net.lodgames.user.model.LoginAddInfo;
 import lombok.Getter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 

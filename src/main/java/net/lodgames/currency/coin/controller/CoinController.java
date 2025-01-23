@@ -2,6 +2,7 @@ package net.lodgames.currency.coin.controller;
 
 import lombok.RequiredArgsConstructor;
 import net.lodgames.config.security.UserPrincipal;
+import net.lodgames.currency.coin.param.CoinCheatParam;
 import net.lodgames.currency.coin.service.CoinService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,10 +21,12 @@ public class CoinController {
     }
 
     // TODO 금액 테스트용입니다. 운영에서 쓰이지 않도록 주의 바랍니다.
-    @PutMapping("/coin/cheat/{amount}")
-    public ResponseEntity<?> coinCheat(@PathVariable("amount") Long amount, @AuthenticationPrincipal UserPrincipal userPrincipal){
+    @PutMapping("/coin/cheat")
+    public ResponseEntity<?> coinCheat(@RequestBody CoinCheatParam coinCheatParam,
+            @AuthenticationPrincipal UserPrincipal userPrincipal){
         long userId = userPrincipal.getUserId();
-        coinService.coinCheat(userId, amount);
+        coinCheatParam.setUserId(userId);
+        coinService.coinCheat(coinCheatParam);
         return ResponseEntity.ok().build();
     }
 

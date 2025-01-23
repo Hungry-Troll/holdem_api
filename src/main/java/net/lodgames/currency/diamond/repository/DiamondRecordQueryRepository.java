@@ -23,6 +23,7 @@ public class DiamondRecordQueryRepository {
                         diamondRecord.userId,
                         diamondRecord.changeType,
                         diamondRecord.changeDiamond,
+                        diamondRecord.paidDiamond,
                         diamondRecord.changeDesc,
                         diamondRecord.resultDiamond,
                         diamondRecord.idempotentKey,

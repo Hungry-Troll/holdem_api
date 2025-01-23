@@ -1,6 +1,6 @@
 package net.lodgames.config.security;
 
-import net.lodgames.user.user.service.JwtAuthenticationService;
+import net.lodgames.user.service.JwtAuthenticationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

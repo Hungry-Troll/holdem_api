@@ -31,6 +31,9 @@ public class DiamondRecord {
     @Column(name="change_diamond")
     private long changeDiamond;
 
+    @Column(name="paid_diamond")
+    private long paidDiamond;
+
     @Column(name="result_diamond")
     private long resultDiamond;
 

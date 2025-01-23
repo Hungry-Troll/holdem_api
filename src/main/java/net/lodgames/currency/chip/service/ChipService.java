@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.currency.common.constants.ChangeType;
 import net.lodgames.currency.chip.constants.ChipHistoryDesc;
 import net.lodgames.currency.chip.model.Chip;
 import net.lodgames.currency.chip.model.ChipRecord;
+import net.lodgames.currency.chip.param.ChipCheatParam;
 import net.lodgames.currency.chip.param.ChipDepositParam;
 import net.lodgames.currency.chip.param.ChipWithdrawParam;
 import net.lodgames.currency.chip.repository.ChipRecordRepository;
@@ -15,7 +15,8 @@ import net.lodgames.currency.chip.repository.ChipRepository;
 import net.lodgames.currency.chip.vo.ChipDepositVo;
 import net.lodgames.currency.chip.vo.ChipVo;
 import net.lodgames.currency.chip.vo.ChipWithdrawVo;
-import net.lodgames.user.user.repository.UserRepository;
+import net.lodgames.user.repository.UserRepository;
+import net.lodgames.currency.common.constants.ChangeType;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,7 +146,12 @@ public class ChipService {
 
     // 코인 가져오기
     public ChipVo getChip(long userId) {
-        Chip chip = chipRepository.findByUserId(userId)
+        Chip chip = getChipElseCreate(userId);
+        return ChipVo.builder().userId(userId).amount(chip.getAmount()).build();
+    }
+
+    public Chip getChipElseCreate(long userId) {
+        return chipRepository.findByUserId(userId)
                 .orElseGet(() -> {
                             if (!userRepository.existsByUserId(userId)) {
                                 throw new RestException(ErrorCode.USER_NOT_EXIST);
@@ -156,24 +162,16 @@ public class ChipService {
                                     .build());
                         }
                 );
-        return ChipVo.builder().userId(userId).amount(chip.getAmount()).build();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void chipCheat(long userId, long amount) {
+    public void chipCheat(ChipCheatParam chipCheatParam) {
         if (!cheatUse) {
             throw new RestException(ErrorCode.NOT_ALLOWED_CHEAT);
         }
-        if (!userRepository.existsByUserId(userId)) {
-            throw new RestException(ErrorCode.USER_NOT_EXIST);
-        }
-
-        Chip chip = chipRepository.findByUserId(userId).orElse( // 없으면 생성
-                Chip.builder()
-                        .userId(userId)
-                        .amount(0L)
-                        .build());
-        chip.changeAmount(amount);
+        Chip chip = getChipElseCreate(chipCheatParam.getUserId());
+        chip.changeAmount(chipCheatParam.getAmount());
+        chipRepository.save(chip);
     }
 
     @Transactional(rollbackFor = Exception.class)

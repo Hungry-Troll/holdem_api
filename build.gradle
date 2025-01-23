@@ -41,7 +41,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-security"
 	implementation "org.springframework.boot:spring-boot-starter-data-redis"
 	implementation 'org.redisson:redisson-spring-boot-starter:3.38.0'
-	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
 	implementation 'org.modelmapper:modelmapper:3.1.0'
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'javax.xml.bind:jaxb-api:2.2.4'
@@ -62,12 +62,12 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0' // mapstruct
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0' 			// mapstruct
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testImplementation "org.projectlombok:lombok:${lombokVersion}"		// lombok for test
-	testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"	// lombok for test
-	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}" // mapstrurtc for test
-	testAnnotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'		// mapstrurtc for test
+	testImplementation "org.projectlombok:lombok:${lombokVersion}"					// lombok for test
+	testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"				// lombok for test
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}" // mapstrurct for test
+	testAnnotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'		// mapstrurct for test
 	testImplementation 'junit:junit:4.13.1'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

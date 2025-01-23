@@ -29,6 +29,9 @@ public class Diamond {
     @Column(name = "amount")
     private Long amount;
 
+    @Column(name = "paid_amount")
+    private Long paidAmount;
+
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt; // 만든날짜
@@ -36,16 +39,29 @@ public class Diamond {
     @LastModifiedDate
     private LocalDateTime updatedAt; // 변경일
 
-
     public void changeAmount(long newAmount) {
         this.amount = newAmount;
+    }
+
+    public void changePaidAmount(long newPaidAmount) {
+        this.paidAmount = newPaidAmount;
     }
 
     public void addAmount(long addAmount) {
         this.amount += addAmount;
     }
 
+    public void addPaidAmount(long addAmount) {
+        this.paidAmount += addAmount;
+        this.amount += addAmount;
+    }
+
     public void deductAmount(long deductAmount) {
+        if(this.paidAmount < deductAmount) {
+            this.paidAmount = 0L;
+        } else {
+            this.paidAmount -= deductAmount;
+        }
         this.amount -= deductAmount;
     }
 

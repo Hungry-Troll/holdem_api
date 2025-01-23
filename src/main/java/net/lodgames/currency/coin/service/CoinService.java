@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.currency.common.constants.ChangeType;
 import net.lodgames.currency.coin.constants.CoinHistoryDesc;
 import net.lodgames.currency.coin.model.Coin;
 import net.lodgames.currency.coin.model.CoinRecord;
+import net.lodgames.currency.coin.param.CoinCheatParam;
 import net.lodgames.currency.coin.param.CoinDepositParam;
 import net.lodgames.currency.coin.param.CoinWithdrawParam;
 import net.lodgames.currency.coin.repository.CoinRecordRepository;
@@ -15,7 +15,8 @@ import net.lodgames.currency.coin.repository.CoinRepository;
 import net.lodgames.currency.coin.vo.CoinDepositVo;
 import net.lodgames.currency.coin.vo.CoinVo;
 import net.lodgames.currency.coin.vo.CoinWithdrawVo;
-import net.lodgames.user.user.repository.UserRepository;
+import net.lodgames.user.repository.UserRepository;
+import net.lodgames.currency.common.constants.ChangeType;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,7 +146,16 @@ public class CoinService {
 
     // 코인 가져오기
     public CoinVo getCoin(long userId) {
-        Coin coin = coinRepository.findByUserId(userId)
+        Coin coin = getCoinElseCreate(userId);
+        return CoinVo.builder()
+                .userId(userId)
+                .amount(coin.getAmount())
+                .build();
+    }
+
+    // 유저 코인을 조회하고 혹시 없으면 생성(에러 방지 코드)
+    protected Coin getCoinElseCreate(long userId) {
+        return coinRepository.findByUserId(userId)
                 .orElseGet(() -> {
                             if (!userRepository.existsByUserId(userId)) {
                                 throw new RestException(ErrorCode.USER_NOT_EXIST);
@@ -156,24 +166,16 @@ public class CoinService {
                                     .build());
                         }
                 );
-        return CoinVo.builder().userId(userId).amount(coin.getAmount()).build();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void coinCheat(long userId, long amount) {
+    public void coinCheat(CoinCheatParam coinCheatParam) {
         if (!cheatUse) {
             throw new RestException(ErrorCode.NOT_ALLOWED_CHEAT);
         }
-        if (!userRepository.existsByUserId(userId)) {
-            throw new RestException(ErrorCode.USER_NOT_EXIST);
-        }
-
-        Coin coin = coinRepository.findByUserId(userId).orElse( // 없으면 생성
-                Coin.builder()
-                        .userId(userId)
-                        .amount(0L)
-                        .build());
-        coin.changeAmount(amount);
+        Coin coin = getCoinElseCreate(coinCheatParam.getUserId());
+        coin.changeAmount(coinCheatParam.getAmount());
+        coinRepository.save(coin);
     }
 
     @Transactional(rollbackFor = Exception.class)

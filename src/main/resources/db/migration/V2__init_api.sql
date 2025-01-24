@@ -523,4 +523,19 @@ CREATE TABLE `user_report`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT ='유저신고'
+  COLLATE = utf8mb4_general_ci COMMENT ='유저신고';
+
+CREATE TABLE `inquiry`
+(
+    `id`         bigint       NOT NULL AUTO_INCREMENT COMMENT '문의 고유번호',
+    `user_id`    bigint       NOT NULL COMMENT '문의자 고유번호',
+    `type`       tinyint      NOT NULL COMMENT '문의종류',
+    `reason`     varchar(500) NULL COMMENT '문의내용',
+    `screenshot` varchar(255) NULL COMMENT '스크린샷경로',
+    `status`     tinyint      NOT NULL COMMENT '문의상태',
+    `created_at` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='문의';

@@ -62,7 +62,7 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0' 			// mapstruct
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0' 			// mapstruct-processor 의존성에 아래 Lombok 지원 플러그인을 추가
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation "org.projectlombok:lombok:${lombokVersion}"					// lombok for test
 	testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"				// lombok for test
@@ -93,6 +93,6 @@ test {
 
 tasks.withType(JavaCompile) {
 	options.compilerArgs = [
-			'-Amapstruct.suppressGeneratorTimestamp=true'
+			'-Amapstruct.suppressGeneratorTimestamp=true' // 생성된 매퍼 클래스의 @Generated 주석에 시간 스탬프가 생성되지 않음
 	]
 }

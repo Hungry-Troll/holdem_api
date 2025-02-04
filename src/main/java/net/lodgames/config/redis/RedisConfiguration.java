@@ -41,11 +41,11 @@ public class RedisConfiguration {
     private int authDatabase;
     @Value("${redis.user.database:1}")
     private int userDatabase;
-    @Value("${redis.noti.database}")
+    @Value("${redis.noti.database:3}")
     private int notiDatabase;
     @Value("${redis.ingame.database:4}")
     private int inGameDatabase;
-    @Value("5")
+    @Value("${redis.version.database:5}")
     private int versionDatabase;
 
     @Value("${redis.password:bg}")

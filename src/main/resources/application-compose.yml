@@ -54,12 +54,12 @@ redis:
     database: 0
   user:
     database: 1
-  sso:
-    database: 2
   noti:
     database: 3
   ingame:
     database: 4
+  version:
+    database: 5
   type: STANDARD
 jwt:
   secret: mysecret

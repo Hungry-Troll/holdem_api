@@ -24,12 +24,11 @@ public class SecurityConfiguration {
     @Value("${jwt.secret}")
     private String secret;
 
-    private JwtAuthenticationService jwtAuthenticationService;
+    private final JwtAuthenticationService jwtAuthenticationService;
 
     public SecurityConfiguration(JwtAuthenticationService jwtAuthenticationService) {
         this.jwtAuthenticationService = jwtAuthenticationService;
     }
-
 
     @Bean
     protected SecurityFilterChain web(HttpSecurity http) throws Exception {

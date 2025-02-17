@@ -1,6 +1,7 @@
 package net.lodgames.config.security;
 
 
+import net.lodgames.user.constants.LoginType;
 import net.lodgames.user.constants.UserStatus;
 import net.lodgames.user.model.LoginAddInfo;
 import lombok.Builder;
@@ -16,8 +17,10 @@ import java.util.Date;
 public class UserPrincipal implements UserDetails {
 
     @Builder
-    public UserPrincipal(long userId, String email, String password, int status, String userHex, String mobile, Date birthDate, LoginAddInfo loginAddInfo, String nickname) {
+    public UserPrincipal(long userId, String loginId, LoginType loginType, String email, String password, UserStatus status, String userHex, String mobile, Date birthDate, LoginAddInfo loginAddInfo, String nickname) {
         this.userId = userId;
+        this.loginId = loginId;
+        this.loginType = loginType;
         this.email = email;
         this.password = password;
         this.status = status;
@@ -29,21 +32,15 @@ public class UserPrincipal implements UserDetails {
     }
 
     private final long userId;
-
-    private final String email;
-
+    private final String loginId;
+    private final LoginType loginType;
     private final String password;
-
+    private final String email;
     private final String userHex;
-
-    private final int status;
-
+    private final UserStatus status;
     private final String mobile;
-
     private final Date birthDate;
-
     private final LoginAddInfo loginAddInfo;
-
     private final String nickname;
 
     @Override
@@ -60,6 +57,7 @@ public class UserPrincipal implements UserDetails {
     public String getUsername() {
         return this.email;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -77,9 +75,9 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.status == UserStatus.NORMAL.getStatus()
-                || this.status == UserStatus.LOGOUT.getStatus();
+        return this.status == UserStatus.NORMAL || this.status == UserStatus.LOGOUT;
     }
 
 }
+
 

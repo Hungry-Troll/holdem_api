@@ -44,6 +44,7 @@ public class CurrencyService {
                     .orElseGet(() -> diamondRepository.save(Diamond.builder()
                             .userId(userId)
                             .amount(0L)
+                            .paidAmount(0L)
                             .build())
                     );
             Chip chip = chipRepository.findByUserId(userId)
@@ -59,5 +60,22 @@ public class CurrencyService {
                     .diamondAmount(diamond.getAmount())
                     .build();
         }
+    }
+
+    // 금액 초기화
+    public void initCurrencies(long userId) {
+        coinRepository.save(Coin.builder()
+                .userId(userId)
+                .amount(0L)
+                .build());
+        diamondRepository.save(Diamond.builder()
+                .userId(userId)
+                .amount(0L)
+                .paidAmount(0L)
+                .build());
+        chipRepository.save(Chip.builder()
+                .userId(userId)
+                .amount(0L)
+                .build());
     }
 }

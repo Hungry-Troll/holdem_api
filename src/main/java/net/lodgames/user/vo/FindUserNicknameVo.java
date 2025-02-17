@@ -16,5 +16,5 @@ public class FindUserNicknameVo {
     // 프로필
     private String nickname;
     private String image;
-    private Short basicImageIdx;
+    private Integer basicImageIdx;
 }

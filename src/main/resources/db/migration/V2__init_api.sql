@@ -1,3 +1,17 @@
+CREATE TABLE `profile`
+(
+    `id`              bigint    NOT NULL AUTO_INCREMENT COMMENT '프로필 고유번호',
+    `user_id`         bigint    NOT NULL COMMENT '유저고유번호',
+    `nickname`        varchar(100)       DEFAULT NULL COMMENT '닉네임',
+    `image`           varchar(100)       DEFAULT NULL COMMENT '이미지 경로',
+    `basic_image_idx` tinyint            DEFAULT 0 COMMENT '기본 프로필 이미지',
+    `created_at`      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='프로필';
+
 CREATE TABLE `stuff`
 (
     `id`            bigint    NOT NULL AUTO_INCREMENT COMMENT '물건고유번호',

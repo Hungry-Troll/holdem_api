@@ -19,7 +19,7 @@ public class FriendVo {
     // profile(friend)
     private String nickname;
     private String image;
-    private Short basicImageIdx;
+    private Integer basicImageIdx;
     // friend
     private LocalDateTime createdAt; // 만든날짜
     private LocalDateTime updatedAt; // 변경일

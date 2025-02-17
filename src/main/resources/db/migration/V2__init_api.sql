@@ -539,3 +539,17 @@ CREATE TABLE `inquiry`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='문의';
+
+CREATE TABLE `stamina`
+(
+    `id`                     bigint    NOT NULL AUTO_INCREMENT COMMENT '스태미나 고유번호',
+    `user_id`                bigint    NOT NULL COMMENT '유저 고유번호',
+    `current_stamina`        int       NOT NULL COMMENT '현재스태미나',
+    `max_stamina`            int       NOT NULL COMMENT '최대스태미나',
+    `last_recovery_time`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '마지막회복접속시간',
+    `recovery_complete_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '완전회복시간',
+    `updated_at`             timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='스태미나';

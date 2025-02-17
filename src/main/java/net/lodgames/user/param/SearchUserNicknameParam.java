@@ -6,9 +6,6 @@ import net.lodgames.common.param.PagingParam;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class SearchUserNicknameParam extends PagingParam {
     @JsonIgnore
     private long userId;

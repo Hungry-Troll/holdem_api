@@ -13,5 +13,5 @@ public class ProfileModParam {
     private Long userId;
     private String nickname;
     private String image;
-    private Short basicImageIdx;
+    private Integer basicImageIdx;
 }

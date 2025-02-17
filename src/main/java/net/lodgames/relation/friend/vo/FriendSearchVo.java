@@ -20,6 +20,6 @@ public class FriendSearchVo {
     // Profile
     private String nickname;
     private String image;
-    private Short basicImageIdx;
+    private Integer basicImageIdx;
 
 }

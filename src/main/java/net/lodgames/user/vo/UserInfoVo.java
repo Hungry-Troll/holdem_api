@@ -13,7 +13,7 @@ public class UserInfoVo {
     // profile(friend)
     private String image;
     private String nickname;
-    private Short basicImageIdx;
+    private Integer basicImageIdx;
     // follow
     private Boolean isFollow;
     // userBlock

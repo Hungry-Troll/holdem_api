@@ -5,9 +5,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserMemoAddParam {
     @JsonIgnore
     private long targetUserId;

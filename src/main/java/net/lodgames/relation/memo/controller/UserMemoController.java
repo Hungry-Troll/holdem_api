@@ -25,12 +25,9 @@ public class UserMemoController {
     public ResponseEntity<?> addMemo(@PathVariable(name = "targetUserId") long targetUserId,
                                      @RequestBody UserMemoAddParam userMemoAddParam,
                                      @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        userMemoService.addMemo(UserMemoAddParam.builder()
-                .userId(userPrincipal.getUserId())
-                .targetUserId(targetUserId)
-                .memoText(userMemoAddParam.getMemoText())
-                .tag(userMemoAddParam.getTag())
-                .build());
+        userMemoAddParam.setTargetUserId(targetUserId);
+        userMemoAddParam.setUserId(userPrincipal.getUserId());
+        userMemoService.addMemo(userMemoAddParam);
         return ResponseEntity.ok().build();
     }
     // 조회 (로컬 테스트용)
@@ -47,12 +44,9 @@ public class UserMemoController {
     public ResponseEntity<?> modMemo(@PathVariable(name = "targetUserId") long targetUserId,
                                      @RequestBody UserMemoModParam userMemoModParam,
                                      @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        userMemoService.modMemo(UserMemoModParam.builder()
-                            .userId(userPrincipal.getUserId())
-                            .targetUserId(targetUserId)
-                            .memoText(userMemoModParam.getMemoText())
-                            .tag(userMemoModParam.getTag())
-                            .build());
+        userMemoModParam.setTargetUserId(targetUserId);
+        userMemoModParam.setUserId(userPrincipal.getUserId());
+        userMemoService.modMemo(userMemoModParam);
         return ResponseEntity.ok().build();
     }
     // 삭제 (로컬 테스트용)

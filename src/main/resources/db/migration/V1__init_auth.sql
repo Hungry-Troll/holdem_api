@@ -1,11 +1,13 @@
 CREATE TABLE `users`
 (
     `user_id`    bigint      NOT NULL AUTO_INCREMENT COMMENT '유저고유번호',
+    `login_id`   varchar(100)         DEFAULT NULL COMMENT '로그인아이디',
     `status`     tinyint     NOT NULL DEFAULT '0' COMMENT '유저상태',
     `password`   varchar(60)          DEFAULT NULL COMMENT '패스워드',
     `mobile`     varchar(12) NOT NULL COMMENT '휴대폰번호',
     `email`      varchar(100)         DEFAULT NULL COMMENT '이메일',
-    `user_type`  tinyint     NOT NULL DEFAULT '0' COMMENT '유저타입 0: 멤버 1: 홀덤',
+    `login_type` tinyint     NOT NULL DEFAULT '0' COMMENT '로그인 타입 id_pass:0, social:1, guest:2',
+    `init_at`    timestamp   NULL     DEFAULT NULL COMMENT '초기화시각',
     `login_at`   timestamp   NULL     DEFAULT NULL COMMENT '로그인시각',
     `logout_at`  timestamp   NULL     DEFAULT NULL COMMENT '로그아웃시각',
     `created_at` timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
@@ -107,16 +109,3 @@ CREATE TABLE `social_login`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='소셜 로그인';
 
-CREATE TABLE `profile`
-(
-    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '프로필 고유번호',
-    `user_id`    bigint    NOT NULL COMMENT '유저고유번호',
-    `nickname`   varchar(100)       DEFAULT NULL COMMENT '닉네임',
-    `image`      varchar(100)       DEFAULT NULL COMMENT '이미지 경로',
-    `basic_image_idx`      tinyint       DEFAULT 0 COMMENT '기본 프로필 이미지',
-    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT ='프로필';

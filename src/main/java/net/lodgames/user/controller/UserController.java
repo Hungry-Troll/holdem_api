@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.security.UserPrincipal;
 import net.lodgames.user.param.SearchUserNicknameParam;
 import net.lodgames.user.param.UserInfoParam;
+import net.lodgames.user.param.UserInitParam;
 import net.lodgames.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,12 +23,12 @@ UserController {
 
     // 유저 정보 조회
     @GetMapping("/users/{targetUserId}")
-    public ResponseEntity<?> userInfo(@PathVariable(name="targetUserId") Long targetUserId,
+    public ResponseEntity<?> userInfo(@PathVariable(name = "targetUserId") Long targetUserId,
                                       @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(userService.userInfo(
                 UserInfoParam.builder()
-                    .targetUserId(targetUserId)
-                    .userId((userPrincipal.getUserId())).build())
+                        .targetUserId(targetUserId)
+                        .userId((userPrincipal.getUserId())).build())
         );
     }
 
@@ -35,10 +36,16 @@ UserController {
     @GetMapping("/users/search/nickname")
     public ResponseEntity<?> searchUserNickname(@RequestBody SearchUserNicknameParam searchUserNicknameParam,
                                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(userService.searchUserNickname(
-                SearchUserNicknameParam.builder()
-                        .userId(userPrincipal.getUserId())
-                        .nickname(searchUserNicknameParam.getNickname()).build())
-        );
+        searchUserNicknameParam.setUserId(userPrincipal.getUserId());
+        return ResponseEntity.ok(userService.searchUserNickname(searchUserNicknameParam));
+    }
+
+    // 유저 닉네임 검색
+    @PostMapping("/users/init")
+    public ResponseEntity<?> initializeUser(@RequestBody UserInitParam userInitParam,
+                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        userInitParam.setUserId(userPrincipal.getUserId());
+        userService.initializeUser(userInitParam);
+        return ResponseEntity.ok().build();
     }
 }

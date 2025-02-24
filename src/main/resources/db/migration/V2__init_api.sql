@@ -105,10 +105,9 @@ CREATE TABLE `board`
 (
     `id`         int          NOT NULL AUTO_INCREMENT COMMENT '게시판 고유번호',
     `title`      varchar(50)  NOT NULL COMMENT '제목',
-    `content`    varchar(100) NOT NULL COMMENT '본문',
+    `content`    TEXT NOT NULL COMMENT '본문',
     `board_type` tinyint      NOT NULL COMMENT '타입',
     `status`     tinyint      NOT NULL COMMENT '상태',
-    `image`      varchar(50)  NULL COMMENT '이미지 경로',
     `created_at` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     `updated_at` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)

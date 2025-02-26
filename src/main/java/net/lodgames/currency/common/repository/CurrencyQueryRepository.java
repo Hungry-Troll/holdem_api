@@ -20,7 +20,11 @@ public class CurrencyQueryRepository {
         return jpaQueryFactory.select(Projections.fields(CurrencyVo.class,
                         coin.amount.as("coinAmount"),
                         chip.amount.as("chipAmount"),
-                        diamond.amount.as("diamondAmount")
+                        diamond.iosAmount,
+                        diamond.androidAmount,
+                        diamond.paidAmount,
+                        diamond.freeAmount
+                        //, diamond.amount.as("diamondAmount")
                 )).from(coin)
                 .leftJoin(chip).on(coin.userId.eq(chip.userId))
                 .leftJoin(diamond).on(coin.userId.eq(diamond.userId))

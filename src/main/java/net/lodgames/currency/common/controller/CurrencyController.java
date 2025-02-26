@@ -18,7 +18,7 @@ public class CurrencyController {
     // 재화 모든 정보를 가져온다.
     @GetMapping("/currency")
     public ResponseEntity<?> getCurrencies(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return ResponseEntity.ok(currencyService.getCurrencies(userPrincipal.getUserId()));
+        return ResponseEntity.ok(currencyService.getCurrencies(userPrincipal.getUserId(), userPrincipal.getOs()));
     }
 
 }

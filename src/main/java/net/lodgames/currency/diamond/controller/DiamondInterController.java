@@ -5,6 +5,7 @@ import net.lodgames.currency.diamond.param.DiamondCheatParam;
 import net.lodgames.currency.diamond.param.DiamondDepositParam;
 import net.lodgames.currency.diamond.param.DiamondWithdrawParam;
 import net.lodgames.currency.diamond.service.DiamondService;
+import net.lodgames.user.constants.Os;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,9 @@ public class DiamondInterController {
     private final DiamondService diamondService;
 
     // 다이아몬드 정보 취득
-    @GetMapping("/users/{userId}/diamond")
-    public ResponseEntity<?> getDiamond(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(diamondService.getDiamondVo(userId));
+    @GetMapping("/users/{userId}/diamond/{os}")
+    public ResponseEntity<?> getDiamond(@PathVariable("userId") Long userId,@PathVariable("os") Os os) {
+        return ResponseEntity.ok(diamondService.getDiamondVo(userId, os));
     }
 
     // 다이아몬드 치트

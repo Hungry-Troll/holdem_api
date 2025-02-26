@@ -5,15 +5,13 @@ import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.storage.model.Storage;
 import net.lodgames.storage.param.StorageDeleteParam;
-import net.lodgames.storage.param.StoragesGetParam;
 import net.lodgames.storage.param.StorageReadParam;
-import net.lodgames.storage.repository.*;
-import net.lodgames.storage.service.temp.TempCoinService;
-import net.lodgames.storage.service.temp.TempDiamondService;
-import net.lodgames.storage.service.temp.TempItemService;
+import net.lodgames.storage.param.StoragesGetParam;
+import net.lodgames.storage.repository.StorageQueryRepository;
+import net.lodgames.storage.repository.StorageRepository;
 import net.lodgames.storage.service.util.StorageValidatorService;
-import net.lodgames.storage.vo.*;
 import net.lodgames.storage.vo.StorageReadVo;
+import net.lodgames.storage.vo.StoragesGetVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +26,6 @@ public class StorageService {
     private final StorageQueryRepository storageQueryRepository;
 
     private final StorageValidatorService storageValidatorService;
-
-    // TODO : 임시 코드 팀장님 재화 코드 사용 후 삭제
-    private final TempCoinService tempCoinService;// 임시 코드
-    private final TempDiamondService tempDiamondService; // 임시 코드
-    private final TempItemService tempItemService; // 임시 코드
-    //
     // 보관함 읽기
     @Transactional(rollbackFor = {Exception.class})
     public StorageReadVo readStorage(StorageReadParam storageReadParam) {

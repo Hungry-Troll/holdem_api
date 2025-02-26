@@ -1,11 +1,12 @@
 package net.lodgames.config.security;
 
 
-import net.lodgames.user.constants.LoginType;
-import net.lodgames.user.constants.UserStatus;
-import net.lodgames.user.model.LoginAddInfo;
 import lombok.Builder;
 import lombok.Getter;
+import net.lodgames.user.constants.LoginType;
+import net.lodgames.user.constants.Os;
+import net.lodgames.user.constants.UserStatus;
+import net.lodgames.user.model.LoginAddInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -78,6 +79,9 @@ public class UserPrincipal implements UserDetails {
         return this.status == UserStatus.NORMAL || this.status == UserStatus.LOGOUT;
     }
 
+    public Os getOs() {
+        return loginAddInfo.getOs();
+    }
 }
 
 

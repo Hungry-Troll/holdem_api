@@ -26,13 +26,14 @@ public class StorageCurrencyController {
                                                  @AuthenticationPrincipal UserPrincipal userPrincipal) {
         storageSendCurrencyParam.setSenderId(userPrincipal.getUserId());
         storageSendCurrencyParam.setSenderType(StorageSenderType.USER);
+        storageSendCurrencyParam.setOs(userPrincipal.getOs());
         storageCurrencyService.sendCurrencyStorage(storageSendCurrencyParam);
         return ResponseEntity.ok().build();
     }
 
     // 보관함 재화 보내기(admin -> user)
     @PostMapping("/storages/currency/grant")
-    public ResponseEntity<?> grantCurrencyStorage(@RequestBody StorageGrantCurrencyParam storageGrantCurrencyParam){
+    public ResponseEntity<?> grantCurrencyStorage(@RequestBody StorageGrantCurrencyParam storageGrantCurrencyParam) {
         storageGrantCurrencyParam.setSenderId(-1L); // TODO 임시 어드민 ID : -1
         storageGrantCurrencyParam.setSenderType(StorageSenderType.ADMIN);
         storageCurrencyService.grantCurrencyStorage(storageGrantCurrencyParam);
@@ -46,6 +47,7 @@ public class StorageCurrencyController {
         storageCurrencyService.receiveCurrencyStorage(StorageReceiveCurrencyParam.builder()
                 .storageId(storageId)
                 .receiverId(userPrincipal.getUserId())
+                .os(userPrincipal.getOs())
                 .build());
         return ResponseEntity.ok().build();
     }

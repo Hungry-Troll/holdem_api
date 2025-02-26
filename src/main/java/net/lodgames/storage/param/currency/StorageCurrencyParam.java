@@ -2,9 +2,10 @@ package net.lodgames.storage.param.currency;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.storage.constants.StorageContentType;
-import net.lodgames.storage.constants.StorageCurrencyType;
 import net.lodgames.storage.constants.StorageSenderType;
+import net.lodgames.user.constants.Os;
 
 @Getter
 @Setter
@@ -15,6 +16,8 @@ public class StorageCurrencyParam {
     // Storage
     @JsonIgnore
     private Long senderId;
+    @JsonIgnore
+    private Os os;
     private Long receiverId;
     private String title;
     private String description;
@@ -22,6 +25,6 @@ public class StorageCurrencyParam {
     private StorageSenderType senderType;
     private StorageContentType contentType;
     // StorageCurrencyType
-    private StorageCurrencyType currencyType;
+    private CurrencyType currencyType;
     private Long currencyAmount;
 }

@@ -12,5 +12,4 @@ public class DiamondWithdrawVo {
     private Long amount;
     private Long resultAmount;
     private String idempotentKey;
-
 }

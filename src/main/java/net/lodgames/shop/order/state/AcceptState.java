@@ -35,7 +35,7 @@ public class AcceptState implements OrderState<Orders> {
         // 지불 기록 생성
         DepositRecord depositRecord = depositRecordService.addDepositRecord(orders.getId(), productId, paymentPrice, userId);
         // 상품 옵션 구매 처리
-        productOptionService.handleOrderProductOptions(userId, productId, depositRecord.getId(), orders.getId());
+        productOptionService.handleOrderProductOptions(userId, orders.getOs(), productId, depositRecord.getId(), orders.getId());
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.lodgames.relation.friend.param.FriendDeleteParam;
 import net.lodgames.relation.friend.param.FriendInfoParam;
 import net.lodgames.relation.friend.param.FriendListParam;
 import net.lodgames.relation.friend.param.FriendSearchParam;
+import net.lodgames.relation.friend.repository.FriendBlockRepository;
 import net.lodgames.relation.friend.repository.FriendQueryRepository;
 import net.lodgames.relation.friend.repository.FriendRepository;
 import net.lodgames.relation.friend.vo.FriendInfoVo;
@@ -28,6 +29,7 @@ public class FriendService {
     private static final String SOURCE_FRIEND_DELETE = "/api/friend/deleteFriend";
     private final FriendQueryRepository friendQueryRepository;
     private final FriendRepository friendRepository;
+    private final FriendBlockRepository friendBlockRepository;
     private final UserEventService userEventService;
 
     // 친구 리스트
@@ -89,6 +91,17 @@ public class FriendService {
     @Transactional(rollbackFor = {Exception.class})
     public List<FriendSearchVo> searchFriend(FriendSearchParam friendSearchParam) {
         return friendQueryRepository.selectFriendByNickName(friendSearchParam, friendSearchParam.of());
+    }
+
+
+    // 친구 관계인지 확인
+    public boolean isFriend(long userId, long friendId) {
+        return friendRepository.existsByUserIdAndFriendId(userId, friendId);
+    }
+
+    // BLOCK 당했는지 확인
+    public boolean isBlocked(long userId, long friendId) {
+        return friendBlockRepository.existsByUserIdAndFriendId(userId, friendId);
     }
 }
 

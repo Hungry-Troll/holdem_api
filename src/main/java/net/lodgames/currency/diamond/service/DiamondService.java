@@ -16,6 +16,7 @@ import net.lodgames.currency.diamond.repository.DiamondRepository;
 import net.lodgames.currency.diamond.vo.DiamondDepositVo;
 import net.lodgames.currency.diamond.vo.DiamondVo;
 import net.lodgames.currency.diamond.vo.DiamondWithdrawVo;
+import net.lodgames.user.constants.Os;
 import net.lodgames.user.repository.UserRepository;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -45,30 +46,29 @@ public class DiamondService {
     private final int LOCK_LEASE_TIME = 3;      // redis rock max using time
     private final String LOCK_PRE_FIX = "d:l:"; // diamond lock prefix name d:l:{user_id}
 
-    protected long addDiamondWithLock(final long userId, final long amount, boolean isPaid, String desc, String idempotentKey) {
+    protected long addDiamondWithLock(final long userId, final long amount, Os os, boolean isPaid, String desc, String idempotentKey) {
         checkDuplicatedRequestForDiamond(idempotentKey);
         Diamond diamond = getDiamondElseCreate(userId);   // 다이아몬드 취득
-        RLock lock = getUserLock(userId);       // 해당 유저의 코인락
-        long total;
-        long paidDiamond = 0;
+        RLock lock = getUserLock(userId);                 // 해당 유저의 코인락
         try {
             // 락획득 시도시 실패했는지 체크
             checkFailureGetLock(lock, userId);
             if (isPaid) {
-                diamond.addPaidAmount(amount);
-                paidDiamond += amount;
+                diamond.addPaidAmount(os, amount);
             } else {
-                diamond.addAmount(amount);
+                diamond.addFreeAmount(amount);
             }
-            total = diamond.getAmount();
-            long resultDiamond = diamondRepository.save(diamond).getAmount();
+            diamondRepository.save(diamond);
             // record the history of diamond
             diamondRecordRepository.save(DiamondRecord.builder()
                     .userId(userId)
                     .changeType(ChangeType.ADD)
                     .changeDiamond(amount)
-                    .paidDiamond(paidDiamond)
-                    .resultDiamond(resultDiamond)
+                    .os(os)
+                    .resultFreeDiamond(diamond.getFreeAmount())
+                    .resultAndroidDiamond(diamond.getAndroidAmount())
+                    .resultIosDiamond(diamond.getIosAmount())
+                    .resultPaidDiamond(diamond.getPaidAmount())
                     .idempotentKey(idempotentKey)
                     .changeDesc(desc)
                     .build());
@@ -81,34 +81,33 @@ public class DiamondService {
                 lock.unlock();
             }
         }
-        return total;
+        return diamond.getTotalAmount(os);
     }
 
-    protected long spendDiamondWithLock(final long userId, final long amount, String desc, String idempotentKey) {
+    protected long spendDiamondWithLock(final long userId, final long amount, Os os, String desc, String idempotentKey) {
         checkDuplicatedRequestForDiamond(idempotentKey);
         Diamond diamond = diamondRepository.findByUserId(userId)
                 .orElseThrow(() -> new RestException(ErrorCode.NOT_FOUND_DIAMOND_INFO));
         RLock lock = getUserLock(userId);
-        long total;
-        long beforePaidDiamond = diamond.getPaidAmount();
         try {
             checkFailureGetLock(lock, userId);
-            if (diamond.getAmount() < amount) {
-                throw new RestException(ErrorCode.NOT_ENOUGH_COIN);
+            if (diamond.isNotAbleToDeductAmount(os, amount)) {
+                throw new RestException(ErrorCode.NOT_ENOUGH_DIAMOND);
             }
-            diamond.deductAmount(amount);
-
+            diamond.deductAmount(os, amount);
+            diamondRepository.save(diamond);
             log.debug("{}", lock.getHoldCount());
             log.debug("diamond deduct");
-            long resultDiamond = diamondRepository.save(diamond).getAmount();
-            total = resultDiamond;
             // record the history of diamond
             diamondRecordRepository.save(DiamondRecord.builder()
                     .userId(userId)
                     .changeType(ChangeType.USE)
                     .changeDiamond(amount)
-                    .paidDiamond(beforePaidDiamond - diamond.getPaidAmount())
-                    .resultDiamond(resultDiamond)
+                    .os(os)
+                    .resultFreeDiamond(diamond.getFreeAmount())
+                    .resultAndroidDiamond(diamond.getAndroidAmount())
+                    .resultIosDiamond(diamond.getIosAmount())
+                    .resultPaidDiamond(diamond.getPaidAmount())
                     .changeDesc(desc)
                     .idempotentKey(idempotentKey)
                     .build());
@@ -119,7 +118,7 @@ public class DiamondService {
                 lock.unlock();
             }
         }
-        return total;
+        return diamond.getTotalAmount(os);
     }
 
     private void checkDuplicatedRequestForDiamond(String idempotentKey) {
@@ -129,10 +128,6 @@ public class DiamondService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class) //
-    public long useDiamondForShopping(long buyerId, long price, String idempotentKey) {
-        return spendDiamondWithLock(buyerId, price, DiamondHistoryDesc.USE_DIAMOND_SHOP, idempotentKey);
-    }
 
     // redis 에서 락을 가져온다.
     private RLock getUserLock(long userId) {
@@ -148,14 +143,14 @@ public class DiamondService {
     }
 
     // 코인 가져오기
-    public DiamondVo getDiamondVo(long userId) {
+    public DiamondVo getDiamondVo(long userId, Os os) {
         Diamond diamond = getDiamondElseCreate(userId);
         return DiamondVo.builder()
                 .userId(userId)
-                .amount(diamond.getAmount())
-                .paidAmount(diamond.getPaidAmount())
+                .amount(diamond.getTotalAmount(os))
                 .build();
     }
+
     // 유저 다이아몬드를 조회하고 혹시 없으면 생성(에러 방지 코드)
     protected Diamond getDiamondElseCreate(long userId) {
         return diamondRepository.findByUserId(userId)
@@ -165,7 +160,9 @@ public class DiamondService {
                             }
                             return diamondRepository.save(Diamond.builder()
                                     .userId(userId)
-                                    .amount(0L)
+                                    .freeAmount(0L)
+                                    .androidAmount(0L)
+                                    .iosAmount(0L)
                                     .paidAmount(0L)
                                     .build());
                         }
@@ -181,29 +178,36 @@ public class DiamondService {
             throw new RestException(ErrorCode.USER_NOT_EXIST);
         }
         Diamond diamond = getDiamondElseCreate(diamondCheatParam.getUserId());
-        diamond.changeAmount(diamondCheatParam.getAmount());
+        diamond.changeFreeAmount(diamondCheatParam.getFreeAmount());
+        diamond.changeAndroidAmount(diamondCheatParam.getAndroidAmount());
+        diamond.changeIosAmount(diamondCheatParam.getIosAmount());
         diamond.changePaidAmount(diamondCheatParam.getPaidAmount());
         diamondRepository.save(diamond);
     }
 
+    @Transactional(rollbackFor = Exception.class) //
+    public long useDiamondForShopping(long buyerId, long price, Os os, String idempotentKey) {
+        return spendDiamondWithLock(buyerId, price, os, DiamondHistoryDesc.USE_DIAMOND_SHOP, idempotentKey);
+    }
+
     // 주문 완료시 다이아몬드 생성
-    public void addDiamondByOrder(Long userId, Long quantity, String orderIdempotentKey) {
-        addDiamondWithLock(userId, quantity, ORDER_IS_PAID, DiamondHistoryDesc.DEPOSIT_DIAMOND_BY_ORDER_PAID, orderIdempotentKey);
+    public void addDiamondByOrder(Long userId, Long quantity, String orderIdempotentKey, Os os) {
+        addDiamondWithLock(userId, quantity, os, ORDER_IS_PAID, DiamondHistoryDesc.DEPOSIT_DIAMOND_BY_ORDER_PAID, orderIdempotentKey);
     }
 
     // 주문
-    public void addDiamondByReceiveStorage(Long userId, Long quantity, String idempotentKey) {
-        addDiamondWithLock(userId, quantity, STORAGE_IS_NOT_PAID, DiamondHistoryDesc.DEPOSIT_DIAMOND_BY_RECEIVE_STORAGE, idempotentKey);
+    public void addDiamondByReceiveStorage(Long userId, Long quantity, String idempotentKey, Os os) {
+        addDiamondWithLock(userId, quantity, os, STORAGE_IS_NOT_PAID, DiamondHistoryDesc.DEPOSIT_DIAMOND_BY_RECEIVE_STORAGE, idempotentKey);
     }
 
-    public void subDiamondBySendStorage(Long userId, Long quantity, String idempotentKey) {
-        spendDiamondWithLock(userId, quantity, DiamondHistoryDesc.DEPOSIT_DIAMOND_BY_SEND_STORAGE, idempotentKey);
+    public void subDiamondBySendStorage(Long userId, Long quantity, String idempotentKey, Os os) {
+        spendDiamondWithLock(userId, quantity, os, DiamondHistoryDesc.DEPOSIT_DIAMOND_BY_SEND_STORAGE, idempotentKey);
     }
 
 
     @Transactional(rollbackFor = Exception.class)
     public DiamondDepositVo diamondDeposit(DiamondDepositParam diamondDepositParam) {
-        long total = addDiamondWithLock(diamondDepositParam.getUserId(), diamondDepositParam.getAmount(), false, DiamondHistoryDesc.DEPOSIT_GAME_DIAMOND, diamondDepositParam.getIdempotentKey());
+        long total = addDiamondWithLock(diamondDepositParam.getUserId(), diamondDepositParam.getAmount(), diamondDepositParam.getOs(), false, DiamondHistoryDesc.DEPOSIT_GAME_DIAMOND, diamondDepositParam.getIdempotentKey());
         return DiamondDepositVo.builder()
                 .resultAmount(total)
                 .userId(diamondDepositParam.getUserId())
@@ -214,7 +218,7 @@ public class DiamondService {
 
     @Transactional(rollbackFor = Exception.class)
     public DiamondWithdrawVo diamondWithdraw(DiamondWithdrawParam diamondWithdrawParam) {
-        long total = spendDiamondWithLock(diamondWithdrawParam.getUserId(), diamondWithdrawParam.getAmount(), DiamondHistoryDesc.WITHDRAW_GAME_DIAMOND, diamondWithdrawParam.getIdempotentKey());
+        long total = spendDiamondWithLock(diamondWithdrawParam.getUserId(), diamondWithdrawParam.getAmount(), diamondWithdrawParam.getOs(), DiamondHistoryDesc.WITHDRAW_GAME_DIAMOND, diamondWithdrawParam.getIdempotentKey());
         return DiamondWithdrawVo.builder()
                 .resultAmount(total)
                 .userId(diamondWithdrawParam.getUserId())

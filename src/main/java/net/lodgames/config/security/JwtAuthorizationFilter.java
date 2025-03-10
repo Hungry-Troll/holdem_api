@@ -11,6 +11,7 @@ import net.lodgames.config.security.constants.JwtProperties;
 import net.lodgames.user.constants.LoginType;
 import net.lodgames.user.model.LoginAddInfo;
 import net.lodgames.user.service.JwtAuthenticationService;
+import net.lodgames.user.constants.Os;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.FilterChain;
@@ -99,6 +100,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String converted  = decodedJWT.getSubject();
         String issueNo  = decodedJWT.getId();
         String loginType = decodedJWT.getClaim(JwtProperties.CLAIM_LOGIN_TYPE).asString();
+        Integer os = decodedJWT.getClaim(JwtProperties.CLAIM_OS).asInt();
         log.debug("param issueNo  : " + issueNo);
         // 토큰 발행 번호로 블랙리스트 조회
         ErrorCode errorCode = jwtAuthenticationService.checkBlackListToken(issueNo);
@@ -120,6 +122,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             }
             LoginAddInfo loginAddInfo = new LoginAddInfo();
             loginAddInfo.setLoginType(LoginType.getLoginTypeAsType(loginType));
+            loginAddInfo.setOs(Os.valueOfTypeNum(os));
             UserPrincipal principal = UserPrincipal.builder()
                     .userId(userId)
                     .userHex(converted)

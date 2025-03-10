@@ -17,7 +17,7 @@ public class DiamondController {
 
     @GetMapping("/diamond")
     public ResponseEntity<?> getDiamond(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return ResponseEntity.ok(diamondService.getDiamondVo(userPrincipal.getUserId()));
+        return ResponseEntity.ok(diamondService.getDiamondVo(userPrincipal.getUserId(), userPrincipal.getOs()));
     }
 
     // TODO 금액 테스트용입니다. 운영에서 쓰이지 않도록 주의 바랍니다.

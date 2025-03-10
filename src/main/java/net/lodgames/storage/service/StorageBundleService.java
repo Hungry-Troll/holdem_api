@@ -1,12 +1,11 @@
 package net.lodgames.storage.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.shop.bundle.model.Bundle;
 import net.lodgames.shop.bundle.repository.BundleRepository;
-import net.lodgames.shop.item.model.Item;
-import net.lodgames.shop.item.repository.ItemRepository;
 import net.lodgames.shop.purchase.service.PurchaseService;
 import net.lodgames.storage.constants.StorageContentType;
 import net.lodgames.storage.constants.StorageSenderType;
@@ -14,10 +13,10 @@ import net.lodgames.storage.constants.StorageStatus;
 import net.lodgames.storage.model.Storage;
 import net.lodgames.storage.model.StorageBundle;
 import net.lodgames.storage.param.bundle.StorageBundleParam;
-import net.lodgames.storage.param.bundle.StorageReceiveBundleParam;
 import net.lodgames.storage.param.bundle.StorageGrantBundleParam;
-import net.lodgames.storage.repository.bundle.StorageBundleRepository;
+import net.lodgames.storage.param.bundle.StorageReceiveBundleParam;
 import net.lodgames.storage.repository.StorageRepository;
+import net.lodgames.storage.repository.bundle.StorageBundleRepository;
 import net.lodgames.storage.service.util.StorageValidatorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +31,8 @@ public class StorageBundleService {
     private final StorageBundleRepository storageBundleRepository;
     private final PurchaseService purchaseService;
     private final BundleRepository bundleRepository;
-
     private final StorageValidatorService storageValidatorService;
+
 
     // 보관함 번들 보내기 // 구매(인벤장부)랑 연관 없음
     @Transactional(rollbackFor = Exception.class)

@@ -3,10 +3,10 @@ package net.lodgames.storage.vo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import net.lodgames.storage.constants.StorageCurrencyType;
+import net.lodgames.currency.common.constants.CurrencyType;
+import net.lodgames.storage.constants.StorageContentType;
 import net.lodgames.storage.constants.StorageSenderType;
 import net.lodgames.storage.constants.StorageStatus;
-import net.lodgames.storage.constants.StorageContentType;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +29,7 @@ public class StoragesGetVo {
     private Boolean isRead;
     // StorageCurrency
     private Long currencyAmount;
-    private StorageCurrencyType currencyType;
+    private CurrencyType currencyType;
     // StorageItem
     private Long itemId;
     private Integer itemNum;

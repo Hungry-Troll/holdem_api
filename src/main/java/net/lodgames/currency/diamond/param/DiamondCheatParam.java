@@ -9,6 +9,8 @@ import lombok.Setter;
 public class DiamondCheatParam {
     @JsonIgnore
     private Long userId;
-    private Long amount;
+    private Long freeAmount;
+    private Long androidAmount;
+    private Long iosAmount;
     private Long paidAmount;
 }

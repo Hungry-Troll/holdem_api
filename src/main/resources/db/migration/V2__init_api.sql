@@ -103,13 +103,13 @@ CREATE TABLE `app_version`
 
 CREATE TABLE `board`
 (
-    `id`         int          NOT NULL AUTO_INCREMENT COMMENT '게시판 고유번호',
-    `title`      varchar(50)  NOT NULL COMMENT '제목',
-    `content`    TEXT NOT NULL COMMENT '본문',
-    `board_type` tinyint      NOT NULL COMMENT '타입',
-    `status`     tinyint      NOT NULL COMMENT '상태',
-    `created_at` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    `id`         int         NOT NULL AUTO_INCREMENT COMMENT '게시판 고유번호',
+    `title`      varchar(50) NOT NULL COMMENT '제목',
+    `content`    TEXT        NOT NULL COMMENT '본문',
+    `board_type` tinyint     NOT NULL COMMENT '타입',
+    `status`     tinyint     NOT NULL COMMENT '상태',
+    `created_at` timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at` timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -254,12 +254,14 @@ CREATE TABLE `coin_record`
 
 CREATE TABLE `diamond`
 (
-    `id`          bigint    NOT NULL AUTO_INCREMENT COMMENT '코인고유번호',
-    `user_id`     bigint    NOT NULL COMMENT '유저고유번호',
-    `amount`      int       NOT NULL DEFAULT 0 COMMENT '금액',
-    `paid_amount` int       NOT NULL DEFAULT 0 COMMENT '구매 금액',
-    `created_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    `updated_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    `id`             bigint    NOT NULL AUTO_INCREMENT COMMENT '코인고유번호',
+    `user_id`        bigint    NOT NULL COMMENT '유저고유번호',
+    `free_amount`    int       NOT NULL DEFAULT 0 COMMENT '무료 금액',
+    `android_amount` int       NOT NULL DEFAULT 0 COMMENT '안드로이드 금액',
+    `ios_amount`     int       NOT NULL DEFAULT 0 COMMENT 'IOS 금액',
+    `paid_amount`    int       NOT NULL DEFAULT 0 COMMENT '구매 금액',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -267,15 +269,18 @@ CREATE TABLE `diamond`
 
 CREATE TABLE `diamond_record`
 (
-    `id`             bigint       NOT NULL AUTO_INCREMENT COMMENT '다이아몬드기록 고유번호',
-    `user_id`        bigint       NOT NULL COMMENT '유저고유번호',
-    `change_type`    tinyint      NOT NULL COMMENT '변경타입(add, use)',
-    `change_diamond` int          NOT NULL COMMENT '변경다이아몬드',
-    `paid_diamond`   int          NOT NULL DEFAULT 0 COMMENT '구매 다이아몬드',
-    `result_diamond` int          NOT NULL COMMENT '결과다이아몬드',
-    `change_desc`    varchar(255) NULL COMMENT '변경설명',
-    `idempotent_key` varchar(255) NOT NULL COMMENT '멱등키',
-    `created_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `id`                     bigint       NOT NULL AUTO_INCREMENT COMMENT '다이아몬드기록 고유번호',
+    `user_id`                bigint       NOT NULL COMMENT '유저고유번호',
+    `change_type`            tinyint      NOT NULL COMMENT '변경타입(add, use)',
+    `os`                     tinyint      NOT NULL COMMENT 'os(안드로이드, ios)',
+    `change_diamond`         int          NOT NULL COMMENT '변경다이아몬드',
+    `result_free_diamond`    int          NOT NULL DEFAULT 0 COMMENT '결과 무료 다이아몬드',
+    `result_android_diamond` int          NOT NULL DEFAULT 0 COMMENT '결과 안드로이드 다이아몬드',
+    `result_ios_diamond`     int          NOT NULL DEFAULT 0 COMMENT '결과 ios 다이아몬드',
+    `result_paid_diamond`    int          NOT NULL DEFAULT 0 COMMENT '결과구매 다이아몬드',
+    `change_desc`            varchar(255) NULL COMMENT '변경설명',
+    `idempotent_key`         varchar(255) NOT NULL COMMENT '멱등키',
+    `created_at`             timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

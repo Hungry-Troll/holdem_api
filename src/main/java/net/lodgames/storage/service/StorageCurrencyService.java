@@ -5,19 +5,18 @@ import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.currency.chip.service.ChipService;
 import net.lodgames.currency.coin.service.CoinService;
+import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.currency.diamond.service.DiamondService;
 import net.lodgames.storage.constants.StorageStatus;
 import net.lodgames.storage.model.Storage;
 import net.lodgames.storage.model.StorageCurrency;
 import net.lodgames.storage.param.currency.StorageCurrencyParam;
 import net.lodgames.storage.param.currency.StorageReceiveCurrencyParam;
-import net.lodgames.storage.param.currency.StorageSendCurrencyParam;
-import net.lodgames.storage.repository.currency.StorageCurrencyRepository;
 import net.lodgames.storage.repository.StorageRepository;
-import net.lodgames.storage.service.temp.TempCoinService;
-import net.lodgames.storage.service.temp.TempDiamondService;
+import net.lodgames.storage.repository.currency.StorageCurrencyRepository;
 import net.lodgames.storage.service.util.StorageValidatorService;
 import net.lodgames.storage.util.StorageHashGenerator;
+import net.lodgames.user.constants.Os;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,24 +38,23 @@ public class StorageCurrencyService {
     private final DiamondService diamondService;
     private final ChipService chipService;
 
-    // TODO : 임시 코드 팀장님 재화 코드 사용 후 삭제
-    private final TempCoinService tempCoinService;// 임시 코드
-    private final TempDiamondService tempDiamondService; // 임시 코드
-
     // 보관함 재화 보내기(user -> user)
     @Transactional(rollbackFor = Exception.class)
     public void sendCurrencyStorage(StorageCurrencyParam storageCurrencyParam) {
         checkSendCurrencyParam(storageCurrencyParam); // 널 체크
-        Storage savedStorage = recordSendCurrency(storageCurrencyParam); // 재화 보낸 기록 저장
-        sendCurrency(savedStorage, storageCurrencyParam); // 재화 보내기 계산
+        Long storageId = recordSendCurrency(storageCurrencyParam); // 재화 보낸 기록 저장
+        saveStorageCurrencyRepository(storageId, storageCurrencyParam.getCurrencyType(), storageCurrencyParam.getCurrencyAmount());
+        sendCurrency(storageId, storageCurrencyParam.getCurrencyType(), storageCurrencyParam.getSenderId(),
+                storageCurrencyParam.getOs(), storageCurrencyParam.getCurrencyAmount()); // 재화 보내기 계산
     }
 
     // 보관함 재화 보내기(admin -> user)
     @Transactional(rollbackFor = Exception.class)
     public void grantCurrencyStorage(StorageCurrencyParam storageCurrencyParam) {
         checkSendCurrencyParam(storageCurrencyParam); // 널 체크
-        Storage savedStorage = recordSendCurrency(storageCurrencyParam); // 재화 보낸 기록 저장
-        sendCurrencyAdmin(savedStorage, storageCurrencyParam); // 재화 보내기 계산
+        Long storageId = recordSendCurrency(storageCurrencyParam); // 재화 보낸 기록 저장
+        saveStorageCurrencyRepository(storageId, storageCurrencyParam.getCurrencyType(), storageCurrencyParam.getCurrencyAmount());
+        // 어드민은 재화를 가지고 있을 필요가 없으므로 따로 계산 할 필요가 없음
     }
 
     // 보관함 재화 보내기 Param null 체크
@@ -77,35 +75,19 @@ public class StorageCurrencyService {
     }
 
     // 보관함 재화 보내기 (계산)
-    public void sendCurrency(Storage savedStorage, StorageCurrencyParam storageCurrencyParam) {
-        String generatedHash = storageHashGenerator.generateMD5(savedStorage.getId());
-        switch (storageCurrencyParam.getCurrencyType()) {
-            case COIN -> coinService.subCoinBySendStorage(storageCurrencyParam.getSenderId(),
-                                                          storageCurrencyParam.getCurrencyAmount(),
-                                                          generatedHash);
-            case CHIP -> chipService.subChipBySendStorage(storageCurrencyParam.getSenderId(),
-                                                          storageCurrencyParam.getCurrencyAmount(),
-                                                          generatedHash);
-            case DIAMOND -> diamondService.subDiamondBySendStorage(storageCurrencyParam.getSenderId(),
-                                                                   storageCurrencyParam.getCurrencyAmount(),
-                                                                   generatedHash);
+    public void sendCurrency(Long storageId, CurrencyType currencyType, Long senderId, Os os, Long currencyAmount) {
+        String generatedHash = storageHashGenerator.generateSHA1(storageId);
+        switch (currencyType) {
+            case COIN -> coinService.subCoinBySendStorage(senderId, currencyAmount, generatedHash);
+            case CHIP -> chipService.subChipBySendStorage(senderId, currencyAmount, generatedHash);
+            case DIAMOND -> diamondService.subDiamondBySendStorage(senderId, currencyAmount, generatedHash, os);
         }
-        storageRepository.save(savedStorage);
-    }
-
-    // 보관함 재화 보내기 (어드민) (계산)
-    public void sendCurrencyAdmin(Storage savedStorage, StorageCurrencyParam storageCurrencyParam) {
-        // 어드민은 재화를 가지고 있을 필요가 없으므로 따로 계산 할 필요가 없음
-        // 형식을 맞추기 위한 더미 코드
-        storageRepository.save(savedStorage);
     }
 
     // 보관함 재화 보내기 (저장)
-    public Storage recordSendCurrency(StorageCurrencyParam storageCurrencyParam) {
-        // Storage, StorageCurrency 둘 다 저장필요
-
+    public Long recordSendCurrency(StorageCurrencyParam storageCurrencyParam) {
         // Storage 저장
-        Storage storage = Storage.builder()
+        Storage storage = storageRepository.save(Storage.builder()
                 .receiverId(storageCurrencyParam.getReceiverId())
                 .senderId(storageCurrencyParam.getSenderId())
                 .title(storageCurrencyParam.getTitle())
@@ -114,18 +96,18 @@ public class StorageCurrencyService {
                 .status(StorageStatus.WAITING)
                 .contentType(storageCurrencyParam.getContentType())
                 .expiryDate(LocalDateTime.now().plusWeeks(2)) // TODO 임시로 2주
-                .build();
-        Storage savedStorage = storageRepository.save(storage);
+                .build());
+        return storage.getId();
+    }
 
+    // 보관함 재화 보내기 (저장)
+    public void saveStorageCurrencyRepository(Long StorageId, CurrencyType currencyType, Long currencyAmount) {
         // StorageCurrency 저장
-        StorageCurrency storageCurrency = StorageCurrency.builder()
-                .storageId(savedStorage.getId())
-                .currencyType(storageCurrencyParam.getCurrencyType())
-                .currencyAmount(storageCurrencyParam.getCurrencyAmount())
-                .build();
-        storageCurrencyRepository.save(storageCurrency);
-
-        return savedStorage;
+        storageCurrencyRepository.save(StorageCurrency.builder()
+                .storageId(StorageId)
+                .currencyType(currencyType)
+                .currencyAmount(currencyAmount)
+                .build());
     }
 
     // 보관함 재화 받기
@@ -136,7 +118,7 @@ public class StorageCurrencyService {
         // 보관함 id로 receiverId 없으면 ErrorCode.NOT_MATCH_STORAGE_AND_RECEIVER
         Storage findStorage =
                 storageValidatorService.checkStorageError(storageReceiveCurrencyParam.getStorageId(),
-                                                          storageReceiveCurrencyParam.getReceiverId());
+                        storageReceiveCurrencyParam.getReceiverId());
 
         // 보관함 id로 StorageCurrency 검색
         StorageCurrency findStorageCurrency = storageCurrencyRepository.findByStorageId(findStorage.getId())
@@ -152,26 +134,21 @@ public class StorageCurrencyService {
                 .build();
 
         // 재화 계산
-        receiveCurrency(findStorage, storageCurrencyParam);
+        receiveCurrency(findStorage.getId(), storageCurrencyParam.getCurrencyType(), storageReceiveCurrencyParam.getReceiverId(),
+                storageReceiveCurrencyParam.getOs(), storageCurrencyParam.getCurrencyAmount());
 
         // 저장
-        recordReceiveCurrency(findStorage,findStorageCurrency);
+        recordReceiveCurrency(findStorage, findStorageCurrency);
     }
 
     // 보관함 재화 받기 (계산)
-    private void receiveCurrency(Storage findStorage, StorageCurrencyParam storageCurrencyParam) {
+    private void receiveCurrency(Long storageId, CurrencyType currencyType, Long receiverId, Os os, Long currencyAmount) {
         // 해시 생성
-        String generatedHash = storageHashGenerator.generateSHA1(findStorage.getId());
-        switch (storageCurrencyParam.getCurrencyType()) {
-            case COIN -> coinService.addCoinByReceiveStorage(storageCurrencyParam.getReceiverId(),
-                                                             storageCurrencyParam.getCurrencyAmount(),
-                                                             generatedHash);
-            case CHIP -> chipService.addChipByReceiveStorage(storageCurrencyParam.getReceiverId(),
-                                                             storageCurrencyParam.getCurrencyAmount(),
-                                                             generatedHash);
-            case DIAMOND -> diamondService.addDiamondByReceiveStorage(storageCurrencyParam.getReceiverId(),
-                                                             storageCurrencyParam.getCurrencyAmount(),
-                                                             generatedHash);
+        String generatedHash = storageHashGenerator.generateSHA1(storageId);
+        switch (currencyType) {
+            case COIN -> coinService.addCoinByReceiveStorage(receiverId, currencyAmount, generatedHash);
+            case CHIP -> chipService.addChipByReceiveStorage(receiverId, currencyAmount, generatedHash);
+            case DIAMOND -> diamondService.addDiamondByReceiveStorage(receiverId, currencyAmount,generatedHash,  os);
         }
     }
 

@@ -2,8 +2,7 @@ package net.lodgames.storage.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import net.lodgames.storage.constants.StorageCurrencyType;
-import net.lodgames.storage.constants.StorageSenderType;
+import net.lodgames.currency.common.constants.CurrencyType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -25,7 +24,7 @@ public class StorageCurrency {
     @Column(name = "currency_amount", nullable = false)
     private Long currencyAmount; // 재화량
     @Column(name = "currency_type", nullable = false)
-    private StorageCurrencyType currencyType;
+    private CurrencyType currencyType;
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

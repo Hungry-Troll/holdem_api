@@ -22,10 +22,13 @@ public class DiamondRecordQueryRepository {
                         diamondRecord.id,
                         diamondRecord.userId,
                         diamondRecord.changeType,
+                        diamondRecord.os,
                         diamondRecord.changeDiamond,
-                        diamondRecord.paidDiamond,
+                        diamondRecord.resultFreeDiamond,
+                        diamondRecord.resultAndroidDiamond,
+                        diamondRecord.resultIosDiamond,
+                        diamondRecord.resultPaidDiamond,
                         diamondRecord.changeDesc,
-                        diamondRecord.resultDiamond,
                         diamondRecord.idempotentKey,
                         diamondRecord.createdAt
                 )).from(diamondRecord)

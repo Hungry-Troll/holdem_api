@@ -1,6 +1,5 @@
 package net.lodgames.relation.friend.repository;
 
-
 import net.lodgames.relation.friend.model.FriendBlock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

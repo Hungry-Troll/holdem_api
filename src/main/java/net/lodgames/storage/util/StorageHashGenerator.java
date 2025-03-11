@@ -2,6 +2,9 @@ package net.lodgames.storage.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import net.lodgames.config.error.ErrorCode;
+import net.lodgames.config.error.exception.RestException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -37,9 +40,8 @@ public class StorageHashGenerator {
             }
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            throw new RestException(ErrorCode.FAIL_ENCRYPTION_HASHCODE_GENERATION);
         }
-        return null;
     }
 }
 

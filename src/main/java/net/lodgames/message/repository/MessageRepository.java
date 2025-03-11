@@ -1,7 +1,6 @@
 package net.lodgames.message.repository;
 
 import net.lodgames.message.model.Message;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

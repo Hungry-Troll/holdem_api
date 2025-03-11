@@ -11,16 +11,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
 import static net.lodgames.profile.model.QProfile.profile;
 import static net.lodgames.relation.friend.model.QFriend.friend;
 import static net.lodgames.user.model.QUsers.users;
-
 
 @Repository
 @AllArgsConstructor

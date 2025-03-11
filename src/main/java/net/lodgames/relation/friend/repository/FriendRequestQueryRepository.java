@@ -1,6 +1,5 @@
 package net.lodgames.relation.friend.repository;
 
-
 import net.lodgames.relation.friend.param.FriendListParam;
 import net.lodgames.relation.friend.vo.FriendReqRecvVo;
 import net.lodgames.relation.friend.vo.FriendReqSendVo;
@@ -15,7 +14,6 @@ import java.util.List;
 import static net.lodgames.profile.model.QProfile.profile;
 import static net.lodgames.relation.friend.model.QFriendRequest.friendRequest;
 import static net.lodgames.user.model.QUsers.users;
-
 
 @Repository
 @RequiredArgsConstructor

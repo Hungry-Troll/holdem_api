@@ -17,14 +17,14 @@ public class StorageCurrencyParam {
     @JsonIgnore
     private Long senderId;
     @JsonIgnore
-    private Os os;
+    private Os os;                           // WEB(0), ANDROID(1), IOS(2), OTHER(3)
     private Long receiverId;
     private String title;
     private String description;
     @JsonIgnore
-    private StorageSenderType senderType;
-    private StorageContentType contentType;
+    private StorageSenderType senderType;    // USER(0),ADMIN(1)
+    private StorageContentType contentType;  // CURRENCY(0),ITEM(1),BUNDLE(2)
     // StorageCurrencyType
-    private CurrencyType currencyType;
+    private CurrencyType currencyType;       // DIAMOND(0),COIN(1),CHIP(2),FREE(3),EVENT(4)
     private Long currencyAmount;
 }

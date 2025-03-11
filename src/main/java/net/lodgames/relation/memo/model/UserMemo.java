@@ -1,6 +1,5 @@
 package net.lodgames.relation.memo.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

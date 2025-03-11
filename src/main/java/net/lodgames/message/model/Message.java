@@ -4,7 +4,6 @@ package net.lodgames.message.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -30,7 +29,6 @@ public class Message {
     @Column(name ="created_at")
     private LocalDateTime createdAt;
     @Column(name ="read_at")
-    //@LastModifiedDate
     private LocalDateTime readAt;
     @Column(name ="deleted_at")
     private LocalDateTime deletedAt;

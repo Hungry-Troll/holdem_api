@@ -1,6 +1,5 @@
 package net.lodgames.relation.follow.controller;
 
-
 import lombok.AllArgsConstructor;
 import net.lodgames.config.security.UserPrincipal;
 import net.lodgames.relation.follow.param.FollowListParam;

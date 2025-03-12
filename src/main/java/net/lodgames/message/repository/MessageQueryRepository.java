@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import static net.lodgames.message.model.QMessage.message;
 
@@ -17,7 +16,6 @@ import static net.lodgames.message.model.QMessage.message;
 @AllArgsConstructor
 public class MessageQueryRepository {
 
-    private final MessageRepository messageRepository;
     private final JPAQueryFactory jpaQueryFactory;
 
     // TODO: 추후 프로필하고 쪽지 합쳐야 됨

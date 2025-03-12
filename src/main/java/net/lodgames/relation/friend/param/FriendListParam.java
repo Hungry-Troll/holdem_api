@@ -10,5 +10,4 @@ import lombok.Setter;
 public class FriendListParam extends PagingParam {
     @JsonIgnore
     private long userId;
-
 }

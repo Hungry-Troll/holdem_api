@@ -1,6 +1,5 @@
 package net.lodgames.relation.friend.repository;
 
-
 import net.lodgames.relation.friend.param.NoneFriendInfoParam;
 import net.lodgames.relation.friend.vo.NoneFriendInfoVo;
 import com.querydsl.core.types.Projections;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import static net.lodgames.profile.model.QProfile.profile;
 import static net.lodgames.relation.friend.model.QFriendRequest.friendRequest;
 import static net.lodgames.user.model.QUsers.users;
-
 
 @Repository
 @RequiredArgsConstructor

@@ -1,6 +1,5 @@
 package net.lodgames.inquiry.param;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import net.lodgames.inquiry.constants.InquiryType;

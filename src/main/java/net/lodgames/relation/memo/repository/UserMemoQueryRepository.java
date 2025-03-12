@@ -13,7 +13,6 @@ import java.util.Optional;
 
 import static net.lodgames.relation.memo.model.QUserMemo.userMemo;
 
-
 @Repository
 @AllArgsConstructor
 public class UserMemoQueryRepository {

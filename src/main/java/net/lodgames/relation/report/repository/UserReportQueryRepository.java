@@ -13,7 +13,6 @@ import java.util.List;
 
 import static net.lodgames.relation.report.model.QUserReport.userReport;
 
-
 @Repository
 @RequiredArgsConstructor
 public class UserReportQueryRepository {

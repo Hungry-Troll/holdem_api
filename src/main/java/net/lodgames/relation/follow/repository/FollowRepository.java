@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface FollowRepository extends CrudRepository<Follow, Long> {
     Optional<Follow> findByUserIdAndFollowId(long accountId, long followId);
-
     boolean existsByUserIdAndFollowId(long userId, long followId);
 }

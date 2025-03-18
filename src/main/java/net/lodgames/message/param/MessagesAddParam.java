@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 public class MessagesAddParam {
     @JsonIgnore
-    private long senderId;
+    private Long senderId;
     private List<Long> receiverIds;
     private String content;
 }

@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserMemoDelParam {
-    private long userId;
-    private long targetUserId;
+    private Long userId;
+    private Long targetUserId;
 }

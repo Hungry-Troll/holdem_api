@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/api/v1")
 public class InquiryController {
+
     private final InquiryService inquiryService;
 
     // 문의 생성 (유저)
@@ -29,7 +30,14 @@ public class InquiryController {
     }
 
     // 전체 문의 리스트 (관리자)
-    @GetMapping("/inquires")
+//    @GetMapping("/inquires")
+//    public ResponseEntity<?> getInquires(@RequestBody InquiresGetParam inquiresGetParam,
+//                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
+//        return ResponseEntity.ok(inquiryService.getInquires(inquiresGetParam));
+//    }
+
+    // 전체 문의 리스트 (관리자)
+    @PostMapping("/inquires/all")
     public ResponseEntity<?> getInquires(@RequestBody InquiresGetParam inquiresGetParam,
                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(inquiryService.getInquires(inquiresGetParam));

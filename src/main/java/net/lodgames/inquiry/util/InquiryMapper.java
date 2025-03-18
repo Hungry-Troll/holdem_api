@@ -1,14 +1,14 @@
 package net.lodgames.inquiry.util;
 
 import net.lodgames.inquiry.model.Inquiry;
+import net.lodgames.inquiry.param.InquiryModParam;
 import net.lodgames.inquiry.vo.InquiryGetVo;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring" ,unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface InquiryMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public InquiryGetVo updateInquiryToVo(Inquiry inquiry);
+    void updateInquireFromModParam(InquiryModParam inquiryModParam, @MappingTarget Inquiry inquiry);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    InquiryGetVo updateInquiryToVo(Inquiry inquiry);
 }

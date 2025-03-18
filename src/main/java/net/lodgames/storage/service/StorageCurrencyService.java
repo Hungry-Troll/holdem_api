@@ -59,11 +59,6 @@ public class StorageCurrencyService {
 
     // 보관함 재화 보내기 Param null 체크
     private void checkSendCurrencyParam(StorageCurrencyParam storageCurrencyParam) {
-        // 필수 요소 확인
-        if (storageCurrencyParam.getReceiverId() == null ||
-                storageCurrencyParam.getCurrencyAmount() == null) {
-            throw new RestException(ErrorCode.MISSING_REQUIRED_PARAMETER);
-        }
         // 송금자 수신자 확인
         if (storageCurrencyParam.getSenderId().equals(storageCurrencyParam.getReceiverId())) {
             throw new RestException(ErrorCode.SAME_SENDER_AND_RECEIVER);
@@ -136,7 +131,6 @@ public class StorageCurrencyService {
         // 재화 계산
         receiveCurrency(findStorage.getId(), storageCurrencyParam.getCurrencyType(), storageReceiveCurrencyParam.getReceiverId(),
                 storageReceiveCurrencyParam.getOs(), storageCurrencyParam.getCurrencyAmount());
-
         // 저장
         recordReceiveCurrency(findStorage, findStorageCurrency);
     }

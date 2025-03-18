@@ -4,6 +4,6 @@ import net.lodgames.relation.block.model.UserBlock;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserBlockRepository extends JpaRepository<UserBlock, Long> {
-    void deleteByUserIdAndBlockUserId(long userId, long blockId);
-    boolean existsByUserIdAndBlockUserId(long userId, long blockUserId);
+    void deleteByUserIdAndBlockUserId(Long userId, Long blockId);
+    boolean existsByUserIdAndBlockUserId(Long userId, Long blockUserId);
 }

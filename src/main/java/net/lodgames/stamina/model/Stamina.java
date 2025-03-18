@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Slf4j
-@Entity
+@Entity(name = "stamina")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -22,9 +22,9 @@ public class Stamina {
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "current_stamina")
-    private Integer currentStamina;
+    private int currentStamina;
     @Column(name = "max_stamina")
-    private Integer maxStamina;
+    private int maxStamina;
     @Column(name = "last_recovery_time")
     private LocalDateTime lastRecoveryTime;// 스태미나가 완전히 회복되기까지 남은 시간을 계산하기 위한 서버 시간
     @Column(name =" recovery_complete_time")

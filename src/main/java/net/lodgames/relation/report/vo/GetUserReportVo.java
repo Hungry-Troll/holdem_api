@@ -9,9 +9,10 @@ import net.lodgames.relation.report.constants.UserReportStatus;
 @Setter
 public class GetUserReportVo {
     @JsonIgnore
-    private Long id;
-    private Long reporterId;
-    private Long targetUserId;
+    private long id;
+    private long reporterId;
+    private long targetUserId;
     private String reason;
     private UserReportStatus status;
+    private String screenshot;
 }

@@ -18,11 +18,11 @@ import java.time.LocalDateTime;
 public class UserBlock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(name = "user_id") // 유저 아이디
-    private long userId;
+    private Long userId;
     @Column(name = "block_user_id") // 차단 유저 아이디
-    private long blockUserId;
+    private Long blockUserId;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt; // 만든날짜
@@ -32,7 +32,7 @@ public class UserBlock {
 
 
     @Builder
-    public UserBlock(long userId, long blockId) {
+    public UserBlock(Long userId, Long blockId) {
         this.userId = userId;
         this.blockUserId = blockId;
     }

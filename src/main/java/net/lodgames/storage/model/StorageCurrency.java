@@ -13,19 +13,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
+@Entity(name = "storage_currency")
 @EntityListeners(AuditingEntityListener.class)
 public class StorageCurrency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "storage_id", nullable = false)
+    @Column(name = "storage_id")
     private Long storageId;
-    @Column(name = "currency_amount", nullable = false)
+    @Column(name = "currency_amount")
     private Long currencyAmount; // 재화량
-    @Column(name = "currency_type", nullable = false)
+    @Column(name = "currency_type")
     private CurrencyType currencyType;
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

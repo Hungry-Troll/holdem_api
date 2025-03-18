@@ -1,6 +1,5 @@
 package net.lodgames.message.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,9 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
-@Builder
 public class Message {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,8 +31,7 @@ public class Message {
     private LocalDateTime deletedAt;
 
     @Builder
-    public Message(Long id, Long senderId, Long receiverId, String content) {
-        this.id = id;
+    public Message(Long senderId, Long receiverId, String content) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.content = content;

@@ -24,11 +24,10 @@ public class InquiryQueryRepository {
                 .select(Projections.fields(InquiresGetVo.class,
                     inquiry.userId,
                     inquiry.type,
-                    inquiry.reason,
-                    inquiry.screenshot
+                    inquiry.status,
+                    inquiry.createdAt
                 ))
                 .from(inquiry)
-                .where(inquiry.status.eq(InquiryStatus.PROGRESS)) // 잰행중 인것만 조회
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(inquiry.id.asc())

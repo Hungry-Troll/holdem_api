@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 public class StorageReadVo {
     //Storage
     @JsonIgnore
-    private Long id;
-    private Long receiverId;
+    private long id;
+    private long receiverId;
     private Long senderId;
     @JsonIgnore
     private Long purchaseId;
@@ -28,13 +28,13 @@ public class StorageReadVo {
     private LocalDateTime expiryDate;
     private Boolean isRead;
     //StorageCurrency
-    private Long currencyAmount;
+    private long currencyAmount;
     private CurrencyType currencyType;
     //StorageItem
-    private Long itemId;
-    private Integer itemNum;
+    private long itemId;
+    private int itemNum;
     //StorageBundle
-    private Long bundleId;
+    private long bundleId;
     
     // StorageCurrency / StorageItem / StorageBundle 은 없으면 null 반환 됨
     // 클라와 상의 후 필요한 내용만 반환받기를 원하면 @JsonInclude(JsonInclude.Include.NON_NULL) 처리 필요

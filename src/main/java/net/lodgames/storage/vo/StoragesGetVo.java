@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 public class StoragesGetVo {
     // TODO 추후 화면 UI 구성에 따라서 바뀔 수 있음
     // Storage
-    private Long id;
-    private Long receiverId;
+    private long id;
+    private long receiverId;
     private Long senderId;
     @JsonIgnore
     private Long purchaseId;
@@ -28,11 +28,11 @@ public class StoragesGetVo {
     private LocalDateTime expiryDate;
     private Boolean isRead;
     // StorageCurrency
-    private Long currencyAmount;
+    private long currencyAmount;
     private CurrencyType currencyType;
     // StorageItem
-    private Long itemId;
-    private Integer itemNum;
+    private long itemId;
+    private int itemNum;
     // StorageBundle
-    private Long bundleId;
+    private long bundleId;
 }

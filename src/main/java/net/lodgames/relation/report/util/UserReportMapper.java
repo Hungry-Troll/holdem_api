@@ -7,5 +7,5 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring" ,unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserReportMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public GetUserReportVo updateUserReportToVo(UserReport userReport);
+    GetUserReportVo updateUserReportToVo(UserReport userReport);
 }

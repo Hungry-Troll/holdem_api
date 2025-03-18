@@ -9,5 +9,5 @@ import net.lodgames.common.param.PagingParam;
 @Setter
 public class MessageSendBoxParam extends PagingParam {
     @JsonIgnore
-    private long senderId;
+    private Long senderId;
 }

@@ -1,10 +1,7 @@
 package net.lodgames.character.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,8 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity(name = "user_character")
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -24,19 +21,32 @@ public class UserCharacter {
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "character_id")
-    private Long characterId;
+    private long characterId;
     @Column(name = "customise_id")
-    private Long customiseId;
-    @Column(name = "level")
-    private Integer level;
-    @Column(name = "grade")
-    private Integer grade;
+    private long customiseId;
+    private int level;
+    private int grade;
     @Column(name = "status_index")
-    private Integer statusIndex;
+    private int statusIndex;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt; // 만든날짜
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt; // 변경일
+
+    @Builder
+    public UserCharacter(Long userId,
+                         long characterId,
+                         long customiseId,
+                         int level,
+                         int grade,
+                         int statusIndex) {
+        this.userId = userId;
+        this.characterId = characterId;
+        this.customiseId = customiseId;
+        this.level = level;
+        this.grade = grade;
+        this.statusIndex = statusIndex;
+    }
 }

@@ -10,9 +10,9 @@ import lombok.*;
 @NoArgsConstructor
 public class UserMemoModParam {
     @JsonIgnore
-    private long userId;
+    private Long userId;
     @JsonIgnore
-    private long targetUserId;
+    private Long targetUserId;
     private String memoText;
     private String tag;
 }

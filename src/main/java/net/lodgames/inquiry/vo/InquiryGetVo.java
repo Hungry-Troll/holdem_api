@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class InquiryGetVo {
-    private Long userId;
+    private long userId;
     private InquiryType type;     // Payment(0),Access(1),Play(2),Feedback(3),Other(4)
     private String reason;
     private String screenshot;

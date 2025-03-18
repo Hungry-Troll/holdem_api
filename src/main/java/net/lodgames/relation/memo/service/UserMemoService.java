@@ -29,7 +29,7 @@ public class UserMemoService {
     public void addMemo (UserMemoAddParam userMemoAddParam) {
         // 메모할 타겟 유저가 없음
         if (!userRepository.findById(userMemoAddParam.getTargetUserId()).isPresent()) {
-            throw new RestException(ErrorCode.NOT_EXIST_TARGET_USER);
+            throw new RestException(ErrorCode.NOT_EXIST_MEMO_TARGET_USER);
         }
         userMemoRepository.save(UserMemo.builder()
                 .userId(userMemoAddParam.getUserId())

@@ -10,6 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 public class UserBlockParam {
     @JsonIgnore
-    private long userId;
-    private long blockUserId;
+    private Long userId;
+    private Long blockUserId;
 }

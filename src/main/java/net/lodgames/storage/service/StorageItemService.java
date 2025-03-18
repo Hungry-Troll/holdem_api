@@ -36,12 +36,6 @@ public class StorageItemService {
     // 보관함 아이템 보내기 // 구매(인벤장부)랑 연관 없음
     @Transactional(rollbackFor = Exception.class)
     public void grantItemStorage(StorageGrantItemParam storageGrantItemParam) {
-        // 널체크
-        if (storageGrantItemParam.getItemId() == null ||
-            storageGrantItemParam.getNum() == null ||
-            storageGrantItemParam.getReceiverId() == null) {
-            throw new RestException(ErrorCode.MISSING_REQUIRED_PARAMETER);
-        }
         if (storageGrantItemParam.getNum() <= 0) {
             throw new RestException(ErrorCode.INVALID_ITEM_NUMBER);
         }
@@ -62,16 +56,18 @@ public class StorageItemService {
         // 받을 아이템 아이디 + 아이템 유닛 아이디 두개가 맞물려있음 아이템 가지고 오면 자연스럽게 유닛 가지고 올 수 있음
         // 이미 만들어져 있는 아이템 아이디 중 해당 아이디를 보관함에 넣기만 하면 됨
         // 보관함 테이블에 기록만 함
+        long adminId = -1L; // TODO Admin 임의값
+        int week = 2; // TODO 임시 기한 2주
         Storage storage = Storage.builder()
                 .receiverId(storageGrantItemParam.getReceiverId())
-                .senderId(-1L) // TODO Admin 임의값
+                .senderId(adminId)
                 //.purchaseId() 테이블에 들어가는게 아니라서 사용 x
                 .title(storageGrantItemParam.getTitle())
                 .description(storageGrantItemParam.getDescription())
                 .senderType(StorageSenderType.ADMIN)
                 .status(StorageStatus.WAITING)
                 .contentType(StorageContentType.ITEM)
-                .expiryDate(LocalDateTime.now().plusWeeks(2)) // TODO 임시로 2주
+                .expiryDate(LocalDateTime.now().plusWeeks(week))
                 .build();
         storageRepository.save(storage); // StorageId 필요
 

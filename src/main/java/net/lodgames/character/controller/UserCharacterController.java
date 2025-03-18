@@ -2,6 +2,7 @@ package net.lodgames.character.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.lodgames.character.param.UserCharactersGetParam;
 import net.lodgames.config.security.UserPrincipal;
 import net.lodgames.character.param.UserCharacterAddParam;
 import net.lodgames.character.param.UserCharacterModParam;
@@ -19,7 +20,7 @@ public class UserCharacterController {
 
         private final UserCharacterService userCharacterService;
 
-        // 유저 캐릭터 등록 (유저가 뽑기나 재화로 구매 시)
+        // 유저 캐릭터 부여 (유저가 뽑기나 재화로 구매 시)
         @PostMapping("/userCharacters")
         public ResponseEntity<?> addUserCharacter(@RequestBody UserCharacterAddParam userCharacterAddParam,
                                                   @AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -37,8 +38,10 @@ public class UserCharacterController {
 
         // 유저 캐릭터 전체 조회
         @GetMapping("/userCharacters")
-        public ResponseEntity<?> getUserCharacters(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-            return ResponseEntity.ok(userCharacterService.getUserCharacters(userPrincipal.getUserId()));
+        public ResponseEntity<?> getUserCharacters(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                   UserCharactersGetParam userCharactersGetParam) {
+            userCharactersGetParam.setUserId(userPrincipal.getUserId());
+            return ResponseEntity.ok(userCharacterService.getUserCharacters(userCharactersGetParam));
         }
 
         // 유저 캐릭터 삭제 (기록 X)

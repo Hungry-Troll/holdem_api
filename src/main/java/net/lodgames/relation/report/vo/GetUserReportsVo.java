@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GetUserReportsVo {
-    private Long id;
-    private Long reporterId;
-    private Long targetUserId;
+    private long id;
+    private long reporterId;
+    private long targetUserId;
     private String reason;
 }

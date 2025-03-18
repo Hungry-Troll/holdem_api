@@ -23,7 +23,6 @@ import static net.lodgames.storage.model.QStorageItem.storageItem;
 @AllArgsConstructor
 public class StorageQueryRepository {
 
-    private final StorageRepository storageRepository;
     private final JPAQueryFactory jpaQueryFactory;
 
     // 보관함 읽기

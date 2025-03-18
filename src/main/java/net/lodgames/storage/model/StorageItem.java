@@ -12,19 +12,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
+@Entity(name = "storage_item")
 @EntityListeners(AuditingEntityListener.class)
 public class StorageItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "storage_id", nullable = false)
+    @Column(name = "storage_id")
     private Long storageId;
-    @Column(name = "item_id", nullable = false)
+    @Column(name = "item_id")
     private Long itemId;
-    @Column(name ="item_num", nullable = false)
+    @Column(name ="item_num")
     private Integer itemNum;
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

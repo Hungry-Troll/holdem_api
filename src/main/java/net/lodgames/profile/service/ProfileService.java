@@ -75,25 +75,23 @@ public class ProfileService {
     // 프로필 삭제 (로컬 테스트용)
     @Transactional(rollbackFor = {Exception.class})
     public ProfileVo deleteProfile(Long profileId) {
-        Profile findProfile = profileRepository.findById(profileId).orElseThrow(() ->
+        Profile profile = profileRepository.findById(profileId).orElseThrow(() ->
                 new RestException(ErrorCode.PROFILE_NOT_EXIST));
 
-        profileRepository.delete(findProfile);
-        return profileMapper.updateProfileToVo(findProfile);
+        profileRepository.delete(profile);
+        return profileMapper.updateProfileToVo(profile);
     }
 
     // 프로필 가져오기
     @Transactional(rollbackFor = {Exception.class})
-    protected Profile retrieveProfile(long userId) {
+    protected Profile retrieveProfile(Long userId) {
         return profileRepository.findByUserId(userId)
                 .orElseGet(() -> {
-                            if (!userRepository.existsByUserId(userId)) {
-                                throw new RestException(ErrorCode.USER_NOT_EXIST);
-                            }
-                            return addBasicProfile(userId, createRandomNickName());
-
-                        }
-                );
+                    if (!userRepository.existsByUserId(userId)) {
+                        throw new RestException(ErrorCode.USER_NOT_EXIST);
+                    }
+                    return addBasicProfile(userId, createRandomNickName());
+                });
     }
 
     public Profile addBasicProfile(long userId, String nickname) {
@@ -106,7 +104,7 @@ public class ProfileService {
     }
 
     // 프로필 저장
-    private Profile saveProfile(long userId, String nickname, String image, Integer basicImageIdx) {
+    private Profile saveProfile(Long userId, String nickname, String image, Integer basicImageIdx) {
         return profileRepository.save(Profile.builder()
                 .userId(userId)
                 .image(image)
@@ -128,10 +126,10 @@ public class ProfileService {
 
     // 동일한 닉네임의 경우 자신의 이름과 같은지 검사
     private void checkProfileNicknameIsMe(String nickname, Long userId) {
-        Profile findProfile = profileRepository.findByUserId(userId).orElseThrow(() ->
+        Profile profile = profileRepository.findByUserId(userId).orElseThrow(() ->
                 new RestException(ErrorCode.PROFILE_NOT_EXIST));
         // 찾은 프로필 이름하고 닉네임이 다를 경우 (이름이 같으면 내 이름이니까 중복이 아님)
-        if (!nickname.equals(findProfile.getNickname())) {
+        if (!nickname.equals(profile.getNickname())) {
             throw new RestException(ErrorCode.EXIST_NICKNAME);// 동일한 닉네임 있음
         }
     }

@@ -4,7 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import net.lodgames.relation.report.constants.UserReportStatus;
-import net.lodgames.relation.report.param.GetUserReportsParam;
+import net.lodgames.relation.report.param.UserReportsGetParam;
 import net.lodgames.relation.report.vo.GetUserReportsVo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -20,7 +20,7 @@ public class UserReportQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     // 전체 조회 (PROGRESS)
-    public List<GetUserReportsVo> reportUsers(GetUserReportsParam getUserReportsParam, Pageable pageable){
+    public List<GetUserReportsVo> reportUsers(UserReportsGetParam userReportsGetParam, Pageable pageable){
         return jpaQueryFactory
                 .select(Projections.fields(GetUserReportsVo.class,
                     userReport.id,

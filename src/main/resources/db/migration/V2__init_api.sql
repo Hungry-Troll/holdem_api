@@ -571,3 +571,45 @@ CREATE TABLE `stamina`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='스태미나';
+
+CREATE TABLE society
+(
+    `id`         bigint       NOT NULL AUTO_INCREMENT COMMENT '모임 고유번호',
+    `name`       varchar(100) NULL COMMENT '모임 이름',
+    `join_type`  tinyint      NULL COMMENT '참가 방식',
+    `passcode`   varchar(20)  NULL COMMENT '비밀번호',
+    `image`      varchar(100) NULL COMMENT '이미지 경로',
+    `back_image` varchar(100) NULL COMMENT '배경 이미지 경로',
+    `info`       varchar(255) NULL COMMENT '정보',
+    `tag`        varchar(255) NULL COMMENT '태그',
+    `created_at` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='모임';
+
+CREATE TABLE society_member
+(
+    `id`          bigint    NOT NULL AUTO_INCREMENT COMMENT '모임회원 고유번호',
+    `user_id`     bigint    NULL COMMENT '유저 고유번호 ',
+    `society_id`  bigint    NULL COMMENT '모임 고유번호',
+    `member_type` tinyint   NULL COMMENT '회원 타입',
+    `created_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='모임 회원';
+
+CREATE TABLE society_member_wait
+(
+    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '모임회원대기 고유번호',
+    `user_id`    bigint    NULL COMMENT '유저 고유번호',
+    `society_id` bigint    NULL COMMENT '모임 고유번호',
+    `wait_type`  tinyint   NULL COMMENT '대기 유형',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='모임 회원 대기';

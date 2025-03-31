@@ -59,6 +59,10 @@ public class UserService {
         Users users = userRepository.findByUserId(userInitParam.getUserId()).orElseThrow(
                 () -> new RestException(ErrorCode.NOT_EXIST_USER)
         );
+        // 이미 초기화된 유저는 초기화 불가
+        if (users.getInitAt() != null) {
+            throw new RestException(ErrorCode.ALREADY_INIT_USER);
+        }
         profileService.addBasicProfile(userInitParam.getUserId(), userInitParam.getNickName());
         currencyService.initCurrencies(userInitParam.getUserId());
         // 초기화 완료 시각

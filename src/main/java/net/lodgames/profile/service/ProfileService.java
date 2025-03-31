@@ -97,6 +97,11 @@ public class ProfileService {
     }
 
     public Profile addBasicProfile(long userId, String nickname) {
+        // 기본 프로필이 없을 경우 기본 프로필 추가
+        if (profileRepository.existsByUserId(userId)) {
+            throw new RestException(ErrorCode.EXIST_PROFILE);
+        }
+        // 기본 프로필 추가
         return saveProfile(userId, nickname, "", 0);
     }
 

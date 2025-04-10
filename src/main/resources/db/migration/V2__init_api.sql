@@ -613,3 +613,62 @@ CREATE TABLE society_member_wait
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='모임 회원 대기';
+
+CREATE TABLE `chat_dm`
+(
+    `id`            bigint    NOT NULL AUTO_INCREMENT COMMENT '다이렉트 메시지 고유번호',
+    `user_id`       bigint    NOT NULL COMMENT '유저고유번호',
+    `target_id`     bigint    NOT NULL COMMENT '대상 유저고유번호',
+    `leave_status`  tinyint   NOT NULL DEFAULT '1' COMMENT '떠남 상태',
+    `target_status` tinyint   NOT NULL DEFAULT '0' COMMENT '친구 유저 상태',
+    `created_at`    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='다이렉트 메시지';
+
+CREATE TABLE `chat_room`
+(
+    `id`               bigint       NOT NULL AUTO_INCREMENT COMMENT '채팅방 고유번호',
+    `name`             varchar(255) NOT NULL COMMENT '방이름',
+    `room_type`        tinyint      NOT NULL DEFAULT '1' COMMENT '방타입',
+    `id_code`          varchar(20)  NOT NULL COMMENT '아이디코드',
+    `secure_code`      varchar(20)  NULL COMMENT '보안코드',
+    `capacity`         smallint     NOT NULL DEFAULT '10' COMMENT '정원',
+    `current_user_num` smallint     NOT NULL DEFAULT '0' COMMENT '현재 인원',
+    `created_at`       timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`       timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    `deleted_at`       timestamp    NULL COMMENT '삭제 시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='채팅방';
+
+CREATE TABLE `chat_participant`
+(
+    `id`               bigint    NOT NULL AUTO_INCREMENT COMMENT '채팅 참가자 고유번호',
+    `room_id`          bigint    NOT NULL COMMENT '채팅방 고유번호',
+    `user_id`          bigint    NOT NULL COMMENT '유저 고유번호',
+    `participant_type` tinyint   NOT NULL DEFAULT '0' COMMENT '참가자 타입',
+    `created_at`       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='채팅 참가자';
+
+
+CREATE TABLE `chat`
+(
+    `id`        bigint       NOT NULL AUTO_INCREMENT COMMENT '채팅 고유번호',
+    `dest`      varchar(100) NOT NULL COMMENT '채팅방 목적지',
+    `sender_id` bigint       NOT NULL COMMENT '보낸사람 고유번호',
+    `dest_type` tinyint      NOT NULL DEFAULT '0' COMMENT '목적지 타입',
+    `msg_type`  varchar(100) NOT NULL COMMENT '채팅방 목적지',
+    `msg_body`  varchar(100) NOT NULL COMMENT '메시지 바디',
+    `send_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '보낸시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='채팅';

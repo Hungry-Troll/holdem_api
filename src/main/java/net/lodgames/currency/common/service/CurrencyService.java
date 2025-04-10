@@ -67,19 +67,26 @@ public class CurrencyService {
 
     // 금액 초기화
     public void initCurrencies(long userId) {
-        coinRepository.save(Coin.builder()
-                .userId(userId)
-                .amount(0L)
-                .build());
-        diamondRepository.save(Diamond.builder()
-                .userId(userId)
-                .freeAmount(0L)
-                .androidAmount(0L)
-                .iosAmount(0L)
-                .build());
-        chipRepository.save(Chip.builder()
-                .userId(userId)
-                .amount(0L)
-                .build());
+        if(!coinRepository.existsByUserId(userId)) {
+            coinRepository.save(Coin.builder()
+                    .userId(userId)
+                    .amount(0L)
+                    .build());
+        }
+        if(!diamondRepository.existsByUserId(userId)) {
+            diamondRepository.save(Diamond.builder()
+                    .userId(userId)
+                    .freeAmount(0L)
+                    .androidAmount(0L)
+                    .iosAmount(0L)
+                    .paidAmount(0L)
+                    .build());
+        }
+        if(!chipRepository.existsByUserId(userId)) {
+            chipRepository.save(Chip.builder()
+                    .userId(userId)
+                    .amount(0L)
+                    .build());
+        }
     }
 }

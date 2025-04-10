@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface DiamondRepository extends JpaRepository<Diamond, Long> {
     Optional<Diamond> findByUserId(long userId);
+    boolean existsByUserId(long userId);
 }

@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ChipRepository extends JpaRepository<Chip, Long> {
     Optional<Chip> findByUserId(long userId);
+    boolean existsByUserId(long userId);
 }

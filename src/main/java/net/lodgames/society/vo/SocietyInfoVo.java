@@ -1,14 +1,16 @@
 package net.lodgames.society.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import net.lodgames.society.constants.JoinType;
 
 import java.util.List;
 
+@Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SocietyInfoVo {
     private Long id;
     private String name;

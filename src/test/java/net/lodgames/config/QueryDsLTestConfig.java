@@ -9,9 +9,12 @@ import net.lodgames.shop.collection.repository.CollectionQueryRepository;
 import net.lodgames.shop.item.repository.ItemQueryRepository;
 import net.lodgames.shop.item.repository.ItemUnitQueryRepository;
 import net.lodgames.shop.purchase.repository.PurchaseQueryRepository;
+import net.lodgames.society.repository.SocietyQueryRepository;
 import net.lodgames.stuff.repository.StuffQueryRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
 
 @TestConfiguration
 public class QueryDsLTestConfig {
@@ -47,6 +50,7 @@ public class QueryDsLTestConfig {
     public BundleQueryRepository bundleQueryRepository() {
         return new BundleQueryRepository(jpaQueryFactory());
     }
+
     @Bean
     public PurchaseQueryRepository purchaseQueryRepository() {
         return new PurchaseQueryRepository(jpaQueryFactory());
@@ -55,5 +59,10 @@ public class QueryDsLTestConfig {
     @Bean
     public CollectionQueryRepository collectionQueryRepository() {
         return new CollectionQueryRepository(jpaQueryFactory());
+    }
+
+    @Bean
+    public SocietyQueryRepository societyQueryRepository() {
+        return new SocietyQueryRepository(jpaQueryFactory());
     }
 }

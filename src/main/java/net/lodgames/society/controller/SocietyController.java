@@ -27,9 +27,9 @@ public class SocietyController {
 
     // add society
     @PostMapping("/societies")
-    public ResponseEntity<?> addSociety(@RequestBody SocietyParam societyParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        societyParam.setUserId(userPrincipal.getUserId());
-        return ResponseEntity.ok(societyService.addSociety(societyParam));
+    public ResponseEntity<?> addSociety(@RequestBody SocietyAddParam societyAddParam, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        societyAddParam.setUserId(userPrincipal.getUserId());
+        return ResponseEntity.ok(societyService.addSociety(societyAddParam));
     }
 
     // mod society (name)
@@ -39,8 +39,7 @@ public class SocietyController {
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         societyModParam.setUserId(userPrincipal.getUserId());
         societyModParam.setSocietyId(societyId);
-        societyService.modSociety(societyModParam);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(societyService.modSociety(societyModParam));
     }
 
     // society info

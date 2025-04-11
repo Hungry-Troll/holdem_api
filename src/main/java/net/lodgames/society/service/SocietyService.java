@@ -1,5 +1,6 @@
 package net.lodgames.society.service;
 
+import com.querydsl.core.util.StringUtils;
 import io.netty.util.internal.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +17,15 @@ import net.lodgames.society.repository.SocietyMemberWaitRepository;
 import net.lodgames.society.repository.SocietyQueryRepository;
 import net.lodgames.society.repository.SocietyRepository;
 import net.lodgames.society.util.SocietyMapper;
+import net.lodgames.society.util.TagUtils;
 import net.lodgames.society.vo.SocietyInfoVo;
 import net.lodgames.society.vo.SocietyVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
+
+import static net.lodgames.society.util.TagUtils.getTagList;
 
 @Slf4j
 @Service
@@ -46,34 +49,34 @@ public class SocietyService {
 
     // add society
     @Transactional(rollbackFor = {Exception.class})
-    public SocietyInfoVo addSociety(SocietyParam societyParam) {
-        if (StringUtil.isNullOrEmpty(societyParam.getName())
-                || societyParam.getJoinType() == null
-                || societyParam.getInfo() == null
-                || (societyParam.getJoinType() == JoinType.LOCK && societyParam.getPasscode() == null)
+    public SocietyInfoVo addSociety(SocietyAddParam societyAddParam) {
+        if (StringUtils.isNullOrEmpty(societyAddParam.getName())
+                || societyAddParam.getJoinType() == null
+                || societyAddParam.getInfo() == null
+                || (societyAddParam.getJoinType() == JoinType.LOCK && societyAddParam.getPasscode() == null)
         ) {
             throw new RestException(ErrorCode.FAIL_ADD_SOCIETY_INVALID_PARAMETER);
         }
 
         // Check the number of society as a leader
-        int leaderSocietyCount = societyMemberRepository.countByUserIdAndMemberType(societyParam.getUserId(), MemberType.LEADER);
+        int leaderSocietyCount = societyMemberRepository.countByUserIdAndMemberType(societyAddParam.getUserId(), MemberType.LEADER);
         if (leaderSocietyCount >= SOCIETY_LEAD_MAX_NUM) { // 5개 이상일 경우
             throw new RestException(ErrorCode.FAIL_ADD_SOCIETY_LEAD_LIMIT);
         }
 
         // tag Array 를 String 으로 변환
-        String tag = tagsToString(societyParam.getTags());
+        String tag = TagUtils.tagsToString(societyAddParam.getTags());
         Society.SocietyBuilder societyBuilder = Society.builder()
-                .name(societyParam.getName())               // 모임 이름
-                .joinType(societyParam.getJoinType())       // 모임 가입 유형
-                .image(societyParam.getImage())             // 대표 이미지
-                .backImage(societyParam.getBackImage())     // 배경 이미지
-                .info(societyParam.getInfo())               // 모임정보
-                .tag(tag);                                  // 태그정보
+                .name(societyAddParam.getName())           // 모임 이름
+                .joinType(societyAddParam.getJoinType())   // 모임 가입 유형
+                .image(societyAddParam.getImage())         // 대표 이미지
+                .backImage(societyAddParam.getBackImage()) // 배경 이미지
+                .info(societyAddParam.getInfo())           // 모임정보
+                .tag(tag);                                 // 태그정보
 
         // 가입 유형이 LOCK 일 경우
-        if(societyParam.getJoinType() == JoinType.LOCK) {
-            societyBuilder.passcode(societyParam.getPasscode()); // 비밀번호
+        if(societyAddParam.getJoinType() == JoinType.LOCK) {
+            societyBuilder.passcode(societyAddParam.getPasscode()); // 비밀번호
         }
 
         // 모임 추가
@@ -83,7 +86,7 @@ public class SocietyService {
         long societyId = society.getId();
         societyMemberRepository.save(SocietyMember.builder()
                 .societyId(societyId)              // 생성된 모임 고유번호
-                .userId(societyParam.getUserId())  // 추가될 멤버 고유번호
+                .userId(societyAddParam.getUserId())  // 추가될 멤버 고유번호
                 .memberType(MemberType.LEADER)     // 멤버 타입 리더
                 .build());
         SocietyInfoVo societyInfoVo = societyMapper.updateSocietyToInfoVo(society);
@@ -92,32 +95,16 @@ public class SocietyService {
         return societyInfoVo;
     }
 
-    private String tagsToString(List<String> tags) {
-        if (tags == null || tags.isEmpty()) {
-            return null;
-        }
-        return tags.stream()
-                .map(tag -> tag.replaceAll(" ", "").toLowerCase().trim())
-                .filter(tag -> !tag.isBlank())
-                .reduce((tag1, tag2) -> tag1 + "," + tag2)
-                .orElse(null);
-    }
-
-    public List<String> getTagList(String tag) {
-        return tag != null && !tag.trim().isEmpty()
-                ? Arrays.asList(tag.split(","))
-                : null;
-    }
 
     // mod society (name)
     @Transactional(rollbackFor = {Exception.class})
-    public void modSociety(SocietyModParam societyModParam) {
+    public SocietyInfoVo modSociety(SocietyModParam societyModParam) {
         // 해당 모임 조회
         Society society = getSocietyEntity(societyModParam.getSocietyId());
         // 해당 모임에 리더 이상의 권한이 있는지 확인
         checkSocietyMemberAuth(societyModParam.getSocietyId(), societyModParam.getUserId(), MemberType.LEADER);
         // tag String 취득
-        String tag = tagsToString(societyModParam.getTags());
+        String tag = TagUtils.tagsToString(societyModParam.getTags());
         // 태그 변경이 있을 경우
         if (!StringUtil.isNullOrEmpty(tag)) {
             society.setTag(tag);
@@ -126,17 +113,15 @@ public class SocietyService {
         societyMapper.updateSocietyFromParam(societyModParam, society);
         // 가입 유형 변경
         changeJoinType(society, societyModParam.getJoinType(), societyModParam.getPasscode());
-
-        try {
-            societyRepository.save(society);
-        } catch (Exception e) {
-            log.info("fail unfollow : {}", e.getCause().getCause().toString());
-            throw new RestException(ErrorCode.FAIL_MOD_SOCIETY);
-        }
+        // 모임 정보 저장
+        society = societyRepository.save(society);
+        SocietyInfoVo societyInfoVo = societyMapper.updateSocietyToInfoVo(society);
+        societyInfoVo.setTags(getTagList(society.getTag()));
+        return societyInfoVo;
     }
 
     // 가입 유형 변경
-    private void changeJoinType(Society society, JoinType newJoinType, String passcode) {
+    protected void changeJoinType(Society society, JoinType newJoinType, String passcode) {
         JoinType oldJoinType = society.getJoinType();
         // 가입 유형이 변경되지 않을 경우
         if (oldJoinType == newJoinType) {
@@ -200,7 +185,7 @@ public class SocietyService {
     // 모임 취득
     private Society getSocietyEntity(long societyId) {
         return societyRepository.findById(societyId).
-                orElseThrow(() -> new RestException(ErrorCode.NOT_EXIST_SOCIETY));
+                orElseThrow(() -> new RestException(ErrorCode.SOCIETY_NOT_EXIST));
     }
 
     // 해당 모임에 필요한 권한(MemberType) 이상의 권한이 있는지 확인

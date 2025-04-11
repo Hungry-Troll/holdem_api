@@ -30,7 +30,6 @@ public class StuffRepositoryTest {
                 .status(StuffStatus.STANDBY)
                 .description("blah blah blah")
                 .makeDatetime(LocalDateTime.now()).build());
-        stuffRepository.save(stuff);
     }
 
 }

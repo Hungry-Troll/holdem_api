@@ -42,7 +42,7 @@ public class SocietyQueryRepository {
                 )).from(society)
                 .join(societyMember).on(society.id.eq(societyMember.societyId))
                 .where(societyMember.userId.eq(societyListParam.getUserId())
-                        , eqTypeNum(societyListParam.getMemberType())
+                        , eqMemberType(societyListParam.getMemberType())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -50,7 +50,7 @@ public class SocietyQueryRepository {
                 .fetch();
     }
 
-    private BooleanExpression eqTypeNum(MemberType memberType) {
+    private BooleanExpression eqMemberType(MemberType memberType) {
         return memberType == null ? null : societyMember.memberType.eq(memberType);
     }
 

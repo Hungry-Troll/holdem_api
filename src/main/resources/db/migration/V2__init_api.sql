@@ -672,3 +672,16 @@ CREATE TABLE `chat`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='채팅';
+
+CREATE TABLE `google_payment`
+(
+    `id`                 bigint       NOT NULL AUTO_INCREMENT COMMENT '구글결제 고유번호',
+    `user_id`            bigint       NOT NULL COMMENT '유저 고유번호',
+    `order_id`           varchar(50)  NOT NULL COMMENT '주문번호',
+    `product_id`         varchar(100) NOT NULL COMMENT '상품아이디',
+    `google_payment_log` varchar(255) NOT NULL COMMENT '구글결제로그',
+    `created_at`         timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='구글결제';

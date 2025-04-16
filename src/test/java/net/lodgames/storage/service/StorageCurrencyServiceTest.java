@@ -21,7 +21,7 @@ class StorageCurrencyServiceTest {
     @Test
     void sendCurrencyStorage() {
         StorageCurrencyParam storageCurrencyParam = StorageCurrencyParam.builder()
-                .senderId(2L)
+                .senderId(3L)
                 .os(Os.ANDROID)
                 .receiverId(1L)
                 .title("테스트용")

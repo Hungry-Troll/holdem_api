@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class FindUserNicknameVo {
     // 유저
-    private Long userId;
+    private long userId;
     private UserStatus status;
     private LocalDateTime logoutAt;
     // 프로필

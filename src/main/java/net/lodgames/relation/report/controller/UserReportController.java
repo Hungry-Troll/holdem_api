@@ -2,9 +2,9 @@ package net.lodgames.relation.report.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.lodgames.profile.vo.ModReportUserParam;
-import net.lodgames.relation.report.param.AddUserReportParam;
-import net.lodgames.relation.report.param.GetUserReportsParam;
+import net.lodgames.relation.report.param.UserReportAddParam;
+import net.lodgames.relation.report.param.UserReportsGetParam;
+import net.lodgames.relation.report.param.UserReportModParam;
 import net.lodgames.relation.report.service.UserReportService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +22,19 @@ public class UserReportController {
     // 유저 신고
     @PostMapping("/users/{targetUserId}/report")
     public ResponseEntity<?> addReportUser(@PathVariable(name = "targetUserId") Long targetUserId,
-                                           @RequestBody AddUserReportParam addUserReportParam,
+                                           @RequestBody UserReportAddParam userReportAddParam,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        addUserReportParam.setReporterId(userPrincipal.getUserId());
-        addUserReportParam.setTargetUserId(targetUserId);
-        userReportService.addReportUser(addUserReportParam);
+        userReportAddParam.setReporterId(userPrincipal.getUserId());
+        userReportAddParam.setTargetUserId(targetUserId);
+        userReportService.addReportUser(userReportAddParam);
         return ResponseEntity.ok().build();
     }
 
     // 유저 신고 리스트 (관리자)
     @GetMapping("/users/reports")
-    public ResponseEntity<?> getReportUsers(@RequestBody GetUserReportsParam getUserReportsParam,
+    public ResponseEntity<?> getReportUsers(@RequestBody UserReportsGetParam userReportsGetParam,
                                             @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(userReportService.getReportUsers(getUserReportsParam));
+        return ResponseEntity.ok(userReportService.getReportUsers(userReportsGetParam));
     }
 
     // 유저 신고 단일 조회 (관리자)
@@ -55,10 +55,10 @@ public class UserReportController {
     // 유저 신고 수정 (관리자)
     @PutMapping("/users/reports/{Id}/mod")
     public ResponseEntity<?> modReportUser(@PathVariable(name = "Id") Long userReportId,
-                                           @RequestBody ModReportUserParam modReportUserParam,
+                                           @RequestBody UserReportModParam userReportModParam,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        modReportUserParam.setReporterId(userPrincipal.getUserId());
-        userReportService.modReportUser(userReportId, modReportUserParam);
+        userReportModParam.setReporterId(userPrincipal.getUserId());
+        userReportService.modReportUser(userReportId, userReportModParam);
         return ResponseEntity.ok().build();
     }
 

@@ -48,38 +48,34 @@ public class InquiryService {
     // 문의 확인
     @Transactional(readOnly = true)
     public InquiryGetVo getInquiry(Long inquiryId) {
-        return inquiryMapper.updateInquiryToVo(findInquiry(inquiryId));
+        return inquiryMapper.updateInquiryToVo(retrieve(inquiryId));
     }
 
     // 문의 해결
     @Transactional(rollbackFor = {Exception.class})
     public void resolveInquiry(Long inquiryId) {
-        Inquiry findInquiry = findInquiry(inquiryId);
-        findInquiry.setStatus(InquiryStatus.RESOLVE);
-        inquiryRepository.save(findInquiry);
+        Inquiry inquiry = retrieve(inquiryId);
+        inquiry.setStatus(InquiryStatus.RESOLVE);
+        inquiryRepository.save(inquiry);
     }
 
     // 문의 수정
     @Transactional(rollbackFor = {Exception.class})
     public void modInquiry(Long inquiryId, InquiryModParam inquiryModParam) {
-        Inquiry findInquiry = findInquiry(inquiryId);
-
-        findInquiry.setType(inquiryModParam.getType());
-        findInquiry.setReason(inquiryModParam.getReason());
-        findInquiry.setScreenshot(inquiryModParam.getScreenshot());
-        inquiryRepository.save(findInquiry);
+        Inquiry inquiry = retrieve(inquiryId);
+        inquiryMapper.updateInquireFromModParam(inquiryModParam, inquiry);
+        inquiryRepository.save(inquiry);
     }
 
     // 문의 삭제
     @Transactional(rollbackFor = {Exception.class})
     public void delInquiry(Long inquiryId) {
-        inquiryRepository.delete(findInquiry(inquiryId));
+        inquiryRepository.delete(retrieve(inquiryId));
     }
 
     // 문의 찾기
-    private Inquiry findInquiry(Long inquiryId) {
-        Inquiry findInquiry = inquiryRepository.findById(inquiryId)
+    private Inquiry retrieve(Long inquiryId) {
+        return inquiryRepository.findById(inquiryId)
                 .orElseThrow(()-> new RestException(ErrorCode.INQUIRY_NOT_EXIST));
-        return findInquiry;
     }
 }

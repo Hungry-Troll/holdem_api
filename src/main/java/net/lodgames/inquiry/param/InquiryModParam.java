@@ -6,7 +6,6 @@ import net.lodgames.inquiry.constants.InquiryType;
 
 @Getter
 @Setter
-
 public class InquiryModParam {
     private InquiryType type; // 문의 종류 PAYMENT(0),ACCESS(1),PLAY(2),FEEDBACK(3),OTHER(4);
     private String reason;    // 문의 내용

@@ -3,8 +3,8 @@ package net.lodgames.message.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
-import net.lodgames.message.model.Message;
 import net.lodgames.message.param.*;
+import net.lodgames.message.vo.MessageBoxVo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -19,10 +19,9 @@ public class MessageQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     // TODO: 추후 프로필하고 쪽지 합쳐야 됨
-    
     // 받은 쪽지함 읽기
-    public List<Message> findReceivedBoxMessage(MessageReceiveBoxParam param, Pageable pageable) {
-        return jpaQueryFactory.select(Projections.fields(Message.class,
+    public List<MessageBoxVo> getMessageBoxesByReceiver(MessageReceiveBoxParam param, Pageable pageable) {
+        return jpaQueryFactory.select(Projections.fields(MessageBoxVo.class,
                 message.id,
                 message.senderId,
                 message.receiverId,
@@ -40,8 +39,8 @@ public class MessageQueryRepository {
     }
 
     // 보낸 쪽지함 확인
-    public List<Message> findSendBoxMessage(MessageSendBoxParam param, Pageable pageable) {
-        return jpaQueryFactory.select(Projections.fields(Message.class,
+    public List<MessageBoxVo> getMessageBoxesBySender(MessageSendBoxParam param, Pageable pageable) {
+        return jpaQueryFactory.select(Projections.fields(MessageBoxVo.class,
                         message.id,
                         message.senderId,
                         message.receiverId,

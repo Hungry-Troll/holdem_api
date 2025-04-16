@@ -7,9 +7,9 @@ import lombok.*;
 @Setter
 public class UserMemoAddParam {
     @JsonIgnore
-    private long targetUserId;
+    private Long targetUserId;
     @JsonIgnore
-    private long userId;
+    private Long userId;
     private String memoText;
     private String tag;
 }

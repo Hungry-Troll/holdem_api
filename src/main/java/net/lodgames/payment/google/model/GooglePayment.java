@@ -18,15 +18,15 @@ public class GooglePayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, name = "user_id")
+    @Column(name = "user_id")
     private Long userId;
-    @Column(nullable = false, name = "order_id")
+    @Column(name = "order_id")
     private String orderId;
-    @Column(nullable = false, name = "product_id")
+    @Column(name = "product_id")
     private String productId;
-    @Column(nullable = false, name = "google_payment_log")
+    @Column(name = "google_payment_log")
     private String googlePaymentLog;
     @CreatedDate
-    @Column(nullable = false, name = "created_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

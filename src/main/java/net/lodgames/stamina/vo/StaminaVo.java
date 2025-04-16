@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class StaminaAcquireVo {
-    private Integer currentStamina;
-    private Integer maxStamina;
+public class StaminaVo {
+    private int currentStamina;
+    private int maxStamina;
     private LocalDateTime lastRecoveryTime;
     private LocalDateTime recoveryCompleteTime;
 }

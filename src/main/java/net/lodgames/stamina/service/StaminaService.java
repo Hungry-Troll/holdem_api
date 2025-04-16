@@ -9,10 +9,8 @@ import net.lodgames.stamina.param.StaminaConsumeParam;
 import net.lodgames.stamina.param.StaminaModParam;
 import net.lodgames.stamina.repository.StaminaRepository;
 import net.lodgames.stamina.util.StaminaMapper;
-import net.lodgames.stamina.vo.StaminaAcquireVo;
+import net.lodgames.stamina.vo.StaminaVo;
 import net.lodgames.stamina.vo.StaminaCalculateVo;
-import net.lodgames.stamina.vo.StaminaConsumeVo;
-import net.lodgames.stamina.vo.StaminaGetVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +44,7 @@ public class StaminaService {
 
     // 스태미나 조회
     @Transactional(rollbackFor = Exception.class)
-    public StaminaGetVo getStamina(Long userId) {
+    public StaminaVo getStamina(Long userId) {
         Stamina findStamina = findUserStamina(userId);
         int currentStamina = findStamina.getCurrentStamina();
         int maxStamina = findStamina.getMaxStamina();
@@ -84,7 +82,7 @@ public class StaminaService {
 
     // 스태미나 소모
     @Transactional(rollbackFor = Exception.class)
-    public StaminaConsumeVo consumeStamina(StaminaConsumeParam staminaConsumeParam) {
+    public StaminaVo consumeStamina(StaminaConsumeParam staminaConsumeParam) {
         // 해당 스테미나를 찾음
         Stamina findStamina = findUserStamina(staminaConsumeParam.getUserId());
         // Data
@@ -99,11 +97,11 @@ public class StaminaService {
         findStamina.setRecoveryCompleteTime(result.getRecoveryCompleteTime());
         findStamina.setLastRecoveryTime(result.getNow());
 
-        return staminaMapper.updateStaminaToConsumeVo(staminaRepository.save(findStamina));
+        return staminaMapper.updateStaminaToVo(staminaRepository.save(findStamina));
     }
 
     // 스태미나 획득
-    public StaminaAcquireVo acquireStamina(StaminaAcquireParam staminaAcquireParam) {
+    public StaminaVo acquireStamina(StaminaAcquireParam staminaAcquireParam) {
         // 해당 스테미나를 찾음
         Stamina findStamina = findUserStamina(staminaAcquireParam.getUserId());
         // Data
@@ -118,7 +116,7 @@ public class StaminaService {
         findStamina.setRecoveryCompleteTime(result.getRecoveryCompleteTime());
         findStamina.setLastRecoveryTime(result.getNow());
 
-        return staminaMapper.updateStaminaToAcquireVo(staminaRepository.save(findStamina));
+        return staminaMapper.updateStaminaToVo(staminaRepository.save(findStamina));
     }
 
     private StaminaCalculateVo getCheckStamina(int currentStamina,

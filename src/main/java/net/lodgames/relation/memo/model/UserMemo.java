@@ -16,14 +16,13 @@ import java.time.LocalDateTime;
 public class UserMemo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column(name = "user_id", nullable = false) // 메모 작성한 유저의 id
-    private long userId;
-    @Column(name = "target_user_id", nullable = false) // 메모 대상 유저의 id
-    private long targetUserId;
-    @Column(name = "memo_text", nullable = false)
+    private Long id;
+    @Column(name = "user_id") // 메모 작성한 유저의 id
+    private Long userId;
+    @Column(name = "target_user_id") // 메모 대상 유저의 id
+    private Long targetUserId;
+    @Column(name = "memo_text")
     private String memoText;
-    @Column(name = "tag", length = 1000)
     private String tag;
     @CreatedDate
     @Column(name = "created_at")
@@ -33,7 +32,7 @@ public class UserMemo {
     private LocalDateTime updatedAt;
 
     @Builder
-    public UserMemo(long userId, long targetUserId, String memoText, String tag) {
+    public UserMemo(Long userId, Long targetUserId, String memoText, String tag) {
         this.userId = userId;
         this.targetUserId = targetUserId;
         this.memoText = memoText;

@@ -13,16 +13,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-@Entity
+@Entity(name = "storage_bundle")
 public class StorageBundle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "storage_id", nullable = false)
+    @Column(name = "storage_id")
     private Long storageId;
-    @Column(name = "bundle_id", nullable = false)
+    @Column(name = "bundle_id")
     private Long bundleId;
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

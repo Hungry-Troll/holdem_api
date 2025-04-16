@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 public class MessageModParam {
     @JsonIgnore
-    private long messageId;
+    private Long messageId;
     @JsonIgnore
-    private long senderId;
+    private Long senderId;
     private String content;
 }

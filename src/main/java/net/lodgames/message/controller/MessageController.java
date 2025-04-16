@@ -37,7 +37,7 @@ public class MessageController {
 
     //쪽지 읽기
     @GetMapping("/messages/{messageId}")
-    public ResponseEntity<?> getMessage(@PathVariable(name="messageId") long messageId,
+    public ResponseEntity<?> getMessage(@PathVariable(name="messageId") Long messageId,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(
                 messageService.getMessage(MessageGetParam.builder()
@@ -48,7 +48,7 @@ public class MessageController {
 
     //쪽지 단일 삭제
     @DeleteMapping("/messages/{messageId}")
-    public ResponseEntity<?> deleteMessage(@PathVariable(name="messageId") long messageId,
+    public ResponseEntity<?> deleteMessage(@PathVariable(name="messageId") Long messageId,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         messageService.deleteMessage(MessageDeleteParam.builder()
                                                        .receiverId(userPrincipal.getUserId())
@@ -68,7 +68,7 @@ public class MessageController {
 
     //쪽지 수정 // 보낸 쪽지를 상대방이 읽거나 삭제 전까지만 수정 할 수 있음
     @PutMapping("/messages/{messageId}")
-    public ResponseEntity<?> modMessage(@PathVariable(name="messageId") long messageId,
+    public ResponseEntity<?> modMessage(@PathVariable(name="messageId") Long messageId,
                                         @RequestBody MessageModParam messageModParam,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         messageModParam.setMessageId(messageId);

@@ -9,7 +9,6 @@ import net.lodgames.common.param.PagingParam;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserBlockListParam extends PagingParam {
-    // 유저
     @JsonIgnore
-    private long userId;
+    private Long userId;
 }

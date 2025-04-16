@@ -1,6 +1,10 @@
 package net.lodgames.config.error;
 
 import lombok.Getter;
+import net.lodgames.message.param.MessageAddParam;
+import net.lodgames.storage.param.StoragesGetParam;
+import net.lodgames.storage.param.bundle.StorageGrantBundleParam;
+import net.lodgames.storage.param.item.StorageGrantItemParam;
 
 // common 100XXX
 // API 12XXXX
@@ -53,6 +57,9 @@ public enum ErrorCode {
     FAIL_READ_MESSAGE_NOT_FOUND(404, 120605, "FAIL_READ_MESSAGE_NOT_FOUND"),
     FAIL_UPDATE_MESSAGE_ALREADY_READ(404, 120606, "FAIL_UPDATE_MESSAGE_ALREADY_READ"),
     FAIL_UPDATE_MESSAGE_ALREADY_DELETED(404, 120607, "FAIL_UPDATE_MESSAGE_ALREADY_DELETED"),
+    MESSAGE_ADD_PARAM_NULL(400, 120608, "MESSAGE_ADD_PARAM_NULL"),
+    FAIL_SEND_MESSAGE_NOT_FOUND_CONTENT(404, 120609, "FAIL_SEND_MESSAGE_NOT_FOUND_CONTENT"),
+
     // FOLLOW (1207XX)
     FAIL_FOLLOW_TARGET_NOT_EXIST(400, 120701, "FAIL_FOLLOW_TARGET_NOT_EXIST"),
     FAIL_NOT_ALLOWED_FOLLOW_SELF(400, 120702, "FAIL_NOT_ALLOWED_FOLLOW_SELF"),
@@ -203,6 +210,7 @@ public enum ErrorCode {
     FAIL_SEND_MSG_BLOCKED(401, 121720,"FAIL_SEND_MSG_BLOCKED" ),
     FAIL_SEND_MSG_UNFRIEND(401, 121721,"FAIL_SEND_MSG_UNFRIEND" ),
     FAIL_SEND_MSG_LEAVE(401, 121722,"FAIL_SEND_MSG_LEAVE" ),
+<<<<<<< HEAD
     
     // IAP (1218XX)
     GOOGLE_SERVICE_ACCOUNT_NOT_FOUND(404, 121801, "GOOGLE_SERVICE_ACCOUNT_NOT_FOUND"),
@@ -211,6 +219,9 @@ public enum ErrorCode {
     GOOGLE_RECEIPT_PARSE_FAILED(404, 121804, "GOOGLE_RECEIPT_PARSE_FAILED"),
     FAILED_TO_VERIFY_PURCHASE(404, 121805, "FAILED_TO_VERIFY_PURCHASE"),
     GOOGLE_PAYMENT_NOT_FOUND(404, 121806, "GOOGLE_PAYMENT_NOT_FOUND");
+=======
+    NOT_EXIST_MEMO_TARGET_USER(404, 121902, "NOT_EXIST_MEMO_TARGET_USER"),
+>>>>>>> 1ce965c (refac : Entity null 여부에 따라 래퍼형, 기본형 사용 refac : Param 래퍼형으로 변경, refac : Vo null 여부에 따라 래퍼형, 기본형 사용, refac : Mapper 역할 단순하게 변경)
     ;
 
     private final int code;

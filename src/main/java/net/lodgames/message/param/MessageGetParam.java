@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class MessageGetParam {
-    private long messageId;
-    private long receiverId;
+    private Long messageId;
+    private Long receiverId;
 }

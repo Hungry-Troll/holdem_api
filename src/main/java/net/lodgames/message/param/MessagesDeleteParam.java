@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class MessagesDeleteParam {
     private List<Long> messageIds;
-    private long receiverId;
+    private Long receiverId;
 }

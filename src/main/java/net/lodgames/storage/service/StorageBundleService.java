@@ -1,6 +1,5 @@
 package net.lodgames.storage.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
@@ -31,18 +30,12 @@ public class StorageBundleService {
     private final StorageBundleRepository storageBundleRepository;
     private final PurchaseService purchaseService;
     private final BundleRepository bundleRepository;
+    // Storage id null 체크, 삭제 체크 공용
     private final StorageValidatorService storageValidatorService;
-
 
     // 보관함 번들 보내기 // 구매(인벤장부)랑 연관 없음
     @Transactional(rollbackFor = Exception.class)
     public void grantBundleStorage(StorageGrantBundleParam storageGrantBundleParam) {
-        // 널체크
-        if (storageGrantBundleParam.getBundleId() == null ||
-            storageGrantBundleParam.getReceiverId() == null) {
-            throw new RestException(ErrorCode.MISSING_REQUIRED_PARAMETER);
-        }
-
         // 보관함에 넣을 수 있는 아이템 및 번들은 FREE, EVENT 만 가능
         // 해당 아이템의 CurrencyState enum 중 FREE, EVENT 만 보관함에 넣을 수 있음
         Bundle findBundle = bundleRepository.findById(storageGrantBundleParam.getBundleId())
@@ -59,16 +52,18 @@ public class StorageBundleService {
         // 필요한 내용 받을 사람 아이디
         // 이미 만들어져 있는 번들 아이디 중 해당 아이디를 보관함에 넣기만 하면 됨
         // 보관함 테이블에 기록만 함
+        long adminId = -1L; // TODO Admin 임의값
+        int week = 2; // TODO 임시 기한 2주
         Storage storage = Storage.builder()
                 .receiverId(storageGrantBundleParam.getReceiverId())
-                .senderId(-1L) // Admin
+                .senderId(adminId) // Admin
                 //.purchaseId() 테이블에 들어가는게 아니라서 사용 x
                 .title(storageGrantBundleParam.getTitle())
                 .description(storageGrantBundleParam.getDescription())
                 .senderType(StorageSenderType.ADMIN)
                 .status(StorageStatus.WAITING)
                 .contentType(StorageContentType.BUNDLE)
-                .expiryDate(LocalDateTime.now().plusWeeks(2)) //임시 2주
+                .expiryDate(LocalDateTime.now().plusWeeks(week))
                 .build();
         storageRepository.save(storage); // StorageId 필요
 
@@ -104,7 +99,6 @@ public class StorageBundleService {
 
         // 아이템 받기
         receiveBundle(findStorage, storageBundleParam);
-
         // 저장
         recordGetBundle(findStorage, findStorageBundle);
     }

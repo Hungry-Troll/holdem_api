@@ -1,6 +1,5 @@
 package net.lodgames.profile.repository;
 
-
 import net.lodgames.profile.model.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class MessageAddParam {
     @JsonIgnore
-    private long senderId;
-    private long receiverId;
+    private Long senderId;
+    private Long receiverId;
     private String content;
 }

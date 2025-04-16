@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class MessageService {
-
     private final MessageRepository messageRepository;
     private final MessageQueryRepository messageQueryRepository;
     private final MessageMapper messageMapper;
@@ -31,11 +30,16 @@ public class MessageService {
         if (messageAddParam.getReceiverId() <= 0) {
             throw new RestException(ErrorCode.FAIL_SEND_MESSAGE_NOT_FOUND_RECEIVER);
         }
+        if (messageAddParam.getContent().isEmpty()) {
+            throw new RestException(ErrorCode.FAIL_SEND_MESSAGE_NOT_FOUND_CONTENT);
+        }
+
         //TODO 금칙어는 클라에서 되도록 처리하고 크리티컬한것만 서버에서 처리하도록 기능 추가
         messageRepository.save(Message.builder()
                 .senderId(messageAddParam.getSenderId())
                 .receiverId(messageAddParam.getReceiverId())
-                .content(messageAddParam.getContent()).build()
+                .content(messageAddParam.getContent())
+                .build()
         );
     }
 
@@ -45,6 +49,10 @@ public class MessageService {
         if (messagesAddParam.getReceiverIds().isEmpty()) {
             throw new RestException(ErrorCode.FAIL_SEND_MESSAGE_NOT_FOUND_RECEIVER);
         }
+        if (messagesAddParam.getContent().isEmpty()) {
+            throw new RestException(ErrorCode.FAIL_SEND_MESSAGE_NOT_FOUND_CONTENT);
+        }
+
         //TODO 금칙어는 클라에서 되도록 처리하고 크리티컬한것만 서버에서 처리하도록 기능 추가
         for (int i = 0; i < messagesAddParam.getReceiverIds().size(); i++) {
             messageRepository.save(Message.builder()
@@ -55,42 +63,41 @@ public class MessageService {
         }
     }
 
-
     //쪽지 읽기(읽음 처리)
     @Transactional(rollbackFor = {Exception.class})
     public MessageReadVo getMessage(MessageGetParam messageGetParam) {
-        Message findMessage = messageRepository.findByIdAndReceiverIdAndDeletedAtIsNull(
+        Message message = messageRepository.findByIdAndReceiverIdAndDeletedAtIsNull(
                 messageGetParam.getMessageId(),
                 messageGetParam.getReceiverId()
         ).orElseThrow(() -> new RestException(ErrorCode.FAIL_READ_MESSAGE_NOT_FOUND));
-        findMessage.setReadAt(LocalDateTime.now());
-        return messageMapper.updateReadMessageToVo(messageRepository.save(findMessage));
+        message.setReadAt(LocalDateTime.now());
+        return messageMapper.updateMessageToReadVo(messageRepository.save(message));
     }
 
     //쪽지 삭제
     @Transactional(rollbackFor = {Exception.class})
     public void deleteMessage(MessageDeleteParam messageDeleteParam) {
-        Message findMessage = messageRepository.findByIdAndReceiverIdAndDeletedAtIsNull(
+        Message message = messageRepository.findByIdAndReceiverIdAndDeletedAtIsNull(
                 messageDeleteParam.getMessageId(),
                 messageDeleteParam.getReceiverId()
         ).orElseThrow(() -> new RestException(ErrorCode.FAIL_DELETE_MESSAGE_NOT_FOUND));
-        findMessage.setDeletedAt(LocalDateTime.now());
-        messageRepository.save(findMessage);
+        message.setDeletedAt(LocalDateTime.now());
+        messageRepository.save(message);
     }
 
     //쪽지 다중 삭제
     @Transactional(rollbackFor = {Exception.class})
     public void deleteMessages(MessagesDeleteParam messagesDeleteParam) {
-        List<Message> findMessages = messageRepository.findByIdInAndReceiverIdAndDeletedAtIsNull(
+        List<Message> message = messageRepository.findByIdInAndReceiverIdAndDeletedAtIsNull(
                 messagesDeleteParam.getMessageIds(),
                 messagesDeleteParam.getReceiverId()
         );
         // 찾은 쪽지가 없는 경우
-        if (findMessages.isEmpty()) {
+        if (message.isEmpty()) {
             throw new RestException(ErrorCode.FAIL_DELETE_MESSAGE_NOT_FOUND);
         }
-        findMessages.forEach(message -> message.setDeletedAt(LocalDateTime.now()));
-        messageRepository.saveAll(findMessages);
+        message.forEach(one -> one.setDeletedAt(LocalDateTime.now()));
+        messageRepository.saveAll(message);
     }
 
     //보낸 쪽지 수정
@@ -100,22 +107,18 @@ public class MessageService {
         ).orElseThrow(() -> new RestException(ErrorCode.FAIL_UPDATE_MESSAGE_NOT_FOUND));
         findMessage.setContent(messageModParam.getContent());
         findMessage.setCreatedAt(LocalDateTime.now()); // 새로운 생성시간 (받는 사람이 읽지 않았으므로...)
-        return messageMapper.updateMessageToVo(messageRepository.save(findMessage));
+        return messageMapper.updateMessageToModVo(messageRepository.save(findMessage));
     }
 
     //받은 쪽지함
     @Transactional(readOnly = true)
-    public List<MessageReceiveBoxVo> receiveBoxMessage(MessageReceiveBoxParam messageReceiveBoxParam) {
-        List<Message> findMessages = messageQueryRepository.findReceivedBoxMessage(
-                messageReceiveBoxParam, messageReceiveBoxParam.of());
-        return messageMapper.updateMessageListToVoList(findMessages);
+    public List<MessageBoxVo> receiveBoxMessage(MessageReceiveBoxParam messageReceiveBoxParam) {
+        return messageQueryRepository.getMessageBoxesByReceiver(messageReceiveBoxParam, messageReceiveBoxParam.of());
     }
 
     //보낸 쪽지함
     @Transactional(readOnly = true)
-    public List<MessageSendBoxVo> sendBoxMessage(MessageSendBoxParam messageSendBoxParam) {
-        List<Message> findMessages = messageQueryRepository.findSendBoxMessage(
-                messageSendBoxParam, messageSendBoxParam.of());
-        return messageMapper.updateCheckSendMessageToVo(findMessages);
+    public List<MessageBoxVo> sendBoxMessage(MessageSendBoxParam messageSendBoxParam) {
+        return messageQueryRepository.getMessageBoxesBySender(messageSendBoxParam, messageSendBoxParam.of());
     }
 }

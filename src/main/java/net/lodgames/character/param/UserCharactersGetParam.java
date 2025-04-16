@@ -1,4 +1,4 @@
-package net.lodgames.message.param;
+package net.lodgames.character.param;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import net.lodgames.common.param.PagingParam;
 
 @Getter
 @Setter
-public class MessageReceiveBoxParam extends PagingParam {
+public class UserCharactersGetParam extends PagingParam {
     @JsonIgnore
-    private Long receiverId;
+    private Long userId;
 }

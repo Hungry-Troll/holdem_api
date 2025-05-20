@@ -6,6 +6,7 @@ import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.inquiry.constants.InquiryStatus;
 import net.lodgames.inquiry.model.Inquiry;
+import net.lodgames.inquiry.param.InquiresGetByUserIdParam;
 import net.lodgames.inquiry.param.InquiresGetParam;
 import net.lodgames.inquiry.param.InquiryAddParam;
 import net.lodgames.inquiry.param.InquiryModParam;
@@ -39,16 +40,22 @@ public class InquiryService {
                 .build());
     }
 
-    // 문의 리스트
+    // 문의 확인 (유저)
     @Transactional(readOnly = true)
-    public List<InquiresGetVo> getInquires(InquiresGetParam inquiresGetParam) {
-        return inquiryQueryRepository.getInquires(inquiresGetParam.of());
+    public List<InquiresGetVo> getInquiresByUserId(Long userId, InquiresGetByUserIdParam inquiresGetByUserIdParam) {
+        return inquiryQueryRepository.getInquiresByUserId(userId, inquiresGetByUserIdParam.of());
     }
 
-    // 문의 확인
+    // 문의 확인 (관리자)
     @Transactional(readOnly = true)
     public InquiryGetVo getInquiry(Long inquiryId) {
         return inquiryMapper.updateInquiryToVo(retrieve(inquiryId));
+    }
+
+    // 문의 리스트 (관리자)
+    @Transactional(readOnly = true)
+    public List<InquiresGetVo> getInquires(InquiresGetParam inquiresGetParam) {
+        return inquiryQueryRepository.getInquires(inquiresGetParam.of());
     }
 
     // 문의 해결

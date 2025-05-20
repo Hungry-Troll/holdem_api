@@ -3,6 +3,7 @@ package net.lodgames.inquiry.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.security.UserPrincipal;
+import net.lodgames.inquiry.param.InquiresGetByUserIdParam;
 import net.lodgames.inquiry.param.InquiresGetParam;
 import net.lodgames.inquiry.param.InquiryAddParam;
 import net.lodgames.inquiry.param.InquiryModParam;
@@ -29,25 +30,27 @@ public class InquiryController {
         return ResponseEntity.ok().build();
     }
 
-    // 전체 문의 리스트 (관리자)
-//    @GetMapping("/inquires")
-//    public ResponseEntity<?> getInquires(@RequestBody InquiresGetParam inquiresGetParam,
-//                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
-//        return ResponseEntity.ok(inquiryService.getInquires(inquiresGetParam));
-//    }
-
-    // 전체 문의 리스트 (관리자)
-    @PostMapping("/inquires/all")
-    public ResponseEntity<?> getInquires(@RequestBody InquiresGetParam inquiresGetParam,
-                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(inquiryService.getInquires(inquiresGetParam));
+    // 문의 확인 (유저)
+    @GetMapping("/inquires")
+    public ResponseEntity<?> getInquiresByUserId(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                 @RequestBody InquiresGetByUserIdParam inquiresGetByUserIdParam) {
+        return ResponseEntity.ok(inquiryService.getInquiresByUserId(userPrincipal.getUserId(), inquiresGetByUserIdParam));
     }
+
+    // 이하 관리자 코드는 테스트용
 
     // 문의 확인 (관리자)
     @GetMapping("/inquires/{id}")
     public ResponseEntity<?> getInquiry(@PathVariable(name = "id") Long inquiryId,
                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(inquiryService.getInquiry(inquiryId));
+    }
+
+    // 전체 문의 리스트 (관리자)
+    @GetMapping("/inquires/all")
+    public ResponseEntity<?> getInquires(@RequestBody InquiresGetParam inquiresGetParam,
+                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(inquiryService.getInquires(inquiresGetParam));
     }
 
     // 문의 해결 (관리자)

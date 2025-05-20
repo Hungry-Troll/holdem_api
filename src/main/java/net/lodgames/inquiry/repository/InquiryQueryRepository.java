@@ -18,7 +18,7 @@ public class InquiryQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    // 전체 조회
+    // 전체 조회 (관리자)
     public List<InquiresGetVo> getInquires(Pageable pageable) {
         return jpaQueryFactory
                 .select(Projections.fields(InquiresGetVo.class,
@@ -28,6 +28,23 @@ public class InquiryQueryRepository {
                     inquiry.createdAt
                 ))
                 .from(inquiry)
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .orderBy(inquiry.id.asc())
+                .fetch();
+    }
+
+    // 전체 조회 (유저)
+    public List<InquiresGetVo> getInquiresByUserId(Long userId, Pageable pageable) {
+        return jpaQueryFactory
+                .select(Projections.fields(InquiresGetVo.class,
+                    inquiry.userId,
+                    inquiry.type,
+                    inquiry.status,
+                    inquiry.createdAt
+                ))
+                .from(inquiry)
+                .where(inquiry.userId.eq(userId))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(inquiry.id.asc())

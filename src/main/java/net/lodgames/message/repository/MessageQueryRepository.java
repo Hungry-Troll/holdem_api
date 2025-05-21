@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static net.lodgames.message.model.QMessage.message;
+import static net.lodgames.profile.model.QProfile.profile;
 
 @Repository
 @AllArgsConstructor
@@ -27,11 +28,14 @@ public class MessageQueryRepository {
                 message.receiverId,
                 message.content,
                 message.createdAt,
-                message.readAt
+                message.readAt,
+                profile.image,
+                profile.basicImageIdx
                 ))
                 .from(message)
-                .where(message.receiverId.eq(param.getReceiverId()))
-                .where(message.deletedAt.isNull())
+                .where(message.receiverId.eq(param.getReceiverId()),
+                       message.deletedAt.isNull())
+                .join(profile).on(message.senderId.eq(profile.userId)) // 프로필과 조인
                 .orderBy(message.id.desc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())

@@ -12,11 +12,18 @@ import java.time.LocalDateTime;
 public class FriendBlockVo {
     @JsonIgnore
     private long id;
+
+    // friend_block
     @JsonIgnore
     private long userId;
     private long friendId;
     private LocalDateTime createdAt;
+
+    // account
     private UserStatus status;
+
+    // profile
     private String nickname;
     private String image;
+    private Integer basicImageIdx;
 }

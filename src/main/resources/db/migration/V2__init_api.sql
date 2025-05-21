@@ -4,7 +4,7 @@ CREATE TABLE `profile`
     `user_id`         bigint    NOT NULL COMMENT '유저고유번호',
     `nickname`        varchar(100)       DEFAULT NULL COMMENT '닉네임',
     `image`           varchar(100)       DEFAULT NULL COMMENT '이미지 경로',
-    `basic_image_idx` tinyint            DEFAULT 0 COMMENT '기본 프로필 이미지',
+    `basic_image_idx` int                DEFAULT 0 COMMENT '기본 프로필 이미지',
     `created_at`      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     `updated_at`      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
     PRIMARY KEY (`id`)
@@ -64,13 +64,14 @@ CREATE TABLE `friend_request`
 
 CREATE TABLE `message`
 (
-    id          bigint       NOT NULL AUTO_INCREMENT COMMENT '메세지 고유번호',
-    sender_id   bigint       NOT NULL COMMENT '메세지 보낸 유저 고유번호',
-    receiver_id bigint       NOT NULL COMMENT '메시지 받은 유저 고유번호',
-    content     varchar(255) NULL COMMENT '메세지 내용',
-    created_at  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
-    read_at     timestamp    NULL COMMENT '읽은시각',
-    deleted_at  timestamp    NULL COMMENT '삭제시각',
+    id              bigint       NOT NULL AUTO_INCREMENT COMMENT '메세지 고유번호',
+    sender_id       bigint       NOT NULL COMMENT '메세지 보낸 유저 고유번호',
+    receiver_id     bigint       NOT NULL COMMENT '메시지 받은 유저 고유번호',
+    content         varchar(255) NULL COMMENT '메세지 내용',
+    basic_image_idx int      NULL COMMENT '기본 프로필 이미지',
+    created_at      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    read_at         timestamp    NULL COMMENT '읽은시각',
+    deleted_at      timestamp    NULL COMMENT '삭제시각',
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

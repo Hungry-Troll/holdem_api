@@ -17,7 +17,6 @@ import java.io.IOException;
 public class GooglePaymentUtil {
 
     private final GoogleCredentials credentials;
-    private final ObjectMapper objectMapper; // JSON 파싱을 위한 ObjectMapper 객체
 
     public String getAccessToken() throws IOException {
         if (credentials == null) {
@@ -41,6 +40,7 @@ public class GooglePaymentUtil {
 
     // receipt JSON 파싱
     private GooglePaymentReceiptParsedVo processParser(String receipt) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
         // String으로 받은 JSON을 JsonNode로 파싱
         JsonNode receiptNode = objectMapper.readTree(receipt);
         // Payload 부분 추출

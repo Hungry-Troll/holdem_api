@@ -24,4 +24,5 @@ public class FriendReqSendVo {
     // profile
     private String nickname;
     private String image;
+    private Integer basicImageIdx;
 }

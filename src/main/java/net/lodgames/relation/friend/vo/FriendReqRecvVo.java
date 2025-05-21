@@ -27,4 +27,5 @@ public class FriendReqRecvVo {
     // profile
     private String nickname;
     private String image;
+    private Integer basicImageIdx;
 }

@@ -19,7 +19,6 @@ import static net.lodgames.user.model.QUsers.users;
 public class FriendBlockQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-
     public List<FriendBlockVo> selectFriendBlockByUserId(FriendListParam friendListParam, Pageable pageable){
         return jpaQueryFactory
                 .select(Projections.fields(FriendBlockVo.class,

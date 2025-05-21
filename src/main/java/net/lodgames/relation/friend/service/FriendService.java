@@ -7,10 +7,7 @@ import net.lodgames.config.error.exception.RestException;
 import net.lodgames.event.constant.UserEventType;
 import net.lodgames.event.service.UserEventService;
 import net.lodgames.relation.friend.model.Friend;
-import net.lodgames.relation.friend.param.FriendDeleteParam;
-import net.lodgames.relation.friend.param.FriendInfoParam;
-import net.lodgames.relation.friend.param.FriendListParam;
-import net.lodgames.relation.friend.param.FriendSearchParam;
+import net.lodgames.relation.friend.param.*;
 import net.lodgames.relation.friend.repository.FriendBlockRepository;
 import net.lodgames.relation.friend.repository.FriendQueryRepository;
 import net.lodgames.relation.friend.repository.FriendRepository;
@@ -85,6 +82,12 @@ public class FriendService {
         // 친구 삭제 알림
         String extData = userEventService.getSimpleExtData(userId);
         userEventService.setUserEvent(SOURCE_FRIEND_DELETE, UserEventType.FRIEND_DELETE, userId, friendId, extData);
+    }
+
+    // 친구 전체 숫자
+    @Transactional(rollbackFor = {Exception.class})
+    public long getFriendCount(long userId) {
+        return friendRepository.countByUserId(userId);
     }
 
     // 친구 닉네임 검색

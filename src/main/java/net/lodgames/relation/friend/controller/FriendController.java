@@ -1,10 +1,7 @@
 package net.lodgames.relation.friend.controller;
 
 import net.lodgames.config.security.UserPrincipal;
-import net.lodgames.relation.friend.param.FriendDeleteParam;
-import net.lodgames.relation.friend.param.FriendInfoParam;
-import net.lodgames.relation.friend.param.FriendListParam;
-import net.lodgames.relation.friend.param.FriendSearchParam;
+import net.lodgames.relation.friend.param.*;
 import net.lodgames.relation.friend.service.FriendService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import net.lodgames.relation.friend.vo.FriendVo;
@@ -51,6 +48,12 @@ public class FriendController {
                     .friendId(friendId)
                     .build());
         return ResponseEntity.ok().build();
+    }
+
+    // 친구 전체 숫자
+    @GetMapping("/friends/count")
+    public ResponseEntity<?> friendCount(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(friendService.getFriendCount(userPrincipal.getUserId()));
     }
 
     // 친구 닉네임 검색

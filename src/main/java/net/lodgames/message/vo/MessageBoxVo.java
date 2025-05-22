@@ -14,6 +14,7 @@ public class MessageBoxVo {
     private long receiverId;
     private String content;
     // Profile
+    private String nickname;
     private String image;
     private int basicImageIdx;
     // Message

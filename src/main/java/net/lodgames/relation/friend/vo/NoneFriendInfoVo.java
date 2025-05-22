@@ -12,5 +12,6 @@ public class NoneFriendInfoVo {
     // profile(none friend)
     private String image;
     private String nickname;
+    private int basicImageIdx;
     private boolean isRequest;
 }

@@ -29,6 +29,7 @@ public class MessageQueryRepository {
                 message.content,
                 message.createdAt,
                 message.readAt,
+                profile.nickname,
                 profile.image,
                 profile.basicImageIdx
                 ))

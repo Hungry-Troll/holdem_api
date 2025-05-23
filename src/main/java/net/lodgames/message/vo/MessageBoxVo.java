@@ -13,6 +13,7 @@ public class MessageBoxVo {
     private long senderId;
     private long receiverId;
     private String content;
+    private boolean isRead;
     // Profile
     private String nickname;
     private String image;

@@ -4,8 +4,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
 import net.lodgames.storage.constants.StorageStatus;
+import net.lodgames.storage.param.StorageReceiveHistoryParam;
 import net.lodgames.storage.param.StorageReadParam;
 import net.lodgames.storage.param.StoragesGetParam;
+import net.lodgames.storage.vo.StorageReceiveHistoryVo;
 import net.lodgames.storage.vo.StoragesGetVo;
 import net.lodgames.storage.vo.StorageReadVo;
 import org.springframework.data.domain.Pageable;
@@ -90,6 +92,42 @@ public class StorageQueryRepository {
                 .leftJoin(storageBundle).on(storage.id.eq(storageBundle.storageId))
                 .leftJoin(storageItem).on(storage.id.eq(storageItem.storageId))
                 .orderBy(storage.id.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
+    }
+
+    // 보관함 수령 이력 조회
+    public List<StorageReceiveHistoryVo> receiveStorageHistory(StorageReceiveHistoryParam param, Pageable pageable) {
+        return jpaQueryFactory
+                .select(Projections.fields(StorageReceiveHistoryVo.class,
+                        storage.id,
+                        storage.receiverId,
+                        storage.senderId,
+                        storage.title,
+                        storage.description,
+                        storage.status,
+                        storage.contentType,
+                        storage.senderType,
+                        storage.expiryDate,
+                        storage.readAt.isNotNull().as("isRead"),
+                        storage.createdAt,
+                        storage.updatedAt,
+                        storage.deletedAt,
+                        storageCurrency.currencyType,
+                        storageCurrency.currencyAmount,
+                        storageItem.itemId,
+                        storageItem.itemNum,
+                        storageBundle.bundleId
+                ))
+                .from(storage)
+                .where(storage.receiverId.eq(param.getReceiverId())
+                        .and(storage.deletedAt.isNotNull())
+                        .and(storage.status.eq(StorageStatus.RECEIVED)))
+                .leftJoin(storageCurrency).on(storage.id.eq(storageCurrency.storageId))
+                .leftJoin(storageBundle).on(storage.id.eq(storageBundle.storageId))
+                .leftJoin(storageItem).on(storage.id.eq(storageItem.storageId))
+                .orderBy(storage.id.asc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();

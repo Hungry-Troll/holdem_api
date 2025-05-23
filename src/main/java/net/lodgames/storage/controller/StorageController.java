@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.security.UserPrincipal;
 import net.lodgames.storage.param.StorageReadParam;
+import net.lodgames.storage.param.StorageReceiveHistoryParam;
 import net.lodgames.storage.param.StoragesGetParam;
 import net.lodgames.storage.service.StorageService;
 import net.lodgames.storage.param.StorageDeleteParam;
@@ -36,6 +37,14 @@ public class StorageController {
                                          @AuthenticationPrincipal UserPrincipal userPrincipal) {
         storagesGetParam.setReceiverId(userPrincipal.getUserId());
         return ResponseEntity.ok(storageService.getStorages(storagesGetParam));
+    }
+
+    // 보관함 수령 이력 조회
+    @GetMapping("/storages/receive-history")
+    public ResponseEntity<?> receiveStorageHistory(@RequestBody StorageReceiveHistoryParam storageReceiveHistoryParam,
+                                               @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        storageReceiveHistoryParam.setReceiverId(userPrincipal.getUserId());
+        return ResponseEntity.ok(storageService.receiveStorageHistory(storageReceiveHistoryParam));
     }
 
     // 보관함 삭제 (Admin 사용)

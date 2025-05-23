@@ -5,11 +5,13 @@ import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.storage.model.Storage;
 import net.lodgames.storage.param.StorageDeleteParam;
+import net.lodgames.storage.param.StorageReceiveHistoryParam;
 import net.lodgames.storage.param.StorageReadParam;
 import net.lodgames.storage.param.StoragesGetParam;
 import net.lodgames.storage.repository.StorageQueryRepository;
 import net.lodgames.storage.repository.StorageRepository;
 import net.lodgames.storage.service.util.StorageValidatorService;
+import net.lodgames.storage.vo.StorageReceiveHistoryVo;
 import net.lodgames.storage.vo.StorageReadVo;
 import net.lodgames.storage.vo.StoragesGetVo;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,12 @@ public class StorageService {
     @Transactional(rollbackFor = {Exception.class})
     public List<StoragesGetVo> getStorages(StoragesGetParam storagesGetParam) {
         return storageQueryRepository.getStorages(storagesGetParam, storagesGetParam.of());
+    }
+
+    // 보관함 수령 이력 조회
+    @Transactional(rollbackFor = {Exception.class})
+    public List<StorageReceiveHistoryVo> receiveStorageHistory(StorageReceiveHistoryParam storageReceiveHistoryParam) {
+        return storageQueryRepository.receiveStorageHistory(storageReceiveHistoryParam, storageReceiveHistoryParam.of());
     }
 
     // 보관함 삭제

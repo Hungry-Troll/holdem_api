@@ -28,14 +28,14 @@ public class MessageQueryRepository {
                 message.receiverId,
                 message.content,
                 message.createdAt,
-                message.readAt,
+                message.readAt.isNotNull().as("isRead"),
                 profile.nickname,
                 profile.image,
                 profile.basicImageIdx
                 ))
                 .from(message)
-                .where(message.receiverId.eq(param.getReceiverId()),
-                       message.deletedAt.isNull())
+                .where(message.receiverId.eq(param.getReceiverId())
+                        .and(message.deletedAt.isNull()))
                 .join(profile).on(message.senderId.eq(profile.userId)) // 프로필과 조인
                 .orderBy(message.id.desc())
                 .limit(pageable.getPageSize())
@@ -50,11 +50,16 @@ public class MessageQueryRepository {
                         message.senderId,
                         message.receiverId,
                         message.content,
-                        message.createdAt
+                        message.createdAt,
+                        message.readAt.isNotNull().as("isRead"),
+                        profile.nickname,
+                        profile.image,
+                        profile.basicImageIdx
                         ))
                         .from(message)
-                        .where(message.senderId.eq(param.getSenderId()))
-                        .where(message.deletedAt.isNull())
+                        .where(message.senderId.eq(param.getSenderId())
+                                .and(message.deletedAt.isNull()))
+                        .join(profile).on(message.receiverId.eq(profile.userId)) // 프로필과 조인
                         .orderBy(message.id.desc())
                         .limit(pageable.getPageSize())
                         .offset(pageable.getOffset())

@@ -26,8 +26,8 @@ import java.util.stream.Stream;
 @RestController
 public class ErrorCodeExporterController {
     // test method
-    @GetMapping("/api/test/error_code")
-    public ResponseEntity<?> error_code() throws Exception{
+    @GetMapping("/api/test/errorCode")
+    public ResponseEntity<?> errorCode() throws Exception{
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
         List<String[]> codes = new ArrayList<>();

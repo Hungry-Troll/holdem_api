@@ -27,15 +27,15 @@ public class CustomErrorAttributes extends DefaultErrorAttributes {
             errorAttributes.put("timestamp", ResponseConstants.DATE_FORMAT.format((Date) timestamp));
         }
 
-        int error_code = 99000;
+        int errorCode = 99000;
         Object statusObj = errorAttributes.get("status");
 
         if (statusObj != null) {
             int status = (Integer) statusObj;
-            error_code = error_code + status;
+            errorCode = errorCode + status;
         }
 
-        errorAttributes.put("error_code", error_code);
+        errorAttributes.put("errorCode", errorCode);
 
         errorAttributes.remove("error");
         errorAttributes.remove("status");

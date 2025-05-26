@@ -26,6 +26,7 @@ public class StorageReceiveHistoryVo {
     private StorageSenderType senderType;
     private StorageContentType contentType;
     private LocalDateTime expiryDate;
+    private LocalDateTime updatedAt;
     private Boolean isRead;
     // StorageCurrency
     private long currencyAmount;

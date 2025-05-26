@@ -14,13 +14,16 @@ public class FriendInfoVo {
     @JsonIgnore
     private long id;
     // user (userId = friendId)
-    private long friendId;
+    private long friendId; // 친구의 userId
     private UserStatus status;
     // profile(friend)
     private String nickname;
     private String image;
     private Integer basicImageIdx;
+    //
+    private Boolean isFriend; // 친구 여부
+    private Boolean isBlock; // 차단 여부
     // friend
-    private LocalDateTime createdAt; // 만든날짜
-    private LocalDateTime updatedAt; // 변경일
+    //private LocalDateTime createdAt; // 만든날짜
+    //private LocalDateTime updatedAt; // 변경일
 }

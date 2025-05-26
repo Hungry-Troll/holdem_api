@@ -90,7 +90,7 @@ public class FriendRequestService {
             throw new RestException(ErrorCode.FAIL_ADD_FRIEND_REQUEST_BLOCKED_FRIEND_BY_USER);
         }
 
-        // 친구가 나에게 이미 친구가 나를 추가했는지 확인 만약 있다면 친구관계로 변경
+        // 친가 나에게 이미 친구가 나를 추가했는지 확인 만약 있다면 친구구관계로 변경
         boolean isAdded = deleteRequestAndAddFriends(sender, receiver);
         if (isAdded) {
             return;

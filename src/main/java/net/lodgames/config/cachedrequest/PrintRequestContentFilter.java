@@ -19,7 +19,7 @@ import java.io.InputStream;
 @Slf4j
 @Order
 @Component
-@Profile({"default","dev"})
+@Profile({"default","dev","compose"})
 @WebFilter(filterName = "printRequestContentFilter", urlPatterns = "/api/*")
 public class PrintRequestContentFilter extends OncePerRequestFilter {
     private static final String HEALTH_CHECK_URL = "/hello";

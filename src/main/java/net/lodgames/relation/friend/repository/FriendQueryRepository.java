@@ -1,11 +1,11 @@
 package net.lodgames.relation.friend.repository;
 
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.dsl.Expressions;
 import net.lodgames.relation.friend.param.FriendInfoParam;
 import net.lodgames.relation.friend.param.FriendListParam;
 import net.lodgames.relation.friend.param.FriendSearchParam;
-import net.lodgames.relation.friend.vo.FriendInfoVo;
-import net.lodgames.relation.friend.vo.FriendSearchVo;
-import net.lodgames.relation.friend.vo.FriendVo;
+import net.lodgames.relation.friend.vo.*;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 import static net.lodgames.profile.model.QProfile.profile;
@@ -48,23 +49,43 @@ public class FriendQueryRepository {
                 .fetch();
     }
 
-    public FriendInfoVo selectFriendByFriendId(FriendInfoParam friendInfoParam){
+    // 친구 정보 조회
+//    public FriendInfoVo selectFriendByFriendId(FriendInfoParam friendInfoParam, boolean isFriend, boolean isBlocked) {
+//        return jpaQueryFactory.select(Projections.bean(FriendInfoVo.class,
+//                        friend.id,
+//                        friend.friendId,
+//                        //users.userId,
+//                        users.status,
+//                        profile.nickname,
+//                        profile.image,
+//                        profile.basicImageIdx,
+//                        ExpressionUtils.as(Expressions.constant(isFriend), "isFriend"),
+//                        ExpressionUtils.as(Expressions.constant(isBlocked), "isBlock"),
+//                        friend.createdAt,
+//                        friend.updatedAt
+//                ))
+//                .from(friend)
+//                .join(users).on(users.userId.eq(friend.friendId))
+//                .leftJoin(profile).on(profile.userId.eq(users.userId))
+//                .where(friend.userId.eq(friendInfoParam.getUserId())
+//                        .and(friend.friendId.eq(friendInfoParam.getFriendId())))
+//                .fetchOne();
+//    }
+
+    // 친구 정보 조회 (사실 유저 정보 조회에 가까움)
+    public FriendInfoVo selectFriendByFriendId(FriendInfoParam friendInfoParam, boolean isFriend, boolean isBlocked) {
         return jpaQueryFactory.select(Projections.bean(FriendInfoVo.class,
-                        friend.id,
-                        friend.friendId,
-                        //users.userId,
+                        users.userId.as("friendId"),
                         users.status,
                         profile.nickname,
                         profile.image,
                         profile.basicImageIdx,
-                        friend.createdAt,
-                        friend.updatedAt
+                        ExpressionUtils.as(Expressions.constant(isFriend), "isFriend"),
+                        ExpressionUtils.as(Expressions.constant(isBlocked), "isBlock")
                 ))
-                .from(friend)
-                .join(users).on(users.userId.eq(friend.friendId))
+                .from(users)
                 .leftJoin(profile).on(profile.userId.eq(users.userId))
-                .where(friend.userId.eq(friendInfoParam.getUserId())
-                        .and(friend.friendId.eq(friendInfoParam.getFriendId())))
+                .where(users.userId.eq(friendInfoParam.getFriendId()))
                 .fetchOne();
     }
 

@@ -8,12 +8,11 @@ import net.lodgames.event.constant.UserEventType;
 import net.lodgames.event.service.UserEventService;
 import net.lodgames.relation.friend.model.Friend;
 import net.lodgames.relation.friend.param.*;
+import net.lodgames.relation.friend.repository.FriendBlockQueryRepository;
 import net.lodgames.relation.friend.repository.FriendBlockRepository;
 import net.lodgames.relation.friend.repository.FriendQueryRepository;
 import net.lodgames.relation.friend.repository.FriendRepository;
-import net.lodgames.relation.friend.vo.FriendInfoVo;
-import net.lodgames.relation.friend.vo.FriendSearchVo;
-import net.lodgames.relation.friend.vo.FriendVo;
+import net.lodgames.relation.friend.vo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +24,7 @@ import java.util.List;
 public class FriendService {
     private static final String SOURCE_FRIEND_DELETE = "/api/friend/deleteFriend";
     private final FriendQueryRepository friendQueryRepository;
+    private final FriendBlockQueryRepository friendBlockQueryRepository;
     private final FriendRepository friendRepository;
     private final FriendBlockRepository friendBlockRepository;
     private final UserEventService userEventService;
@@ -42,7 +42,13 @@ public class FriendService {
         if (param.getUserId() == param.getFriendId()) {
             throw new RestException(ErrorCode.FOUND_USER_IS_ME);
         }
-        FriendInfoVo friendInfoVo = friendQueryRepository.selectFriendByFriendId(param);
+        long userId = param.getUserId();
+        long friendId = param.getFriendId();
+
+        boolean isFriend = isFriend(userId, friendId); // 친구 관계인지 확인
+        boolean isBlocked = isBlocked(userId, friendId); // 차단 당했는지 확인
+
+        FriendInfoVo friendInfoVo = friendQueryRepository.selectFriendByFriendId(param, isFriend, isBlocked);
         if (friendInfoVo == null) {
             throw new RestException(ErrorCode.NOT_FOUND_FRIEND);
         }
@@ -53,9 +59,9 @@ public class FriendService {
     private void deleteFriend(long userId, long friendId, boolean isStrict) {
         Friend friend;
         try {
-            friend = retrieveFriend(userId,friendId);
+            friend = retrieveFriend(userId, friendId);
             friendRepository.delete(friend);
-        } catch (RestException e){
+        } catch (RestException e) {
             if (isStrict) {
                 throw new RestException(ErrorCode.FAIL_DELETE_FRIEND);
             }
@@ -68,7 +74,6 @@ public class FriendService {
                 new RestException(ErrorCode.NOT_FOUND_FRIEND)
         );
     }
-
 
     // 친구 관계 삭제
     @Transactional(rollbackFor = {Exception.class})
@@ -86,8 +91,10 @@ public class FriendService {
 
     // 친구 전체 숫자
     @Transactional(rollbackFor = {Exception.class})
-    public long getFriendCount(long userId) {
-        return friendRepository.countByUserId(userId);
+    public FriendCountVo getFriendCount(long userId) {
+        return FriendCountVo.builder()
+                .friendCount(friendRepository.countByUserId(userId))
+                .build();
     }
 
     // 친구 닉네임 검색
@@ -95,7 +102,6 @@ public class FriendService {
     public List<FriendSearchVo> searchFriend(FriendSearchParam friendSearchParam) {
         return friendQueryRepository.selectFriendByNickName(friendSearchParam, friendSearchParam.of());
     }
-
 
     // 친구 관계인지 확인
     public boolean isFriend(long userId, long friendId) {

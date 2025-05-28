@@ -39,7 +39,7 @@ public class Item {
     private ItemPeriodType periodType; // 기간타입 NONE(0), DAY(1), MONTH(2), EXPIRATION(2)
     private Integer period;            // 기간
     private LocalDateTime expiration;  // 만료기한
-    private CurrencyType currencyType; // 재화타입 DIAMOND(0), COIN(1), CHIP(2), FREE(3), EVENT(4)
+    private CurrencyType currencyType; // 재화타입 DIAMOND(0), COIN(1), GOLD(2), FREE(3), EVENT(4)
     private Integer amount;            // 가격
     @CreatedDate
     private LocalDateTime createdAt;   // 만든날짜

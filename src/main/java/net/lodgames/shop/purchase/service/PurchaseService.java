@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
 import net.lodgames.currency.common.constants.CurrencyType;
-import net.lodgames.currency.chip.service.ChipService;
+import net.lodgames.currency.gold.service.GoldService;
 import net.lodgames.currency.coin.service.CoinService;
 import net.lodgames.shop.bundle.constants.BundleStatus;
 import net.lodgames.shop.bundle.model.Bundle;
@@ -48,7 +48,7 @@ public class PurchaseService {
     private final CollectionService collectionService;
     private final BundleItemRepository bundleItemRepository;
     private final BundleCurrencyRepository bundleCurrencyRepository;
-    private final ChipService chipService;
+    private final GoldService goldService;
 
     // 구매 리스트
     @Transactional(readOnly = true)
@@ -136,7 +136,7 @@ public class PurchaseService {
             case DIAMOND, COIN -> PurchaseType.BUY; // 재화(상품 구매) -> 구매 보유
             case EVENT -> PurchaseType.EVENT;       // 이벤트 -> 이벤트 보유
             case FREE -> PurchaseType.FREE;         // 무료 -> 무료 보유
-            case CHIP -> null;                      // note : chip 은 물건 구매가 불가능하고 게임만 진행됨
+            case GOLD -> null;                      // note : gold 은 물건 구매가 불가능하고 게임만 진행됨
         };
     }
 
@@ -172,8 +172,8 @@ public class PurchaseService {
             // 코인 지급
             if (Objects.requireNonNull(currencyType) == CurrencyType.COIN) {
                 coinService.addCoinByBundleTransaction(userId, count);
-            } else if (Objects.requireNonNull(currencyType) == CurrencyType.CHIP) {
-                chipService.addChipByBundleTransaction(userId, count);
+            } else if (Objects.requireNonNull(currencyType) == CurrencyType.GOLD) {
+                goldService.addGoldByBundleTransaction(userId, count);
             }
         }
         return bundle;

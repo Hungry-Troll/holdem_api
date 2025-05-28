@@ -49,7 +49,7 @@ public class StorageItemService {
         switch (findItem.getCurrencyType()) {
             case DIAMOND:
             case COIN:
-            case CHIP:
+            case GOLD:
                 throw new RestException(ErrorCode.FAIL_STORAGE_ITEM_NOT_ENOUGH_STOCK);
         }
 

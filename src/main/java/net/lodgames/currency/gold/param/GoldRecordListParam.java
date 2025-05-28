@@ -1,4 +1,4 @@
-package net.lodgames.currency.chip.param;
+package net.lodgames.currency.gold.param;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import net.lodgames.common.param.PagingParam;
 
 @Getter
 @Setter
-public class ChipRecordListParam extends PagingParam {
+public class GoldRecordListParam extends PagingParam {
     @JsonIgnore
     private long userId;
 }

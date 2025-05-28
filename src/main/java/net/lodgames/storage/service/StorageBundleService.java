@@ -45,7 +45,7 @@ public class StorageBundleService {
         switch (findBundle.getCurrencyType()) {
             case DIAMOND:
             case COIN:
-            case CHIP:
+            case GOLD:
                 throw new RestException(ErrorCode.FAIL_STORAGE_BUNDLE_NOT_ENOUGH_STOCK);
         }
 

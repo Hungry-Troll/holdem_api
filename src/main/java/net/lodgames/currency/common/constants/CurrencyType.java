@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum CurrencyType {
     DIAMOND(0),
     COIN(1),
-    CHIP(2),
+    GOLD(2),
     FREE(3),
     EVENT(4)
     ;

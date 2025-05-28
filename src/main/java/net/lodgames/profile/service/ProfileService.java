@@ -86,17 +86,16 @@ public class ProfileService {
     @Transactional(rollbackFor = {Exception.class})
     protected Profile retrieveProfile(Long userId) {
         return profileRepository.findByUserId(userId)
-                .orElseGet(() -> {
-                    if (!userRepository.existsByUserId(userId)) {
-                        throw new RestException(ErrorCode.USER_NOT_EXIST);
-                    }
-                    return addBasicProfile(userId, createRandomNickName());
-                });
+                .orElseThrow(() -> new RestException(ErrorCode.PROFILE_NOT_EXIST));
     }
 
-    public Profile addBasicProfile(long userId, String nickname) {
+    public void addBasicProfile(long userId, String nickname) {
+        // 기본 프로필이 없을 경우 기본 프로필 추가
+        if (profileRepository.existsByUserId(userId)) {
+            throw new RestException(ErrorCode.EXIST_PROFILE);
+        }
         // 기본 프로필 추가
-        return saveProfile(userId, nickname, "", 0);
+        saveProfile(userId, nickname, "", 0);
     }
 
     // 프로필 저장

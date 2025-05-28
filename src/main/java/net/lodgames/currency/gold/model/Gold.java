@@ -1,4 +1,4 @@
-package net.lodgames.currency.chip.model;
+package net.lodgames.currency.gold.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "chip")
+@Entity(name = "gold")
 @EntityListeners(AuditingEntityListener.class)
 @Builder
-public class Chip {
+public class Gold {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

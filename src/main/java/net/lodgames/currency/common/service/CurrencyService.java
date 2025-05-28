@@ -3,8 +3,8 @@ package net.lodgames.currency.common.service;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.currency.chip.model.Chip;
-import net.lodgames.currency.chip.repository.ChipRepository;
+import net.lodgames.currency.gold.model.Gold;
+import net.lodgames.currency.gold.repository.GoldRepository;
 import net.lodgames.currency.coin.model.Coin;
 import net.lodgames.currency.coin.repository.CoinRepository;
 import net.lodgames.currency.common.repository.CurrencyQueryRepository;
@@ -22,7 +22,7 @@ public class CurrencyService {
     private final CurrencyQueryRepository currencyQueryRepository;
     private final CoinRepository coinRepository;
     private final DiamondRepository diamondRepository;
-    private final ChipRepository chipRepository;
+    private final GoldRepository goldRepository;
 
     // 모든 재화 정보를 조회한다.
     public CurrencyVo getCurrencies(long userId, Os os) {
@@ -50,15 +50,15 @@ public class CurrencyService {
                             .paidAmount(0L)
                             .build())
                     );
-            Chip chip = chipRepository.findByUserId(userId)
-                    .orElseGet(() -> chipRepository.save(Chip.builder()
+            Gold gold = goldRepository.findByUserId(userId)
+                    .orElseGet(() -> goldRepository.save(Gold.builder()
                             .userId(userId)
                             .amount(0L)
                             .build())
                     );
             return CurrencyVo.builder()
                     .userId(userId)
-                    .chipAmount(chip.getAmount())
+                    .goldAmount(gold.getAmount())
                     .coinAmount(coin.getAmount())
                     .diamondAmount(diamond.getTotalAmount(os))
                     .build();
@@ -82,8 +82,8 @@ public class CurrencyService {
                     .paidAmount(0L)
                     .build());
         }
-        if(!chipRepository.existsByUserId(userId)) {
-            chipRepository.save(Chip.builder()
+        if(!goldRepository.existsByUserId(userId)) {
+            goldRepository.save(Gold.builder()
                     .userId(userId)
                     .amount(0L)
                     .build());

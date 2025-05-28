@@ -15,7 +15,7 @@ public class CurrencyVo {
     @Getter
     private Long coinAmount;    // 코인 합계
     @Getter
-    private Long chipAmount;    // 칩 합계
+    private Long goldAmount;    // 골드 합계
     private Long diamondAmount; // 다이아몬드 합계
     @JsonIgnore
     private Long freeAmount;

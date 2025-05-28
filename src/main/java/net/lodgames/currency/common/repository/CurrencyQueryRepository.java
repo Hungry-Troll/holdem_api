@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import net.lodgames.currency.common.vo.CurrencyVo;
 import org.springframework.stereotype.Repository;
 
-import static net.lodgames.currency.chip.model.QChip.chip;
+import static net.lodgames.currency.gold.model.QGold.gold;
 import static net.lodgames.currency.coin.model.QCoin.coin;
 import static net.lodgames.currency.diamond.model.QDiamond.diamond;
 
@@ -19,14 +19,14 @@ public class CurrencyQueryRepository {
     public CurrencyVo findCurrenciesByUserId(Long userId) {
         return jpaQueryFactory.select(Projections.fields(CurrencyVo.class,
                         coin.amount.as("coinAmount"),
-                        chip.amount.as("chipAmount"),
+                        gold.amount.as("goldAmount"),
                         diamond.iosAmount,
                         diamond.androidAmount,
                         diamond.paidAmount,
                         diamond.freeAmount
                         //, diamond.amount.as("diamondAmount")
                 )).from(coin)
-                .leftJoin(chip).on(coin.userId.eq(chip.userId))
+                .leftJoin(gold).on(coin.userId.eq(gold.userId))
                 .leftJoin(diamond).on(coin.userId.eq(diamond.userId))
                 .where(coin.userId.eq(userId))
                 .orderBy(coin.createdAt.desc())

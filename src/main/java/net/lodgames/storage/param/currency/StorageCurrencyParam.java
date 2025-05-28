@@ -25,6 +25,6 @@ public class StorageCurrencyParam {
     private StorageSenderType senderType;    // USER(0),ADMIN(1)
     private StorageContentType contentType;  // CURRENCY(0),ITEM(1),BUNDLE(2)
     // StorageCurrencyType
-    private CurrencyType currencyType;       // DIAMOND(0),COIN(1),CHIP(2),FREE(3),EVENT(4)
+    private CurrencyType currencyType;       // DIAMOND(0),COIN(1),GOLD(2),FREE(3),EVENT(4)
     private Long currencyAmount;
 }

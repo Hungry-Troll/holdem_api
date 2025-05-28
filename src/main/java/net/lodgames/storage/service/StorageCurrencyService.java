@@ -3,7 +3,7 @@ package net.lodgames.storage.service;
 import lombok.AllArgsConstructor;
 import net.lodgames.config.error.ErrorCode;
 import net.lodgames.config.error.exception.RestException;
-import net.lodgames.currency.chip.service.ChipService;
+import net.lodgames.currency.gold.service.GoldService;
 import net.lodgames.currency.coin.service.CoinService;
 import net.lodgames.currency.common.constants.CurrencyType;
 import net.lodgames.currency.diamond.service.DiamondService;
@@ -36,7 +36,7 @@ public class StorageCurrencyService {
     // 재화 관련
     private final CoinService coinService;
     private final DiamondService diamondService;
-    private final ChipService chipService;
+    private final GoldService goldService;
 
     // 보관함 재화 보내기(user -> user)
     @Transactional(rollbackFor = Exception.class)
@@ -74,7 +74,7 @@ public class StorageCurrencyService {
         String generatedHash = storageHashGenerator.generateSHA1(storageId);
         switch (currencyType) {
             case COIN -> coinService.subCoinBySendStorage(senderId, currencyAmount, generatedHash);
-            case CHIP -> chipService.subChipBySendStorage(senderId, currencyAmount, generatedHash);
+            case GOLD -> goldService.subGoldBySendStorage(senderId, currencyAmount, generatedHash);
             case DIAMOND -> diamondService.subDiamondBySendStorage(senderId, currencyAmount, generatedHash, os);
         }
     }
@@ -141,7 +141,7 @@ public class StorageCurrencyService {
         String generatedHash = storageHashGenerator.generateSHA1(storageId);
         switch (currencyType) {
             case COIN -> coinService.addCoinByReceiveStorage(receiverId, currencyAmount, generatedHash);
-            case CHIP -> chipService.addChipByReceiveStorage(receiverId, currencyAmount, generatedHash);
+            case GOLD -> goldService.addGoldByReceiveStorage(receiverId, currencyAmount, generatedHash);
             case DIAMOND -> diamondService.addDiamondByReceiveStorage(receiverId, currencyAmount,generatedHash,  os);
         }
     }

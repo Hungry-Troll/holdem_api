@@ -90,6 +90,9 @@ public class ProfileService {
     }
 
     public void addBasicProfile(long userId, String nickname) {
+        if (nickname == null || nickname.trim().isEmpty()) {
+            nickname = createRandomNickName();
+        }
         // 기본 프로필이 없을 경우 기본 프로필 추가
         if (profileRepository.existsByUserId(userId)) {
             throw new RestException(ErrorCode.EXIST_PROFILE);

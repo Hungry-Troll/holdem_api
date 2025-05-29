@@ -22,25 +22,36 @@ import java.io.IOException;
 @Service
 @AllArgsConstructor
 public class GooglePaymentService {
-    // 서비스 계정 인증 정보
     private final GooglePaymentUtil googlePaymentUtil;
-    //
     private final GooglePaymentRepository googlePaymentRepository;
     private final GooglePaymentQueryRepository googlePaymentQueryRepository;
     // Google Play Developer API URL
     private static String CONSUME_URL = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/{packageName}/purchases/products/{productId}/tokens/{token}:consume";
     private static String VERIFY_URL = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/{packageName}/purchases/products/{productId}/tokens/{token}";
 
-    // 영수증 소비 처리
+    //===========================================================
+    // 영수증으로 소비 처리하는 메서드 //
+    //===========================================================
+    // 이 메서드는 영수증을 소비하고 검증하는 역할을 합니다.
+    // 과정은 다음과 같습니다:
+    // 1. 매개변수 영수증(receipt)을 파싱
+    // 2. 파싱 정보를 가지고 옴 : receiptParsedVo
+    // 3. 액세스 토큰 가지고 옴 : googlePaymentUtil.getAccessToken();
+    // 4. 소비 처리 Google Play API 호출
+    // 5. 영수증 검증 처리 Google Play API 호출
     @Transactional(rollbackFor = Exception.class)
     public GooglePaymentVerifyReceiptVo consumePurchase(String receipt, Long userId) throws IOException {
         // 영수증 파싱
         GooglePaymentReceiptParsedVo receiptParsedVo = googlePaymentUtil.receiptParser(receipt);
-        // TODO DB 검증 플로우 추가
+        // DB 검증
+        googlePaymentRepository.findByOrderId(receiptParsedVo.getOrderId())
+                .ifPresent(googlePayment -> {
+                    throw new RestException(ErrorCode.EXIST_GOOGLE_PAYMENT_ORDER);
+                });
 
         // 액세스 토큰 가져오기
         String accessToken = googlePaymentUtil.getAccessToken();
-        // Google Play API 호출
+        // Google Play API 호출 (소비 처리)
         ResponseEntity<String> response = callGoogleApi(receiptParsedVo, accessToken, CONSUME_URL, HttpMethod.POST);
         log.info("response.getStatusCode() : {}", response.getStatusCode());
         // 상태 코드 확인
@@ -70,7 +81,7 @@ public class GooglePaymentService {
 
     // 영수증 검증
     private GooglePaymentVerifyReceiptVo verifyReceipt(GooglePaymentReceiptParsedVo receiptParsedVo, String accessToken, Long userId) {
-        // Google Play API 호출
+        // Google Play API 호출 (검증 처리)
         ResponseEntity<String> response = callGoogleApi(receiptParsedVo, accessToken, VERIFY_URL, HttpMethod.GET);
         // 상태 코드 확인
         if (response.getStatusCode() != HttpStatus.OK) {
@@ -85,7 +96,6 @@ public class GooglePaymentService {
                                                     .productId(receiptParsedVo.getProductId())
                                                     .googlePaymentLog(jsonResponse)
                                                     .build());
-
         return GooglePaymentVerifyReceiptVo.builder()
                 .purchaseState(GooglePaymentPurchaseState.PURCHASED)
                 .orderId(receiptParsedVo.getOrderId())
